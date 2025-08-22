@@ -3,10 +3,14 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Dashboard;
 
-Route::middleware(['auth'])->group(function(){
-    Route::get('/dashboard', action: [DashboardController::class, 'index'])->name('dashboard');
+
+Route::get('/', function () {
+    return view('auth.login');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
 });
 
 Route::middleware('auth')->group(function () {
@@ -15,4 +19,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

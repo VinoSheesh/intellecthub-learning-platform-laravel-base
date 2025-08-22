@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\User;
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 
 class Dashboard extends Component
 {
-    public $totalUsers;
+    public $user;
+    public $role;
 
     public function mount()
     {
-        // Ambil data dari database
-        $this->totalUsers = User::count();
+        $this->user = Auth::user();
+        $this->role = $this->user->role; 
     }
 
     public function render()

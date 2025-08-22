@@ -398,6 +398,7 @@
             }
         }
     </style>
+    @include('includes.cdn')
     @vite('resources/css/app.css')
     @livewireStyles
 </head>
@@ -406,7 +407,7 @@
     @include('partials.sidebar')
     <div class="flex-1 flex flex-col">
         @include('partials.navbar')
-        <main class="p-6 flex-1 overflow-auto">
+        <main class="flex-1 overflow-auto pt-24 p-6">
             {{ $slot }}
         </main>
     </div>
@@ -485,7 +486,7 @@
                 // Hide elements after a short delay
                 setTimeout(() => {
                     const elementsToHide = sidebar.querySelectorAll(
-                    '.menu-text, .dropdown-arrow, .submenu');
+                        '.menu-text, .dropdown-arrow, .submenu');
                     elementsToHide.forEach(el => {
                         el.style.display = 'none';
                     });
@@ -520,7 +521,7 @@
                 // Show elements after a short delay
                 setTimeout(() => {
                     const elementsToShow = sidebar.querySelectorAll(
-                    '.menu-text, .dropdown-arrow, .submenu');
+                        '.menu-text, .dropdown-arrow, .submenu');
                     elementsToShow.forEach(el => {
                         el.style.display = '';
                     });
