@@ -15,18 +15,22 @@ class RoleSeeder extends Seeder
     {
         Roles::updateOrCreate([
             'name' => 'SuperAdmin',
+            'guard_name' => 'web',
         ]);
 
         Roles::updateOrCreate([
             'name' => 'Guest',
+            'guard_name' => 'web',
         ]);
 
         Roles::updateOrCreate(attributes: [
             'name' => 'Student',
+            'guard_name' => 'web',
         ]);
 
         Roles::updateOrCreate([
             'name' => 'Teacher',
+            'guard_name' => 'web',
         ]);
     }
 }
