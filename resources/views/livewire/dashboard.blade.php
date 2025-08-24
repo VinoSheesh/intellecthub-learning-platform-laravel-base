@@ -1,7 +1,7 @@
 <div class="w-full h-screen">
     <!-- Greeting -->
     <div class="p-6">
-        <h2 class="text-4xl font-bold">Selamat datang, {{ $user->name }}!</h2>
+        <h2 class="text-4xl text-gray-600 font-bold">Selamat datang, {{ $user->name }}!</h2>
         <p class="mt-2 text-gray-600">Semoga aktivitas belajarmu menyenangkan.</p>
         <p class="mt-2 text-gray-600">Statusmu Saat Ini adalah {{ $role->name }}</p>
     </div>

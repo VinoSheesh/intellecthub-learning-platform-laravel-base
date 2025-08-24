@@ -11,6 +11,10 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
+    Route::prefix('courses')->group(function () {
+        Route::get('/allcourse', \App\Livewire\Courses::class)->name('allcourse');
+        Route::get('/inprogress', \App\Livewire\Inprogress::class)->name('inprogress');
+    });
 });
 
 Route::middleware('auth')->group(function () {

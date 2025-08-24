@@ -15,14 +15,14 @@
         </a>
 
         <!-- My Courses -->
-        <div x-data="{ open: {{ request()->routeIs('courses.*') ? 'true' : 'false' }} }" class="sidebar-dropdown">
+        <div x-data="{ open: false }" x-init="open = {{ request()->routeIs('courses') || request()->routeIs('courses.*') ? 'true' : 'false' }} class ="sidebar-dropdown">
             <button @click="open = !open"
                 class="sidebar-menu-item w-full group flex items-center justify-between px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('courses.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                 <div class="flex items-center">
                     <i class="fa-solid fa-book-open mr-3"></i>
                     <span class="menu-text">My Courses</span>
                 </div>
-                <i class="fa-solid fa-caret-down":class="{ 'rotate-180': open }" fill="none" stroke="currentColor"
+                <i class="fa-solid fa-caret-down" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24"></i>
 
             </button>
@@ -31,12 +31,19 @@
             <div x-show="open" x-transition:enter="transition ease-out duration-200"
                 x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
                 class="submenu ml-8 mt-2 space-y-1">
-                <a href="#"
-                    class="menu-text block px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors">All
-                    Courses</a>
-                <a href="#"
-                    class="menu-text block px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors">In
-                    Progress</a>
+                <a href="{{ route('allcourse') }}"
+                    class="menu-text px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors flex items-center  {{ request()->routeIs('allcourse') ? 'bg-blue-50 text-blue-700 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">All
+                    Courses @if (request()->routeIs('allcourse'))
+                        <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full flex-shrink-0 flex justify-center items-center"></div>
+                    @endif
+                </a>
+                <a href={{ route('inprogress') }}
+                    class="menu-text px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors flex items-center    {{ request()->routeIs('inprogress') ? 'bg-blue-50 text-blue-700 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">In
+                    Progress
+                    @if (request()->routeIs('inprogress'))
+                        <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full flex-shrink-0 flex items-center"></div>
+                    @endif
+                </a>
                 <a href="#"
                     class="menu-text block px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors">Completed</a>
                 <a href="#"
