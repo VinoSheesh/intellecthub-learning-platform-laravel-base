@@ -14,7 +14,9 @@
             /* Fixed width and overflow issues */
             overflow-x: hidden;
             overflow-y: auto;
+            /* Fixed minimum width for collapsed state */
             min-width: 4rem;
+            max-width: 16rem;
         }
 
         #sidebar .menu-text {
@@ -32,26 +34,30 @@
             transition: all 0.2s ease-in-out;
             /* Prevent horizontal overflow */
             overflow: hidden;
+            /* Better flex alignment for collapsed state */
+            display: flex;
+            align-items: center;
         }
 
         #sidebar .submenu {
             transition: all 0.2s ease-in-out;
         }
 
-        /* Main content transition */
+        /* Improved main content transition and width calculation */
         main {
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            /* Ensure proper width calculation */
-            width: calc(100% - 16rem);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Remove fixed width, let it be flexible */
         }
 
-        /* Main content responsive width adjustments */
+        /* Better responsive width adjustments */
         main.sidebar-collapsed {
-            width: calc(100% - 4rem) !important;
+            margin-left: 4rem !important;
+            width: calc(100vw - 4rem) !important;
         }
 
         main.sidebar-expanded {
-            width: calc(100% - 16rem) !important;
+            margin-left: 16rem !important;
+            width: calc(100vw - 16rem) !important;
         }
 
         /* Gradient backgrounds */
@@ -108,7 +114,7 @@
             transition: all 0.2s ease-out;
         }
 
-        /* Sidebar animations */
+        /* Improved sidebar animations and states */
         .sidebar-transition {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -120,6 +126,18 @@
 
         .sidebar-expanded {
             width: 16rem !important;
+        }
+
+        /* Better collapsed state styling */
+        .sidebar-collapsed .sidebar-menu-item {
+            justify-content: center !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        .sidebar-collapsed .menu-text,
+        .sidebar-collapsed .dropdown-arrow {
+            display: none !important;
         }
 
         /* Hide overflow during transition */
@@ -159,7 +177,7 @@
             box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
         }
 
-        /* Mobile responsive adjustments */
+        /* Improved mobile responsive adjustments */
         @media (max-width: 1023px) {
             .sidebar-mobile {
                 transform: translateX(-100%);
@@ -176,15 +194,11 @@
             }
         }
 
-        /* Desktop adjustments */
+        /* Better desktop adjustments */
         @media (min-width: 1024px) {
-            /* Main content margin adjustment for desktop */
-            main.sidebar-collapsed {
-                margin-left: 4rem !important;
-            }
-
-            main.sidebar-expanded {
-                margin-left: 16rem !important;
+            /* Remove default margin from main content */
+            main {
+                margin-left: 0;
             }
         }
 
@@ -266,8 +280,8 @@
 
 <body class="flex h-screen bg-gray-100 overflow-x-hidden">
     @include('partials.sidebar')
-    <!-- Removed pt-24 since no navbar, added proper responsive classes -->
-    <main id="mainContent" class="flex-1 overflow-auto p-6 transition-all duration-300 ease-in-out ml-64 lg:ml-64">
+    <!-- Removed default margin classes, let JavaScript handle positioning -->
+    <main id="mainContent" class="flex-1 overflow-auto p-6 transition-all duration-300 ease-in-out">
         {{ $slot }}
     </main>
     @livewireScripts
@@ -283,14 +297,12 @@
             let isCollapsed = false;
             let isMobile = window.innerWidth < 1024;
 
-            // Initialize sidebar state
             function initializeSidebar() {
-                updateMainContentClasses();
-                
                 if (isMobile) {
                     sidebar.classList.add('-translate-x-full');
                     mainContent.style.marginLeft = '0';
                     mainContent.style.width = '100%';
+                    mainContent.classList.remove('sidebar-collapsed', 'sidebar-expanded');
                 } else {
                     sidebar.classList.remove('-translate-x-full');
                     if (isCollapsed) {
@@ -298,10 +310,10 @@
                     } else {
                         expandSidebar();
                     }
+                    updateMainContentClasses();
                 }
             }
 
-            // Update main content classes
             function updateMainContentClasses() {
                 mainContent.classList.remove('sidebar-collapsed', 'sidebar-expanded');
                 
@@ -309,11 +321,11 @@
                     if (isCollapsed) {
                         mainContent.classList.add('sidebar-collapsed');
                         mainContent.style.marginLeft = '4rem';
-                        mainContent.style.width = 'calc(100% - 4rem)';
+                        mainContent.style.width = 'calc(100vw - 4rem)';
                     } else {
                         mainContent.classList.add('sidebar-expanded');
                         mainContent.style.marginLeft = '16rem';
-                        mainContent.style.width = 'calc(100% - 16rem)';
+                        mainContent.style.width = 'calc(100vw - 16rem)';
                     }
                 }
             }
@@ -366,55 +378,28 @@
                 updateMainContentClasses();
             }
 
-            // Collapse sidebar (desktop)
             function collapseSidebar() {
+                sidebar.classList.add('sidebar-collapsed');
+                sidebar.classList.remove('sidebar-expanded');
                 sidebar.style.width = '4rem';
+                
                 sidebar.classList.add('sidebar-transitioning');
 
-                // Hide elements immediately for smoother transition
-                const elementsToHide = sidebar.querySelectorAll('.menu-text, .dropdown-arrow, .submenu');
-                elementsToHide.forEach(el => {
-                    el.style.opacity = '0';
-                });
-
                 setTimeout(() => {
-                    elementsToHide.forEach(el => {
-                        el.style.display = 'none';
-                    });
-
-                    // Center menu icons
-                    const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
-                    menuItems.forEach(item => {
-                        item.classList.add('justify-center');
-                        item.classList.remove('justify-start');
-                    });
-
                     sidebar.classList.remove('sidebar-transitioning');
-                }, 150);
+                }, 300);
             }
 
-            // Expand sidebar (desktop)
             function expandSidebar() {
+                sidebar.classList.add('sidebar-expanded');
+                sidebar.classList.remove('sidebar-collapsed');
                 sidebar.style.width = '16rem';
+                
                 sidebar.classList.add('sidebar-transitioning');
 
-                // Reset menu items first
-                const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
-                menuItems.forEach(item => {
-                    item.classList.remove('justify-center');
-                    item.classList.add('justify-start');
-                });
-
-                // Show elements
                 setTimeout(() => {
-                    const elementsToShow = sidebar.querySelectorAll('.menu-text, .dropdown-arrow, .submenu');
-                    elementsToShow.forEach(el => {
-                        el.style.display = '';
-                        el.style.opacity = '1';
-                    });
-
                     sidebar.classList.remove('sidebar-transitioning');
-                }, 150);
+                }, 300);
             }
 
             // Handle window resize
@@ -457,7 +442,7 @@
             // Initialize on page load
             initializeSidebar();
 
-            console.log('Sidebar initialized successfully');
+            console.log('[v0] Sidebar initialized successfully');
         });
     </script>
 </body>

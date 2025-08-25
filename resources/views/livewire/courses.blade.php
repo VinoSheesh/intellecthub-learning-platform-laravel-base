@@ -1,114 +1,174 @@
-<div>
-    <h1 class="text-4xl text-gray-800 dark:text-gray-100 font-bold mb-2">Semua Kursus</h1>
-    <p class="text-gray-600  mb-8">cari kursus yang anda inginkan</p>
-    <div class="flex flex-col md:flex-row items-center gap-4 mb-6">
-        <!-- Search -->
-        <input type="text" wire:model.live.debounce.300ms="search"
-            class="w-full md:w-1/2 p-2 border rounded-lg dark:bg-gray-800 dark:text-gray-200"
-            placeholder="Cari kursus...">
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <!-- Added breadcrumbs navigation -->
+    <nav class="flex mb-6" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{{ route('dashboard') }}" class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L9 3.414V19a1 1 0 0 0 2 0V3.414l7.293 7.293a1 1 0 0 0 1.414-1.414Z"/>
+                    </svg>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-3 h-3 text-gray-400 mx-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
+                    </svg>
+                    <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 dark:text-gray-400">Semua Kursus</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
 
-        <!-- Category Filter -->
-        <select wire:model.live="category"
-            class="w-full md:w-1/3 p-2 border rounded-lg dark:bg-gray-800 dark:text-gray-200">
-            <option value="">Semua Kategori</option>
-            @foreach ($categories as $cat)
-                <option value="{{ $cat->id }}">{{ $cat->name }}</option>
-            @endforeach
-        </select>
+    <!-- Redesigned header with search and filter on the right -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
+        <div class="mb-4 lg:mb-0">
+            <h1 class="text-4xl text-gray-800 dark:text-gray-100 font-bold mb-2">Semua Kursus</h1>
+            <p class="text-gray-600 dark:text-gray-400">Cari kursus yang anda inginkan</p>
+        </div>
+        
+        <!-- Search and filter moved to right side with improved styling -->
+        <div class="flex items-center gap-3">
+            <!-- Search Input -->
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <input type="text" wire:model.live.debounce.300ms="search"
+                    class="w-64 pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:border-gray-600 dark:text-gray-200 dark:focus:ring-blue-400"
+                    placeholder="Cari kursus...">
+            </div>
+            
+            <!-- Category filter changed to filter icon with blue background -->
+            <div class="relative" x-data="{ open: false }">
+                <button @click="open = !open" 
+                    class="flex items-center justify-center w-11 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.75 4H19M7.75 4a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 4h2.25m13.5 6H19m-2.25 0a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 10h11.25m-4.5 6H19M7.75 16a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 16h2.25"/>
+                    </svg>
+                </button>
+                
+                <div x-show="open" @click.away="open = false" x-transition
+                    class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+                    <div class="py-1">
+                        <button wire:click="$set('category', '')" @click="open = false"
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            Semua Kategori
+                        </button>
+                        @foreach ($categories as $cat)
+                            <button wire:click="$set('category', '{{ $cat->id }}')" @click="open = false"
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                {{ $cat->name }}
+                            </button>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+    <!-- Enhanced card grid with more attractive and interactive design -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         @foreach ($courses as $course)
-            <article class="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 transform hover:-translate-y-3 hover:rotate-1">
-                
-                <!-- Image Container with Badge -->
-                <div class="relative overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
-                    <img src="{{ $course->thumbnail }}" 
-                         alt="{{ $course->title }}"
-                         class="w-full h-52 object-cover transition-all duration-700 group-hover:scale-110 group-hover:brightness-110">
+            <div class="group bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 hover:-translate-y-2 cursor-pointer">
+                <!-- Enhanced image container with overlay effects -->
+                <div class="relative overflow-hidden">
+                    <img src="{{ $course->thumbnail }}" alt="{{ $course->title }}"
+                        class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-700">
                     
-                    <!-- Category Badge -->
-                    <div class="absolute top-4 left-4">
-                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-white/90 dark:bg-gray-900/90 text-gray-700 dark:text-gray-300 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 shadow-lg">
+                    <!-- Added gradient overlay for better text readability -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    
+                    <!-- Enhanced category badge with animation -->
+                    <div class="absolute top-4 left-4 transform group-hover:scale-105 transition-transform duration-300">
+                        <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm border border-white/20">
                             {{ $course->category->name }}
                         </span>
                     </div>
                     
-                    <!-- Gradient Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
-                    
-                    <!-- Floating Action Button -->
-                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-                        <button class="w-10 h-10 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center hover:bg-blue-50 dark:hover:bg-blue-900/50 transition-colors duration-200">
-                            <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <!-- Added floating action button -->
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                        <button class="w-10 h-10 bg-white/90 hover:bg-white text-gray-700 rounded-full shadow-lg backdrop-blur-sm flex items-center justify-center transition-colors duration-200">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                             </svg>
                         </button>
                     </div>
+                    
+                    <!-- Added progress indicator -->
+                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200 dark:bg-gray-700">
+                        <div class="h-full bg-blue-500 transition-all duration-500 group-hover:bg-blue-400" style="width: {{ rand(20, 80) }}%"></div>
+                    </div>
                 </div>
-
-                <!-- Content Section -->
+                
+                <!-- Enhanced card content with better typography and spacing -->
                 <div class="p-6 space-y-4">
-                    <!-- Title -->
-                    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 leading-tight group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 line-clamp-2 min-h-[3.5rem]">
+                    <!-- Added instructor info -->
+                    <div class="flex items-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
+                        <div class="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+                            <svg class="w-3 h-3 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <span>Instructor Name</span>
+                        <span>•</span>
+                        <span>{{ rand(50, 200) }} siswa</span>
+                    </div>
+                    
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 line-clamp-2">
                         {{ $course->title }}
                     </h2>
-
-                    <!-- Description -->
-                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-3 min-h-[4.5rem]">
+                    
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed line-clamp-3">
                         {{ Str::limit($course->description, 120) }}
                     </p>
-
-                    <!-- Stats Row -->
-                    <div class="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-100 dark:border-gray-700">
-                        <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <span>8 jam</span>
+                    
+                    <!-- Added rating and stats -->
+                    <div class="flex items-center space-x-4 text-sm">
+                        <div class="flex items-center space-x-1">
+                            <div class="flex items-center">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <svg class="w-4 h-4 {{ $i <= 4 ? 'text-yellow-400' : 'text-gray-300' }}" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                    </svg>
+                                @endfor
+                            </div>
+                            <span class="text-gray-600 dark:text-gray-400">4.0</span>
                         </div>
-                        <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-                            <span>150+ siswa</span>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-                            </svg>
-                            <span>4.8</span>
-                        </div>
+                        <span class="text-gray-400">•</span>
+                        <span class="text-gray-600 dark:text-gray-400">{{ rand(5, 25) }} jam</span>
                     </div>
-                </div>
-
-                <!-- Footer Section -->
-                <div class="px-6 pb-6">
-                    <div class="flex items-center justify-between">
-                        <!-- Price -->
-                        <div class="flex flex-col">
-                            <span class="text-xs text-gray-500 dark:text-gray-400">Mulai dari</span>
-                            <span class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 group-hover:text-emerald-500 transition-colors duration-300">
+                    
+                    <!-- Enhanced price and action section -->
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                        <div class="space-y-1">
+                            <span class="text-2xl font-bold text-green-600 dark:text-green-400">
                                 Rp{{ number_format($course->price, 0, ',', '.') }}
                             </span>
+                            <div class="text-xs text-gray-500 dark:text-gray-400">
+                                <span class="line-through">Rp{{ number_format($course->price * 1.5, 0, ',', '.') }}</span>
+                                <span class="ml-2 text-red-500 font-medium">33% OFF</span>
+                            </div>
                         </div>
-
-                        <!-- CTA Button -->
-                        <button class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-semibold rounded-xl shadow-lg hover:shadow-xl transform transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0">
-                            <span class="flex items-center gap-2">
-                                Mulai Belajar
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                                </svg>
-                            </span>
-                        </button>
+                        
+                        <!-- Enhanced action buttons with better animations -->
+                        <div class="flex items-center space-x-2">
+                            <button class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 shadow-lg hover:shadow-xl hover:scale-105">
+                                Daftar Sekarang
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Bottom Accent -->
-                <div class="h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-700 origin-left"></div>
-            </article>
+                
+                <!-- Added subtle glow effect on hover -->
+                <div class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
+                    <div class="absolute inset-0 rounded-2xl shadow-2xl shadow-blue-500/10"></div>
+                </div>
+            </div>
         @endforeach
     </div>
 </div>
-</div>
+    
