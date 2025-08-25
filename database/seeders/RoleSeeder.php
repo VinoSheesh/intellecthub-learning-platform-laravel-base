@@ -30,7 +30,7 @@ class RoleSeeder extends Seeder
 
         Roles::updateOrCreate([
             'name' => 'Teacher',
-            'guard_name' => 'web',
+            'guard_name' => 'web',  
         ]);
     }
 }

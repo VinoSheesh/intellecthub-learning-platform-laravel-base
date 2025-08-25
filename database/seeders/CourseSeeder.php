@@ -42,5 +42,25 @@ class CourseSeeder extends Seeder
             'instructor_id' => 1,
             'price' => 150000,
         ]);
+
+        Courses::updateOrCreate([
+            'id' => 4,
+            'title' => 'Bagaimana agar berwibawa seperti kaisar hirohito',
+            'category_id' => 3,
+            'description' => 'Explore the world of data science and analytics.',
+            'thumbnail' => '/storage/berwibawaHirohito.jpg',
+            'instructor_id' => 1,
+            'price' => 150000,
+        ]);
+
+        Courses::updateOrCreate([
+            'id' => 5,
+            'title' => 'Cara agar tidak digantung seperti Benito Mussolini',
+            'category_id' => 3,
+            'description' => 'Explore the world of data science and analytics.',
+            'thumbnail' => '/storage/agarTidakDigantung.jpeg',
+            'instructor_id' => 1,
+            'price' => 150000,
+        ]);
     }
 }

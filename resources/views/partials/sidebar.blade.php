@@ -1,282 +1,345 @@
-<!-- Sidebar -->
-<aside id="sidebar"
-    class="fixed left-0 top-16 bottom-0 w-64 bg-white shadow-xl transform transition-all duration-300 ease-in-out z-40 border-r border-gray-100 overflow-hidden">
+<!-- Modern Sidebar -->
+<aside id="sidebar" x-data="{ 
+    isCollapsed: false, 
+    isMobile: window.innerWidth < 1024,
+    coursesOpen: {{ request()->routeIs('courses') || request()->routeIs('courses.*') ? 'true' : 'false' }},
+    userMenuOpen: false
+}" 
+x-init="
+    if (isMobile) {
+        $el.classList.add('-translate-x-full');
+    }
+    $watch('isCollapsed', value => {
+        if (!isMobile) {
+            if (value) {
+                $el.style.width = '5rem';
+                setTimeout(() => {
+                    $el.querySelectorAll('.menu-text').forEach(el => el.style.display = 'none');
+                    $el.querySelectorAll('.dropdown-arrow').forEach(el => el.style.display = 'none');
+                    $el.querySelectorAll('.submenu').forEach(el => el.style.display = 'none');
+                }, 150);
+            } else {
+                $el.style.width = '18rem';
+                setTimeout(() => {
+                    $el.querySelectorAll('.menu-text').forEach(el => el.style.display = '');
+                    $el.querySelectorAll('.dropdown-arrow').forEach(el => el.style.display = '');
+                    $el.querySelectorAll('.submenu').forEach(el => el.style.display = '');
+                }, 150);
+            }
+        }
+    })
+"
+class="fixed left-0 top-0 bottom-0 w-72 bg-gradient-to-b from-blue-600 via-blue-700 to-blue-800 shadow-2xl transform transition-all duration-300 ease-in-out z-50 overflow-hidden">
+
+    <!-- Sidebar Header -->
+    <div class="flex items-center justify-between p-6 border-b border-blue-500/30">
+        <!-- Logo & Brand -->
+        <div class="flex items-center space-x-3" :class="{ 'justify-center': isCollapsed }">
+            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm ring-2 ring-white/10">
+                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z" />
+                </svg>
+            </div>
+            <div class="menu-text">
+                <span class="text-white font-bold text-xl tracking-wide">IntellectHub</span>
+            </div>
+        </div>
+
+        <!-- Toggle Button -->
+        <button @click="isCollapsed = !isCollapsed" 
+                class="hidden lg:flex items-center justify-center w-8 h-8 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200">
+            <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': isCollapsed }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+    </div>
 
     <!-- Navigation Menu -->
-    <nav class="flex-1 px-4 py-6 space-y-2">
+    <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
         <!-- Dashboard -->
         <a href="{{ route('dashboard') }}"
-            class="sidebar-menu-item group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-            <i class="fa-solid fa-house mr-3"></i>
+            class="sidebar-menu-item group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 relative overflow-hidden
+            {{ request()->routeIs('dashboard') ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm' : 'text-white/80 hover:bg-white/10 hover:text-white' }}"
+            :class="{ 'justify-center': isCollapsed }">
+            
+            <i class="fa-solid fa-house text-lg flex-shrink-0" :class="{ 'mr-3': !isCollapsed }"></i>
             <span class="menu-text">Dashboard</span>
+            
             @if (request()->routeIs('dashboard'))
-                <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full flex-shrink-0"></div>
+                <div class="menu-text ml-auto w-2 h-2 bg-white rounded-full flex-shrink-0 animate-pulse"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-50"></div>
             @endif
         </a>
 
         <!-- My Courses -->
-        <div x-data="{ open: false }" x-init="open = {{ request()->routeIs('courses') || request()->routeIs('courses.*') ? 'true' : 'false' }} class ="sidebar-dropdown">
-            <button @click="open = !open"
-                class="sidebar-menu-item w-full group flex items-center justify-between px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 {{ request()->routeIs('courses.*') ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
-                <div class="flex items-center">
-                    <i class="fa-solid fa-book-open mr-3"></i>
-                    <span class="menu-text">My Courses</span>
-                </div>
-                <i class="fa-solid fa-caret-down" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24"></i>
-
+        <div class="sidebar-dropdown">
+            <button @click="coursesOpen = !coursesOpen"
+                class="sidebar-menu-item w-full group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 relative overflow-hidden
+                {{ request()->routeIs('courses.*') ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm' : 'text-white/80 hover:bg-white/10 hover:text-white' }}"
+                :class="{ 'justify-center': isCollapsed }">
+                
+                <i class="fa-solid fa-book-open text-lg flex-shrink-0" :class="{ 'mr-3': !isCollapsed }"></i>
+                <span class="menu-text flex-1 text-left">My Courses</span>
+                <i class="fa-solid fa-caret-down dropdown-arrow transition-transform duration-200 menu-text" 
+                   :class="{ 'rotate-180': coursesOpen }"></i>
+                
+                @if (request()->routeIs('courses.*'))
+                    <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-50"></div>
+                @endif
             </button>
 
             <!-- Submenu -->
-            <div x-show="open" x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 -translate-y-1" x-transition:enter-end="opacity-100 translate-y-0"
-                class="submenu ml-8 mt-2 space-y-1">
+            <div x-show="coursesOpen && !isCollapsed" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 -translate-y-2" 
+                 x-transition:enter-end="opacity-100 translate-y-0"
+                 class="submenu ml-6 mt-2 space-y-1 border-l-2 border-white/20 pl-4">
+                
                 <a href="{{ route('allcourse') }}"
-                    class="menu-text px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors flex items-center  {{ request()->routeIs('allcourse') ? 'bg-blue-50 text-blue-700 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">All
-                    Courses @if (request()->routeIs('allcourse'))
-                        <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full flex-shrink-0 flex justify-center items-center"></div>
+                    class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
+                    {{ request()->routeIs('allcourse') ? 'bg-white/15 text-white shadow-md' : 'text-white/70 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fa-solid fa-list-ul text-xs mr-2 opacity-60"></i>
+                    All Courses
+                    @if (request()->routeIs('allcourse'))
+                        <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
                     @endif
                 </a>
-                <a href={{ route('inprogress') }}
-                    class="menu-text px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors flex items-center    {{ request()->routeIs('inprogress') ? 'bg-blue-50 text-blue-700 border-r-4 border-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">In
-                    Progress
+                
+                <a href="{{ route('inprogress') }}"
+                    class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
+                    {{ request()->routeIs('inprogress') ? 'bg-white/15 text-white shadow-md' : 'text-white/70 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fa-solid fa-clock text-xs mr-2 opacity-60"></i>
+                    In Progress
                     @if (request()->routeIs('inprogress'))
-                        <div class="ml-auto w-2 h-2 bg-blue-600 rounded-full flex-shrink-0 flex items-center"></div>
+                        <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
                     @endif
                 </a>
-                <a href="#"
-                    class="menu-text block px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors">Completed</a>
-                <a href="#"
-                    class="menu-text block px-4 py-2 text-sm text-gray-600 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-colors">Favorites</a>
+                
+                <a href="{{ route('completed') }}"
+                    class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
+                    {{ request()->routeIs('completed') ? 'bg-white/15 text-white shadow-md' : 'text-white/70 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fa-solid fa-check-circle text-xs mr-2 opacity-60"></i>
+                    Completed
+                    @if (request()->routeIs('completed'))
+                        <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                    @endif
+                </a>
+                
+                <a href="{{ route('favorites') }}"
+                    class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
+                    {{ request()->routeIs('favorites') ? 'bg-white/15 text-white shadow-md' : 'text-white/70 hover:bg-white/10 hover:text-white' }}">
+                    <i class="fa-solid fa-heart text-xs mr-2 opacity-60"></i>
+                    Favorites
+                    @if (request()->routeIs('favorites'))
+                        <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                    @endif
+                </a>
             </div>
         </div>
 
         <!-- Assignments -->
         <a href="#"
-            class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200">
-            <i class="fa-solid fa-clipboard-list mr-3"></i>
-            Assignments
-
+            class="sidebar-menu-item group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 text-white/80 hover:bg-white/10 hover:text-white relative overflow-hidden"
+            :class="{ 'justify-center': isCollapsed }">
+            <i class="fa-solid fa-clipboard-list text-lg flex-shrink-0" :class="{ 'mr-3': !isCollapsed }"></i>
+            <span class="menu-text">Assignments</span>
         </a>
 
         <!-- Grades -->
         <a href="#"
-            class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200">
-            <i class="fa-solid fa-chart-simple mr-3 "></i>
-            Grades & Progress
+            class="sidebar-menu-item group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 text-white/80 hover:bg-white/10 hover:text-white relative overflow-hidden"
+            :class="{ 'justify-center': isCollapsed }">
+            <i class="fa-solid fa-chart-simple text-lg flex-shrink-0" :class="{ 'mr-3': !isCollapsed }"></i>
+            <span class="menu-text">Grades & Progress</span>
         </a>
 
         <!-- Calendar -->
         <a href="#"
-            class="group flex items-center px-4 py-3 text-sm font-medium rounded-xl text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200">
-            <i class="fa-solid fa-calendar mr-3"></i>
-            Calendar
+            class="sidebar-menu-item group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 text-white/80 hover:bg-white/10 hover:text-white relative overflow-hidden"
+            :class="{ 'justify-center': isCollapsed }">
+            <i class="fa-solid fa-calendar text-lg flex-shrink-0" :class="{ 'mr-3': !isCollapsed }"></i>
+            <span class="menu-text">Calendar</span>
         </a>
 
+        <!-- Divider -->
+        <div class="border-t border-white/20 my-6"></div>
+
+        <!-- Notifications -->
+        <button class="sidebar-menu-item group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 text-white/80 hover:bg-white/10 hover:text-white relative overflow-hidden w-full"
+                :class="{ 'justify-center': isCollapsed }">
+            <div class="relative flex-shrink-0" :class="{ 'mr-3': !isCollapsed }">
+                <i class="fa-solid fa-bell text-lg"></i>
+                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center animate-pulse">3</span>
+            </div>
+            <span class="menu-text">Notifications</span>
+        </button>
+    </nav>
+
+    <!-- User Profile Section -->
+    <div class="border-t border-white/20 p-4">
+        <div class="relative" x-data="{ userMenuOpen: false }">
+            <button @click="userMenuOpen = !userMenuOpen"
+                class="w-full flex items-center space-x-3 text-white hover:bg-white/10 px-3 py-3 rounded-xl transition-all duration-200 group"
+                :class="{ 'justify-center': isCollapsed }">
+                
+                <div class="w-10 h-10 bg-gradient-to-br from-white/30 to-white/10 rounded-full flex items-center justify-center backdrop-blur-sm ring-2 ring-white/20 flex-shrink-0">
+                    <span class="text-sm font-semibold">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                </div>
+                
+                <div class="menu-text flex-1 text-left">
+                    <p class="font-medium text-sm truncate">{{ auth()->user()->name }}</p>
+                    <p class="text-xs text-white/70 truncate">{{ auth()->user()->email }}</p>
+                </div>
+                
+                <svg class="menu-text w-4 h-4 transition-transform duration-200 flex-shrink-0" 
+                     :class="{ 'rotate-180': userMenuOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"></path>
+                </svg>
+            </button>
+
+            <!-- User Dropdown Menu -->
+            <div x-show="userMenuOpen && !isCollapsed" 
+                 x-transition:enter="transition ease-out duration-200"
+                 x-transition:enter-start="opacity-0 scale-95" 
+                 x-transition:enter-end="opacity-100 scale-100"
+                 @click.outside="userMenuOpen = false"
+                 class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-xl border border-gray-100 py-2 overflow-hidden">
+                
+                <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors group">
+                    <svg class="w-4 h-4 mr-3 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span class="text-sm">Profile Settings</span>
+                </a>
+
+                <a href="#" class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors group">
+                    <svg class="w-4 h-4 mr-3 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span class="text-sm">Account Settings</span>
+                </a>
+
+                <div class="border-t border-gray-100 my-1"></div>
+
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center px-4 py-3 text-red-600 hover:bg-red-50 transition-colors group">
+                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        <span class="text-sm">Sign Out</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 </aside>
 
-<!-- Overlay for mobile -->
-<div id="sidebarOverlay"
-    class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden opacity-0 pointer-events-none transition-opacity duration-300">
+<!-- Mobile Toggle Button -->
+<button id="mobileToggle" 
+        @click="$el.closest('body').querySelector('#sidebar').classList.toggle('-translate-x-full')"
+        class="lg:hidden fixed top-4 left-4 z-50 bg-blue-600 text-white p-3 rounded-xl shadow-lg hover:bg-blue-700 transition-colors">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+</button>
+
+<!-- Mobile Overlay -->
+<div id="sidebarOverlay" 
+     @click="$el.closest('body').querySelector('#sidebar').classList.add('-translate-x-full')"
+     class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden opacity-0 pointer-events-none transition-opacity duration-300">
 </div>
 
-<!-- JavaScript for Sidebar Toggle -->
+<style>
+/* Custom scrollbar for sidebar */
+#sidebar::-webkit-scrollbar {
+    width: 4px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Focus styles */
+.sidebar-menu-item:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* Smooth transitions for menu items */
+.sidebar-menu-item {
+    position: relative;
+}
+
+.sidebar-menu-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 0;
+    background: white;
+    border-radius: 0 2px 2px 0;
+    transition: height 0.2s ease;
+}
+
+.sidebar-menu-item:hover::before,
+.sidebar-menu-item.active::before {
+    height: 60%;
+}
+</style>
+
+<!-- Alpine.js for interactivity -->
+<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-        const mainContent = document.querySelector('main');
-
-        let isCollapsed = false;
-        let isMobile = window.innerWidth < 1024;
-
-        // Initially hide sidebar on mobile
-        if (isMobile) {
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    // Handle mobile sidebar toggle
+    function toggleMobileSidebar() {
+        const isHidden = sidebar.classList.contains('-translate-x-full');
+        
+        if (isHidden) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('opacity-0', 'pointer-events-none');
+            document.body.classList.add('overflow-hidden');
+        } else {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            document.body.classList.remove('overflow-hidden');
+        }
+    }
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 1024) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            document.body.classList.remove('overflow-hidden');
+        } else {
             sidebar.classList.add('-translate-x-full');
         }
-
-        function toggleSidebar() {
-            if (isMobile) {
-                // Mobile behavior - slide in/out
-                const isHidden = sidebar.classList.contains('-translate-x-full');
-
-                if (isHidden) {
-                    // Show sidebar
-                    sidebar.classList.remove('-translate-x-full');
-                    sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
-                    document.body.classList.add('overflow-hidden');
-                } else {
-                    // Hide sidebar
-                    sidebar.classList.add('-translate-x-full');
-                    sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-                    document.body.classList.remove('overflow-hidden');
-                }
-            } else {
-                // Desktop behavior - collapse/expand with smooth transition
-                isCollapsed = !isCollapsed;
-
-                if (isCollapsed) {
-                    // Collapse sidebar
-                    sidebar.style.width = '4rem'; // 16 * 0.25rem = 4rem
-
-                    // Hide text and arrows with delay
-                    setTimeout(() => {
-                        const menuTexts = sidebar.querySelectorAll('.menu-text');
-                        const dropdownArrows = sidebar.querySelectorAll('.dropdown-arrow');
-                        const submenu = sidebar.querySelectorAll('.submenu');
-
-                        menuTexts.forEach(text => {
-                            text.style.opacity = '0';
-                            text.style.display = 'none';
-                        });
-
-                        dropdownArrows.forEach(arrow => {
-                            arrow.style.opacity = '0';
-                            arrow.style.display = 'none';
-                        });
-
-                        submenu.forEach(menu => {
-                            menu.style.display = 'none';
-                        });
-
-                        // Center icons
-                        const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
-                        menuItems.forEach(item => {
-                            item.style.justifyContent = 'center';
-                            item.style.paddingLeft = '0.75rem';
-                            item.style.paddingRight = '0.75rem';
-                        });
-
-                    }, 150);
-
-                    // Adjust main content
-                    if (mainContent) {
-                        mainContent.style.marginLeft = '4rem';
-                    }
-
-                } else {
-                    // Expand sidebar
-                    sidebar.style.width = '16rem'; // 64 * 0.25rem = 16rem
-
-                    // Reset menu items layout
-                    const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
-                    menuItems.forEach(item => {
-                        item.style.justifyContent = '';
-                        item.style.paddingLeft = '';
-                        item.style.paddingRight = '';
-                    });
-
-                    // Show text and arrows with delay
-                    setTimeout(() => {
-                        const menuTexts = sidebar.querySelectorAll('.menu-text');
-                        const dropdownArrows = sidebar.querySelectorAll('.dropdown-arrow');
-                        const submenu = sidebar.querySelectorAll('.submenu');
-
-                        menuTexts.forEach(text => {
-                            text.style.display = '';
-                            text.style.opacity = '1';
-                        });
-
-                        dropdownArrows.forEach(arrow => {
-                            arrow.style.display = '';
-                            arrow.style.opacity = '1';
-                        });
-
-                        submenu.forEach(menu => {
-                            menu.style.display = '';
-                        });
-
-                    }, 150);
-
-                    // Adjust main content
-                    if (mainContent) {
-                        mainContent.style.marginLeft = '16rem';
-                    }
-                }
-            }
-        }
-
-        // Toggle sidebar
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', toggleSidebar);
-        }
-
-        // Close sidebar when clicking overlay (mobile)
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', function() {
-                if (isMobile && !sidebar.classList.contains('-translate-x-full')) {
-                    sidebar.classList.add('-translate-x-full');
-                    sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-                    document.body.classList.remove('overflow-hidden');
-                }
-            });
-        }
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            const wasMobile = isMobile;
-            isMobile = window.innerWidth < 1024;
-
-            if (wasMobile !== isMobile) {
-                if (isMobile) {
-                    // Switched to mobile
-                    sidebar.classList.add('-translate-x-full');
-                    sidebar.style.width = '';
-                    sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-                    document.body.classList.remove('overflow-hidden');
-                    isCollapsed = false;
-
-                    // Reset all styles
-                    const menuTexts = sidebar.querySelectorAll('.menu-text');
-                    const dropdownArrows = sidebar.querySelectorAll('.dropdown-arrow');
-                    const submenu = sidebar.querySelectorAll('.submenu');
-                    const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
-
-                    menuTexts.forEach(text => {
-                        text.style.display = '';
-                        text.style.opacity = '';
-                    });
-
-                    dropdownArrows.forEach(arrow => {
-                        arrow.style.display = '';
-                        arrow.style.opacity = '';
-                    });
-
-                    submenu.forEach(menu => {
-                        menu.style.display = '';
-                    });
-
-                    menuItems.forEach(item => {
-                        item.style.justifyContent = '';
-                        item.style.paddingLeft = '';
-                        item.style.paddingRight = '';
-                    });
-
-                    if (mainContent) {
-                        mainContent.style.marginLeft = '';
-                    }
-
-                } else {
-                    // Switched to desktop
-                    sidebar.classList.remove('-translate-x-full');
-                    sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-                    document.body.classList.remove('overflow-hidden');
-                }
-            }
-        });
-
-        // Close sidebar with ESC key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && isMobile && !sidebar.classList.contains('-translate-x-full')) {
-                sidebar.classList.add('-translate-x-full');
-                sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-                document.body.classList.remove('overflow-hidden');
-            }
-        });
     });
+    
+    // Close sidebar with ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && window.innerWidth < 1024 && !sidebar.classList.contains('-translate-x-full')) {
+            toggleMobileSidebar();
+        }
+    });
+});
 </script>
-</script>
-
-<!-- Add Alpine.js for dropdown functionality -->
-<script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>

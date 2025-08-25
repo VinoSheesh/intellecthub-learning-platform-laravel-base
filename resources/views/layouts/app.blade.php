@@ -11,10 +11,17 @@
         /* Sidebar smooth transitions */
         #sidebar {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Fixed width and overflow issues */
+            overflow-x: hidden;
+            overflow-y: auto;
+            min-width: 4rem;
         }
 
         #sidebar .menu-text {
             transition: opacity 0.2s ease-in-out;
+            /* Prevent text wrapping and overflow */
+            white-space: nowrap;
+            overflow: hidden;
         }
 
         #sidebar .dropdown-arrow {
@@ -23,6 +30,8 @@
 
         #sidebar .sidebar-menu-item {
             transition: all 0.2s ease-in-out;
+            /* Prevent horizontal overflow */
+            overflow: hidden;
         }
 
         #sidebar .submenu {
@@ -32,6 +41,17 @@
         /* Main content transition */
         main {
             transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Ensure proper width calculation */
+            width: calc(100% - 16rem);
+        }
+
+        /* Main content responsive width adjustments */
+        main.sidebar-collapsed {
+            width: calc(100% - 4rem) !important;
+        }
+
+        main.sidebar-expanded {
+            width: calc(100% - 16rem) !important;
         }
 
         /* Gradient backgrounds */
@@ -109,12 +129,9 @@
 
         /* Badge animations */
         @keyframes pulse-scale {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: scale(1);
             }
-
             50% {
                 transform: scale(1.1);
             }
@@ -152,15 +169,15 @@
                 transform: translateX(0);
             }
 
-            /* Ensure main content doesn't have left margin on mobile */
+            /* Ensure main content takes full width on mobile */
             main {
                 margin-left: 0 !important;
+                width: 100% !important;
             }
         }
 
         /* Desktop adjustments */
         @media (min-width: 1024px) {
-
             /* Main content margin adjustment for desktop */
             main.sidebar-collapsed {
                 margin-left: 4rem !important;
@@ -177,16 +194,16 @@
         }
 
         .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
+            background: rgba(255, 255, 255, 0.1);
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 3px;
         }
 
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+            background: rgba(255, 255, 255, 0.5);
         }
 
         /* Notification badge */
@@ -207,21 +224,18 @@
             animation: pulse 2s infinite;
         }
 
-        /* Loading skeleton */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+        /* Prevent body horizontal scroll */
+        body {
+            overflow-x: hidden;
         }
 
-        @keyframes loading {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
+        /* Ensure sidebar container doesn't cause overflow */
+        .sidebar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 50;
         }
 
         /* Utility classes */
@@ -243,159 +257,6 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            .dark-mode {
-                --bg-primary: #1f2937;
-                --bg-secondary: #111827;
-                --text-primary: #f9fafb;
-                --text-secondary: #d1d5db;
-                --border-color: #374151;
-            }
-        }
-
-        /* Print styles */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-        }
-
-        2563eb;
-        }
-
-        .menu-item-active svg {
-            color: #2563eb;
-        }
-
-        /* Search input focus effect */
-        .search-input:focus {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Mobile responsive adjustments */
-        @media (max-width: 1023px) {
-            .sidebar-mobile {
-                transform: translateX(-100%);
-            }
-
-            .sidebar-mobile.open {
-                transform: translateX(0);
-            }
-
-            /* Ensure main content doesn't have left margin on mobile */
-            main {
-                margin-left: 0 !important;
-            }
-        }
-
-        /* Desktop adjustments */
-        @media (min-width: 1024px) {
-
-            /* Main content margin adjustment for desktop */
-            main.sidebar-collapsed {
-                margin-left: 4rem !important;
-            }
-
-            main.sidebar-expanded {
-                margin-left: 16rem !important;
-            }
-        }
-
-        /* Smooth scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 3px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
-        /* Notification badge */
-        .notification-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            min-width: 18px;
-            height: 18px;
-            background: #ef4444;
-            color: white;
-            font-size: 11px;
-            font-weight: 600;
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: pulse 2s infinite;
-        }
-
-        /* Loading skeleton */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-        }
-
-        @keyframes loading {
-            0% {
-                background-position: 200% 0;
-            }
-
-            100% {
-                background-position: -200% 0;
-            }
-        }
-
-        /* Utility classes */
-        .backdrop-blur-sm {
-            backdrop-filter: blur(4px);
-        }
-
-        .backdrop-blur-md {
-            backdrop-filter: blur(8px);
-        }
-
-        .text-shadow {
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Prevent text selection during transitions */
-        .no-select {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            .dark-mode {
-                --bg-primary: #1f2937;
-                --bg-secondary: #111827;
-                --text-primary: #f9fafb;
-                --text-secondary: #d1d5db;
-                --border-color: #374151;
-            }
-        }
-
-        /* Print styles */
-        @media print {
-            .no-print {
-                display: none !important;
-            }
         }
     </style>
     @include('includes.cdn')
@@ -403,22 +264,20 @@
     @livewireStyles
 </head>
 
-<body class="flex h-screen bg-gray-100">
+<body class="flex h-screen bg-gray-100 overflow-x-hidden">
     @include('partials.sidebar')
-    <div class="flex-1 flex flex-col">
-        @include('partials.navbar')
-        <main class="flex-1 overflow-auto pt-24 p-6">
-            {{ $slot }}
-        </main>
-    </div>
+    <!-- Removed pt-24 since no navbar, added proper responsive classes -->
+    <main id="mainContent" class="flex-1 overflow-auto p-6 transition-all duration-300 ease-in-out ml-64 lg:ml-64">
+        {{ $slot }}
+    </main>
     @livewireScripts
 
     <script>
-        // JavaScript untuk Laravel E-Learning Sidebar - Fixed Version
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.getElementById('sidebar');
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mainContent = document.getElementById('mainContent');
             const body = document.body;
 
             let isCollapsed = false;
@@ -426,11 +285,36 @@
 
             // Initialize sidebar state
             function initializeSidebar() {
+                updateMainContentClasses();
+                
                 if (isMobile) {
                     sidebar.classList.add('-translate-x-full');
-                    sidebar.style.width = '';
+                    mainContent.style.marginLeft = '0';
+                    mainContent.style.width = '100%';
                 } else {
                     sidebar.classList.remove('-translate-x-full');
+                    if (isCollapsed) {
+                        collapseSidebar();
+                    } else {
+                        expandSidebar();
+                    }
+                }
+            }
+
+            // Update main content classes
+            function updateMainContentClasses() {
+                mainContent.classList.remove('sidebar-collapsed', 'sidebar-expanded');
+                
+                if (!isMobile) {
+                    if (isCollapsed) {
+                        mainContent.classList.add('sidebar-collapsed');
+                        mainContent.style.marginLeft = '4rem';
+                        mainContent.style.width = 'calc(100% - 4rem)';
+                    } else {
+                        mainContent.classList.add('sidebar-expanded');
+                        mainContent.style.marginLeft = '16rem';
+                        mainContent.style.width = 'calc(100% - 16rem)';
+                    }
                 }
             }
 
@@ -450,7 +334,9 @@
                 if (isHidden) {
                     // Show sidebar
                     sidebar.classList.remove('-translate-x-full');
-                    sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                    if (sidebarOverlay) {
+                        sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                    }
                     body.classList.add('overflow-hidden');
                 } else {
                     // Hide sidebar
@@ -461,7 +347,9 @@
             // Close mobile sidebar
             function closeMobileSidebar() {
                 sidebar.classList.add('-translate-x-full');
-                sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
+                if (sidebarOverlay) {
+                    sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
+                }
                 body.classList.remove('overflow-hidden');
             }
 
@@ -474,19 +362,22 @@
                 } else {
                     expandSidebar();
                 }
+                
+                updateMainContentClasses();
             }
 
             // Collapse sidebar (desktop)
             function collapseSidebar() {
                 sidebar.style.width = '4rem';
-
-                // Add transition class
                 sidebar.classList.add('sidebar-transitioning');
 
-                // Hide elements after a short delay
+                // Hide elements immediately for smoother transition
+                const elementsToHide = sidebar.querySelectorAll('.menu-text, .dropdown-arrow, .submenu');
+                elementsToHide.forEach(el => {
+                    el.style.opacity = '0';
+                });
+
                 setTimeout(() => {
-                    const elementsToHide = sidebar.querySelectorAll(
-                        '.menu-text, .dropdown-arrow, .submenu');
                     elementsToHide.forEach(el => {
                         el.style.display = 'none';
                     });
@@ -494,9 +385,8 @@
                     // Center menu icons
                     const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
                     menuItems.forEach(item => {
-                        item.style.justifyContent = 'center';
-                        item.style.paddingLeft = '0.75rem';
-                        item.style.paddingRight = '0.75rem';
+                        item.classList.add('justify-center');
+                        item.classList.remove('justify-start');
                     });
 
                     sidebar.classList.remove('sidebar-transitioning');
@@ -506,24 +396,21 @@
             // Expand sidebar (desktop)
             function expandSidebar() {
                 sidebar.style.width = '16rem';
-
-                // Add transition class
                 sidebar.classList.add('sidebar-transitioning');
 
                 // Reset menu items first
                 const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
                 menuItems.forEach(item => {
-                    item.style.justifyContent = '';
-                    item.style.paddingLeft = '';
-                    item.style.paddingRight = '';
+                    item.classList.remove('justify-center');
+                    item.classList.add('justify-start');
                 });
 
-                // Show elements after a short delay
+                // Show elements
                 setTimeout(() => {
-                    const elementsToShow = sidebar.querySelectorAll(
-                        '.menu-text, .dropdown-arrow, .submenu');
+                    const elementsToShow = sidebar.querySelectorAll('.menu-text, .dropdown-arrow, .submenu');
                     elementsToShow.forEach(el => {
                         el.style.display = '';
+                        el.style.opacity = '1';
                     });
 
                     sidebar.classList.remove('sidebar-transitioning');
@@ -536,50 +423,8 @@
 
                 if (newIsMobile !== isMobile) {
                     isMobile = newIsMobile;
-
-                    if (isMobile) {
-                        // Switched to mobile
-                        resetSidebarForMobile();
-                    } else {
-                        // Switched to desktop
-                        resetSidebarForDesktop();
-                    }
+                    initializeSidebar();
                 }
-            }
-
-            // Reset sidebar for mobile
-            function resetSidebarForMobile() {
-                closeMobileSidebar();
-                resetSidebarStyles();
-                isCollapsed = false;
-            }
-
-            // Reset sidebar for desktop
-            function resetSidebarForDesktop() {
-                sidebar.classList.remove('-translate-x-full');
-                sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-                body.classList.remove('overflow-hidden');
-
-                if (!isCollapsed) {
-                    sidebar.style.width = '';
-                }
-            }
-
-            // Reset all sidebar styles
-            function resetSidebarStyles() {
-                sidebar.style.width = '';
-
-                const elementsToReset = sidebar.querySelectorAll('.menu-text, .dropdown-arrow, .submenu');
-                elementsToReset.forEach(el => {
-                    el.style.display = '';
-                });
-
-                const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
-                menuItems.forEach(item => {
-                    item.style.justifyContent = '';
-                    item.style.paddingLeft = '';
-                    item.style.paddingRight = '';
-                });
             }
 
             // Event listeners
@@ -611,43 +456,6 @@
 
             // Initialize on page load
             initializeSidebar();
-
-            // Tooltip functionality for collapsed sidebar
-            function initializeTooltips() {
-                if (!isCollapsed || isMobile) return;
-
-                const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
-
-                menuItems.forEach(item => {
-                    const text = item.querySelector('.menu-text')?.textContent;
-                    if (text && !item.hasAttribute('title')) {
-                        item.setAttribute('title', text);
-                    }
-                });
-            }
-
-            // Call tooltip initialization after collapse
-            const originalCollapseSidebar = collapseSidebar;
-            collapseSidebar = function() {
-                originalCollapseSidebar();
-                setTimeout(initializeTooltips, 200);
-            };
-
-            // Remove tooltips when expanded
-            const originalExpandSidebar = expandSidebar;
-            expandSidebar = function() {
-                const menuItems = sidebar.querySelectorAll('.sidebar-menu-item');
-                menuItems.forEach(item => {
-                    item.removeAttribute('title');
-                });
-                originalExpandSidebar();
-            };
-
-            // Smooth scroll for sidebar
-            sidebar.style.scrollBehavior = 'smooth';
-
-            // Add custom scrollbar
-            sidebar.classList.add('custom-scrollbar');
 
             console.log('Sidebar initialized successfully');
         });
