@@ -98,7 +98,7 @@ class="fixed left-0 top-0 bottom-0 w-64 bg-gradient-to-b from-blue-600 via-blue-
                 :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
                 
                 <i class="fa-solid fa-book-open text-lg flex-shrink-0" :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
-                <span class="menu-text flex-1 text-left" x-show="!isCollapsed" x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">My Courses</span>
+                <span class="menu-text flex-1 text-left" x-show="!isCollapsed" x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100">Courses</span>
                 <i class="fa-solid fa-caret-down dropdown-arrow transition-transform duration-200 menu-text flex-shrink-0" 
                    :class="{ 'rotate-180': coursesOpen }" x-show="!isCollapsed"></i>
                 

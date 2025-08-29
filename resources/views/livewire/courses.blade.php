@@ -77,8 +77,9 @@
                 </div>
 
             </div>
-            
-            @if (auth()->check() && auth()->user()->hasRole(['SuperAdmin', 'instructor']))
+
+            @if (auth()->check() &&
+                    auth()->user()->hasRole(['SuperAdmin', 'instructor']))
                 <a href="{{ route('createcourse') }}"
                     class="flex items-center px-4 py-2 h-11 bg-blue-600 hover:bg-blue-700  text-white rounded-lg font-semibold shadow transition-all duration-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -145,7 +146,7 @@
                                     clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <span>Instructor Name</span>
+                        <span>{{ $course->instructor->name }}</span>
                         <span>•</span>
                         <span>{{ rand(50, 200) }} siswa</span>
                     </div>
@@ -179,26 +180,20 @@
                     </div>
 
                     <!-- Enhanced price and action section -->
-                    <div class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                    <div
+                        class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700 group">
                         <div class="space-y-1">
                             <span class="text-2xl font-bold text-green-600 dark:text-green-400">
                                 Rp{{ number_format($course->price, 0, ',', '.') }}
                             </span>
-                            <div class="text-xs text-gray-500 dark:text-gray-400">
-                                <span
-                                    class="line-through">Rp{{ number_format($course->price * 1.5, 0, ',', '.') }}</span>
-                                <span class="ml-2 text-red-500 font-medium">33% OFF</span>
-                            </div>
                         </div>
 
-                        <!-- Enhanced action buttons with better animations -->
-                        <div class="flex items-center space-x-2">
-                            <button
-                                class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-x-4 group-hover:translate-x-0 shadow-lg hover:shadow-xl hover:scale-105">
-                                Daftar Sekarang
-                            </button>
-                        </div>
+                        <a href="{{ route('showcourse', ['id' => $course->id]) }}" wire:navigate
+                            class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
+                            Lihat
+                        </a>
                     </div>
+
                 </div>
 
                 <!-- Added subtle glow effect on hover -->
