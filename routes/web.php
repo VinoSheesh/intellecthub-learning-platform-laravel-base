@@ -11,6 +11,8 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
+    Route::get('/subscription', \App\Livewire\Subscription::class)->name('subscriptionplan');
+    Route::get('/subscription/transaction', \App\Livewire\SubscriptionTransaction::class)->name('subscriptiontransaction');
     Route::prefix('courses')->group(function () {
         Route::get('/allcourse', \App\Livewire\Courses::class)->name('allcourse');
         Route::get('/createcourse', \App\Livewire\Createcourse::class)->name('createcourse');
