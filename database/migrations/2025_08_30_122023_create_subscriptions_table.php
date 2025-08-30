@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->enum('plan', ['monthly', 'yearly']); // pilihan
+            $table->enum('plan', ['1_month', '3_months', '6_months', '12_months']);
             $table->date('starts_at');
             $table->date('ends_at');
             $table->timestamps();
