@@ -1,12 +1,12 @@
 <div class="w-full h-screen">
     <!-- Greeting -->
-    <div class="p-6">
+    <div class="">
         <h2 class="text-4xl text-gray-600 font-bold">Selamat datang, {{ $user->name }}!</h2>
         <p class="mt-2 text-gray-600">Semoga aktivitas belajarmu menyenangkan.</p>
         <p class="mt-2 text-gray-600">Statusmu Saat Ini adalah {{ $role->name }}</p>
     </div>
 
-    <div class="bg-white p-6 rounded-lg shadow">
+    <div class="bg-white p-6 rounded-lg shadow mt-8">
         <div class="flex items-center space-x-3">
             <i class="fa-solid fa-check text-2xl flex items-center justify-center"></i>
             <h2 class="text-xl font-bold flex items-center justify-center">Status Berlangganan</h2>
@@ -17,10 +17,14 @@
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-lg shadow mt-7">
+    <div class="bg-white p-6 rounded-lg shadow mt-7 flex flex-col ">
         <div class="flex items-center space-x-3">
             <i class="fa-solid fa-calendar"></i>
             <h1 class="text-xl font-bold">Aktivitas</h1>
+        </div>
+
+        <div class="my-32 flex justify-center">
+            <h2 class="text-lg">belum ada Aktivitas</h2>
         </div>
     </div>
 </div>
