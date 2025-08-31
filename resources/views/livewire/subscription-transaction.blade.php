@@ -7,12 +7,13 @@
             <span>
                 @php
                     $plan = session('plan');
-                    $planLabel = [
-                        '1_month' => 'Langganan 1 Bulan',
-                        '3_month' => 'Langganan 3 Bulan',
-                        '6_month' => 'Langganan 6 Bulan',
-                        '1_year' => 'Langganan 1 Tahun',
-                    ][$plan] ?? '-';
+                    $planLabel =
+                        [
+                            '1_month' => 'Langganan 1 Bulan',
+                            '3_month' => 'Langganan 3 Bulan',
+                            '6_month' => 'Langganan 6 Bulan',
+                            '1_year' => 'Langganan 1 Tahun',
+                        ][$plan] ?? '-';
                 @endphp
                 {{ $planLabel }}
             </span>
@@ -28,34 +29,52 @@
         </div>
     </div>
 
-    @if (!session('show_snap'))
-        <button wire:click="showSnap"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold mt-4">
-            Bayar Sekarang
-        </button>
-    @endif
-
+    <button wire:click="showSnap"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold mt-4">
+        Bayar Sekarang
+    </button>
     <div id="snap-container"></div>
+    <div>Snap Token: {{ session('snap_token') }}</div>
 </div>
 
-@if (session('show_snap'))
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var snapToken = "{{ session('snap_token') }}";
-            if(snapToken){
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+<script>
+    document.addEventListener('livewire:init', function () {
+        Livewire.on('showSnap', () => {
+            let snapToken = @json(session('snap_token'));
+            if (snapToken) {
                 window.snap.pay(snapToken, {
-                    onSuccess: function(result){
-                        window.livewire.emit('paymentSuccess', result);
+                    onSuccess: function(result) {
+                        Livewire.dispatch('paymentSuccess', result);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Pembayaran berhasil, anda telah berlangganan!',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            window.location.href = '{{ route("dashboard") }}';
+                        });
                     },
-                    onPending: function(result){
-                        window.livewire.emit('paymentPending', result);
+                    onPending: function(result) {
+                        Livewire.dispatch('paymentPending', result);
                     },
-                    onError: function(result){
-                        alert('Pembayaran gagal!');
+                    onError: function(result) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Pembayaran gagal!'
+                        });
                     }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Token pembayaran tidak ditemukan!'
                 });
             }
         });
-    </script>
-@endif
+    });
+</script>

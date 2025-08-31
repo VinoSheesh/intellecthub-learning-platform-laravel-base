@@ -9,52 +9,48 @@ use Carbon\Carbon;
 
 class SubscriptionTransaction extends Component
 {
-    protected $listeners = ['paymentSuccess'];
+    protected $listeners = ['paymentSuccess', 'paymentPending'];
 
     public function showSnap()
     {
-        session(['show_snap' => true]);
-        $this->dispatch('$refresh'); // Refresh Livewire component
+        if (!session('snap_token')) {
+            session()->flash('error', 'Token pembayaran tidak ditemukan');
+            return;
+        }
+        $this->dispatch('showSnap');
     }
 
     public function paymentSuccess($result)
     {
-        $user = Auth::user();
-        $plan = session('plan');
-        $price = session('price');
+        try {
+            $user = Auth::user();
+            $plan = session('plan');
+            
+            // Hitung tanggal berakhir
+            $start = Carbon::now();
+            $end = match($plan) {
+                '1_month' => $start->copy()->addMonth(),
+                '3_months' => $start->copy()->addMonths(3),
+                '6_months' => $start->copy()->addMonths(6),
+                '1_year' => $start->copy()->addYear(),
+                default => $start,
+            };
 
-        // Hitung tanggal berakhir
-        $start = Carbon::now();
-        switch ($plan) {
-            case '1_month':
-                $end = $start->copy()->addMonth();
-                break;
-            case '3_months':
-                $end = $start->copy()->addMonths(3);
-                break;
-            case '6_months':
-                $end = $start->copy()->addMonths(6);
-                break;
-            case '1_year':
-                $end = $start->copy()->addYear();
-                break;
-            default:
-                $end = $start;
+            // Simpan ke database
+            Subscription::create([
+                'user_id' => $user->id,
+                'plan' => $plan,
+                'starts_at' => $start,
+                'ends_at' => $end,
+            ]);
+
+            // Bersihkan session
+            session()->forget(['snap_token', 'plan', 'price']);
+            
+            return redirect()->route('dashboard');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Terjadi kesalahan saat memproses pembayaran');
         }
-
-        // Simpan ke database
-        Subscription::create([
-            'user_id' => $user->id,
-            'plan' => $plan,
-            'starts_at' => $start,
-            'ends_at' => $end,
-        ]);
-
-        // Bersihkan session
-        session()->forget(['snap_token', 'plan', 'price', 'show_snap']);
-
-        // Redirect ke dashboard
-        return redirect()->route('dashboard')->with('success', 'Pembayaran berhasil! Langganan aktif.');
     }
 
     public function render()

@@ -40,4 +40,17 @@
             <h2 class="text-lg">belum ada Aktivitas</h2>
         </div>
     </div>
+
+    @if (session()->has('success'))
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session("success") }}',
+                showConfirmButton: false,
+                timer: 2000
+            });
+        </script>
+    @endif
 </div>
