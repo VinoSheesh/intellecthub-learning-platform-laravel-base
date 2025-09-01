@@ -46,7 +46,7 @@
             if (snapToken) {
                 window.snap.pay(snapToken, {
                     onSuccess: function(result) {
-                        Livewire.dispatch('paymentSuccess', result);
+                        Livewire.dispatch('paymentSuccess');  // Removed result parameter
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil!',

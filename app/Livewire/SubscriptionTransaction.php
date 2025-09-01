@@ -20,7 +20,7 @@ class SubscriptionTransaction extends Component
         $this->dispatch('showSnap');
     }
 
-    public function paymentSuccess($result)
+    public function paymentSuccess($result = null)
     {
         try {
             $user = Auth::user();
@@ -30,26 +30,31 @@ class SubscriptionTransaction extends Component
             $start = Carbon::now();
             $end = match($plan) {
                 '1_month' => $start->copy()->addMonth(),
-                '3_months' => $start->copy()->addMonths(3),
-                '6_months' => $start->copy()->addMonths(6),
+                '3_month' => $start->copy()->addMonths(3),
+                '6_month' => $start->copy()->addMonths(6),
                 '1_year' => $start->copy()->addYear(),
                 default => $start,
             };
 
             // Simpan ke database
-            Subscription::create([
+            $subscription = Subscription::create([
                 'user_id' => $user->id,
-                'plan' => $plan,
+                'plan' => $plan, // Gunakan plan langsung tanpa konversi
                 'starts_at' => $start,
                 'ends_at' => $end,
             ]);
 
-            // Bersihkan session
+            // Debug log
+            \Log::info('Subscription created:', $subscription->toArray());
+
+            session()->flash('success', 'Berhasil berlangganan! Selamat menikmati layanan kami.');
             session()->forget(['snap_token', 'plan', 'price']);
             
-            return redirect()->route('dashboard');
+            return redirect()->route('dashboard')->with('subscription_updated', true);
         } catch (\Exception $e) {
+            \Log::error('Payment Error: ' . $e->getMessage());
             session()->flash('error', 'Terjadi kesalahan saat memproses pembayaran');
+            return null;
         }
     }
 

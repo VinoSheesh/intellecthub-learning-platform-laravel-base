@@ -12,21 +12,20 @@
             <h2 class="text-xl font-bold flex items-center justify-center">Status Berlangganan</h2>
         </div>
         <div class="w-full mt-4 mb-2 border border-gray-600 bg-gray-100 p-3 rounded-xl flex justify-between items-center">
-            {{-- Ambil data subscription aktif --}}
-            @php
-                $subscription = \App\Models\Subscription::where('user_id', auth()->id())
-                    ->where('ends_at', '>=', now())
-                    ->orderByDesc('ends_at')
-                    ->first();
-            @endphp
+            <div>
+                @if($subscription)
+                    <p class="text-gray-600">
+                        Status Berlanggananmu <span class="font-bold">Aktif</span><br>
+                        <span class="text-sm">Anda berlangganan sampai {{ Carbon\Carbon::parse($subscription->ends_at)->translatedFormat('d F Y') }}</span>
+                    </p>
+                @else
+                    <p class="text-gray-600">Status Berlanggananmu <span class="font-bold">Tidak Aktif</span></p>
+                @endif
+            </div>
 
-            @if($subscription)
-                <p class="text-gray-600">Status Berlanggananmu <span class="font-bold">Aktif</span> sampai {{ \Carbon\Carbon::parse($subscription->ends_at)->translatedFormat('d F Y') }}</p>
-            @else
-                <p class="text-gray-600">Status Berlanggananmu <span class="font-bold">Tidak Aktif</span></p>
-            @endif
-
-            <a class="bg-gray-700 w-fit h-fit text-white p-2 rounded-md hover:bg-gray-800" href="{{ route('subscriptionplan') }}">Pilih Paket Langganan</a>
+            <a class="bg-gray-700 w-fit h-fit text-white p-2 rounded-md hover:bg-gray-800" href="{{ route('subscriptionplan') }}">
+                {{ $subscription ? 'Perpanjang Langganan' : 'Pilih Paket Langganan' }}
+            </a>
         </div>
     </div>
 
