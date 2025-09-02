@@ -26,6 +26,9 @@ class SubscriptionTransaction extends Component
             $user = Auth::user();
             $plan = session('plan');
             
+            // Debug log untuk melihat plan yang diterima
+            \Log::info('Payment Success - Plan:', ['plan' => $plan]);
+
             // Hitung tanggal berakhir
             $start = Carbon::now();
             $end = match($plan) {
@@ -36,15 +39,19 @@ class SubscriptionTransaction extends Component
                 default => $start,
             };
 
-            // Simpan ke database
+            // Debug log untuk tanggal
+            \Log::info('Subscription Dates:', [
+                'start' => $start->format('Y-m-d'),
+                'end' => $end->format('Y-m-d')
+            ]);
+
             $subscription = Subscription::create([
                 'user_id' => $user->id,
-                'plan' => $plan, // Gunakan plan langsung tanpa konversi
+                'plan' => $plan,
                 'starts_at' => $start,
                 'ends_at' => $end,
             ]);
 
-            // Debug log
             \Log::info('Subscription created:', $subscription->toArray());
 
             session()->flash('success', 'Berhasil berlangganan! Selamat menikmati layanan kami.');

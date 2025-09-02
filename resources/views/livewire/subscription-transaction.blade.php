@@ -7,13 +7,12 @@
             <span>
                 @php
                     $plan = session('plan');
-                    $planLabel =
-                        [
-                            '1_month' => 'Langganan 1 Bulan',
-                            '3_month' => 'Langganan 3 Bulan',
-                            '6_month' => 'Langganan 6 Bulan',
-                            '1_year' => 'Langganan 1 Tahun',
-                        ][$plan] ?? '-';
+                    $planLabel = [
+                        '1_month' => 'Langganan 1 Bulan',
+                        '3_month' => 'Langganan 3 Bulan',    // Ubah dari '3_months'
+                        '6_month' => 'Langganan 6 Bulan',    // Ubah dari '6_months'
+                        '1_year' => 'Langganan 1 Tahun'
+                    ][$plan] ?? '-';
                 @endphp
                 {{ $planLabel }}
             </span>

@@ -281,7 +281,7 @@
 <body class="flex h-screen bg-gray-100 overflow-x-hidden">
     @include('partials.sidebar')
     <!-- Removed default margin classes, let JavaScript handle positioning -->
-    <main id="mainContent" class="flex-1 overflow-auto p-6 transition-all duration-300 ease-in-out">
+    <main id="mainContent" class="flex-1 overflow-auto p-6 transition-all duration-300 ease-in-out bg-white dark:bg-gray-900">
         {{ $slot }}
     </main>
     @livewireScripts
