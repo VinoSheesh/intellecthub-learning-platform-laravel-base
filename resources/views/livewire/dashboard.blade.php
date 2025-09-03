@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-3xl shadow mt-7 flex flex-col ">
+    <div class="bg-gradient-to-b from-blue-600 via-blue-700 to-blue-800 text-white p-6 rounded-3xl shadow mt-7 flex flex-col ">
         <div class="flex items-center space-x-3">
             <i class="fa-solid fa-calendar"></i>
             <h1 class="text-xl font-bold">Aktivitas</h1>
