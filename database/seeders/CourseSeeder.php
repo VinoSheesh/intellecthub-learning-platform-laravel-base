@@ -19,8 +19,6 @@ class CourseSeeder extends Seeder
             'category_id' => 1,
             'description' => 'Learn the basics of programming with this introductory course.',
             'thumbnail' => '/storage/Laravel.png',
-            'instructor_id' => 1,
-            'price' => 100000,
         ]);
 
         Courses::updateOrCreate([
@@ -29,8 +27,6 @@ class CourseSeeder extends Seeder
             'category_id' => 2,
             'description' => 'Take your web development skills to the next level.',
             'thumbnail' => '/storage/modulNgoding.png',
-            'instructor_id' => 1,
-            'price' => 200000,
         ]);
 
         Courses::updateOrCreate([
@@ -39,8 +35,6 @@ class CourseSeeder extends Seeder
             'category_id' => 3,
             'description' => 'Explore the world of data science and analytics.',
             'thumbnail' => '/storage/jagoPublicSpeaking.webp',
-            'instructor_id' => 1,
-            'price' => 150000,
         ]);
 
         Courses::updateOrCreate([
@@ -49,8 +43,6 @@ class CourseSeeder extends Seeder
             'category_id' => 3,
             'description' => 'Explore the world of data science and analytics.',
             'thumbnail' => '/storage/berwibawaHirohito.jpg',
-            'instructor_id' => 1,
-            'price' => 150000,
         ]);
 
         Courses::updateOrCreate([
@@ -59,8 +51,6 @@ class CourseSeeder extends Seeder
             'category_id' => 3,
             'description' => 'Explore the world of data science and analytics.',
             'thumbnail' => '/storage/agarTidakDigantung.jpeg',
-            'instructor_id' => 1,
-            'price' => 150000,
         ]);
     }
 }

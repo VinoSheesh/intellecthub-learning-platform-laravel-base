@@ -14,20 +14,20 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::updateOrCreate([
+        $SuperAdmin = User::updateOrCreate([
             'name' => 'SuperAdmin',
             'email' => 'superadmin@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123'),
-            'role_id' => 1,
         ]);
+        $SuperAdmin->assignRole('SuperAdmin');
 
-        User::updateOrCreate([
+        $Binar = User::updateOrCreate([
             'name' => 'Binar',
             'email' => 'binar@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123'),
-            'role_id' => 2,
         ]);
+        $Binar->assignRole('Student');
     }
 }

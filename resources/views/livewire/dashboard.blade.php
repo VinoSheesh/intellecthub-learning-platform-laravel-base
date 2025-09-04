@@ -1,11 +1,11 @@
 <div class="w-full h-screen font-poppins bg-white dark:bg-gray-900">
     <!-- Greeting -->
     <div class="">
-        <h1 class="text-4xl text-gray-600 font-bold">Selamat datang, {{ $user->name }}👋</h1>
+        <h1 class="text-4xl text-gray-900 font-bold">Selamat datang, {{ $user->name }}👋</h1>
         <p class="mt-2 text-gray-600">Semoga aktivitas belajarmu menyenangkan.</p>
     </div>
 
-    <div class="bg-gradient-to-b from-blue-600 via-blue-700 to-blue-800 text-white p-6 rounded-3xl shadow mt-8">
+    <div class=" text-gray-900 p-6 rounded-3xl shadow mt-8">
         <div class="flex items-center space-x-3">
             <i class="fa-solid fa-check text-2xl flex items-center justify-center"></i>
             <h2 class="text-xl font-bold flex items-center justify-center">Status Berlangganan</h2>
@@ -33,7 +33,7 @@
         </div>
     </div>
 
-    <div class="bg-gradient-to-b from-blue-600 via-blue-700 to-blue-800 text-white p-6 rounded-3xl shadow mt-7 flex flex-col ">
+    <div class="text-gray-900 p-6 rounded-3xl shadow mt-7 flex flex-col ">
         <div class="flex items-center space-x-3">
             <i class="fa-solid fa-calendar"></i>
             <h1 class="text-xl font-bold">Aktivitas</h1>
