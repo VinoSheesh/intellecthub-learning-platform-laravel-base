@@ -3,14 +3,14 @@
     <nav class="flex mb-6" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
             <li class="inline-flex items-center">
-                <a href="{{ route('dashboard') }}"
+                <a href="{{ route('allcourse') }}"
                     class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
                     <svg class="w-3 h-3 mr-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                         viewBox="0 0 20 20">
                         <path
                             d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L9 3.414V19a1 1 0 0 0 2 0V3.414l7.293 7.293a1 1 0 0 0 1.414-1.414Z" />
                     </svg>
-                    Dashboard
+                    Kursus
                 </a>
             </li>
             <li>
@@ -78,15 +78,16 @@
 
             </div>
 
-    
+            @can('tambah-course')
                 <a href="{{ route('createcourse') }}"
-                    class="flex items-center px-4 py-2 h-11 bg-blue-600 hover:bg-blue-700  text-white rounded-lg font-semibold shadow transition-all duration-200">
+                    class="flex items-center px-4 py-2 h-11 bg-blue-600 hover:bg-blue-700  text-white rounded-lg font-semibold transition-all duration-200">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    Tambah Course
+                    Tambah Kursus
                 </a>
-         
+            @endcan
+
         </div>
     </div>
 
@@ -97,7 +98,7 @@
                 class="group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-blue-200 hover:-translate-y-2 cursor-pointer">
                 <!-- Enhanced image container with overlay effects -->
                 <div class="relative overflow-hidden">
-                    <img src="{{ $course->thumbnail }}" alt="{{ $course->title }}"
+                    <img src="/{{ $course->thumbnail }}" alt="{{ $course->title }}"
                         class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-700">
 
                     <!-- Added gradient overlay for better text readability -->
@@ -137,7 +138,7 @@
                 <!-- Enhanced card content with better typography and spacing -->
                 <div class="p-6 space-y-4">
                     <!-- Added instructor info -->
-                
+
 
                     <h2
                         class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
@@ -168,8 +169,7 @@
                     </div>
 
                     <!-- Enhanced price and action section -->
-                    <div
-                        class="flex items-center justify-between pt-4 border-t border-gray-100 group">
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100 group">
 
                         <a href="{{ route('showcourse', ['id' => $course->id]) }}" wire:navigate
                             class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
@@ -187,4 +187,17 @@
             </div>
         @endforeach
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        </script>
+    @endif
 </div>
