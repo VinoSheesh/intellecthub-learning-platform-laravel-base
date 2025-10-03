@@ -1,6 +1,6 @@
-<div class="min-h-screen">
+<div class="min-h-screen font-poppins">
     {{-- Hero Section --}}
-    <div class="mx-auto pt-20 pb-16 px-6">
+    <div class="mx-auto pt-4 pb-16 px-6">
         <div class="text-center mb-20">
             <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
                 Tingkatkan Skill Coding Anda
