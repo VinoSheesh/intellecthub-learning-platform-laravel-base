@@ -8,7 +8,7 @@ use App\Models\Roles;
 
 class RoleSeeder extends Seeder
 {
-    /**
+    /**r
      * Run the database seeds.
      */
     public function run(): void

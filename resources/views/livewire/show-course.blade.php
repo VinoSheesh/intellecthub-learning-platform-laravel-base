@@ -142,11 +142,7 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8 mb-8">
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z">
-                        </path>
-                    </svg>
+                    <i class="fa-solid fa-lightbulb text-blue-600"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900">Yang Akan Anda Pelajari</h2>
             </div>
@@ -226,11 +222,7 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8 mb-8">
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
-                        </path>
-                    </svg>
+                    <i class="fa-solid fa-clipboard-list text-purple-700"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900">Kurikulum Kursus</h2>
             </div>
@@ -322,7 +314,7 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8 mb-8">
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
-                    <i class="fa-solid fa-microchip text-gray-600"></i>
+                    <i class="fa-solid fa-microchip text-red-900"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-900">Persyaratan</h2>
             </div>

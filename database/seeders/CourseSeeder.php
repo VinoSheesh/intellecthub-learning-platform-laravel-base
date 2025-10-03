@@ -28,29 +28,5 @@ class CourseSeeder extends Seeder
             'description' => 'Take your web development skills to the next level.',
             'thumbnail' => '/storage/modulNgoding.png',
         ]);
-
-        Courses::updateOrCreate([
-            'id' => 3,
-            'title' => 'Jago Public Speaking ala Pak Hitler',
-            'category_id' => 3,
-            'description' => 'Explore the world of data science and analytics.',
-            'thumbnail' => '/storage/jagoPublicSpeaking.webp',
-        ]);
-
-        Courses::updateOrCreate([
-            'id' => 4,
-            'title' => 'Bagaimana agar berwibawa seperti kaisar hirohito',
-            'category_id' => 3,
-            'description' => 'Explore the world of data science and analytics.',
-            'thumbnail' => '/storage/berwibawaHirohito.jpg',
-        ]);
-
-        Courses::updateOrCreate([
-            'id' => 5,
-            'title' => 'Cara agar tidak digantung seperti Benito Mussolini',
-            'category_id' => 3,
-            'description' => 'Explore the world of data science and analytics.',
-            'thumbnail' => '/storage/agarTidakDigantung.jpeg',
-        ]);
     }
 }
