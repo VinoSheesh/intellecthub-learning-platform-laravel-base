@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('thumbnail', 255)->nullable();
+            $table->boolean('is_paid')->default(false);
             $table->timestamps();
         });
     }
