@@ -45,11 +45,11 @@ $watch('isCollapsed', value => {
     class="fixed left-0 top-0 bottom-0 w-64 bg-gradient-to-b from-blue-600 via-blue-700 to-blue-800 shadow-2xl transform transition-all duration-300 ease-in-out z-50 overflow-hidden font-poppins">
 
     <!-- Sidebar Header -->
-    <div class="flex items-center justify-between p-4 border-b border-blue-500/30"
+    <div class="flex items-center justify-center p-4 border-b border-blue-500/30"
         :class="{ 'justify-center px-2': isCollapsed }">
         <!-- Logo & Brand -->
         <div class="flex items-center space-x-3" :class="{ 'justify-center space-x-0': isCollapsed }">
-            <div
+            <div x-show="!isCollapsed"
                 class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm ring-1 ring-white/10 flex-shrink-0">
                 <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path

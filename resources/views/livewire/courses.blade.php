@@ -127,12 +127,6 @@
                             </svg>
                         </button>
                     </div>
-
-                    <!-- Added progress indicator -->
-                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gray-200">
-                        <div class="h-full bg-blue-500 transition-all duration-500 group-hover:bg-blue-400"
-                            style="width: {{ rand(20, 80) }}%"></div>
-                    </div>
                 </div>
 
                 <!-- Enhanced card content with better typography and spacing -->
