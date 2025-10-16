@@ -61,9 +61,9 @@
                         <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-4">
                             {{ $course->title }}
                         </h1>
-                        <p class="text-gray-600 leading-relaxed text-base">
-                            {{ $course->description }}
-                        </p>
+                        <div class="text-gray-600 leading-relaxed text-base prose prose-lg max-w-none">
+                            {!! $course->description !!}
+                        </div>
                     </div>
 
                     <!-- Category & Stats Container -->

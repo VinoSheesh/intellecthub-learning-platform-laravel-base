@@ -36,7 +36,7 @@ class CreateCourse extends Component
         $this->validate();
 
         $path = $this->thumbnail->store('thumbnails', 'public');
-
+        
         Courses::create([
             'title' => $this->title,
             'description' => $this->description,

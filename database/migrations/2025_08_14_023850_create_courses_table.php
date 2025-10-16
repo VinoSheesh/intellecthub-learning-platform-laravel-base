@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('title', 150);
-            $table->text('description');
+            $table->longText('description');
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('thumbnail', 255)->nullable();
             $table->boolean('is_paid')->default(false);

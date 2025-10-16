@@ -139,8 +139,8 @@
                         {{ $course->title }}
                     </h2>
 
-                    <p class="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                        {{ Str::limit($course->description, 120) }}
+                    <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 prose prose-lg max-w-none">
+                        {!! Str::limit($course->description, 120) !!}
                     </p>
 
                     <!-- Enhanced price and action section -->
