@@ -11,11 +11,10 @@ class Lessons extends Model
 
     protected $fillable = [
         'title',
-        'description',
-        'video_url',
+        'content',
         'course_id',
-        'duration',
         'order',
+        'is_preview',
     ];
 
     public function course ()
