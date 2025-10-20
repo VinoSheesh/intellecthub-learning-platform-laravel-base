@@ -394,48 +394,60 @@ $watch('isCollapsed', value => {
     document.addEventListener('DOMContentLoaded', function() {
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
-        const mainContent = document.getElementById('mainContent');
 
-        // Handle escape key for mobile
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && window.innerWidth < 1024 && !sidebar.classList.contains(
-                    '-translate-x-full')) {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('opacity-0', 'pointer-events-none');
-                document.body.classList.remove('overflow-hidden');
-            }
-        });
-
-        // Initialize main content positioning
+        // Function to initialize main content positioning
         function initializeLayout() {
-            if (window.innerWidth >= 1024 && mainContent) {
-                const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
-                if (isCollapsed) {
-                    mainContent.style.marginLeft = '4rem';
-                    mainContent.style.width = 'calc(100vw - 4rem)';
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                if (window.innerWidth >= 1024) {
+                    const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
+                    if (isCollapsed) {
+                        mainContent.style.marginLeft = '4rem';
+                        mainContent.style.width = 'calc(100vw - 4rem)';
+                    } else {
+                        mainContent.style.marginLeft = '16rem';
+                        mainContent.style.width = 'calc(100vw - 16rem)';
+                    }
                 } else {
-                    mainContent.style.marginLeft = '16rem';
-                    mainContent.style.width = 'calc(100vw - 16rem)';
+                    mainContent.style.marginLeft = '0';
+                    mainContent.style.width = '100%';
                 }
-            } else if (mainContent) {
-                mainContent.style.marginLeft = '0';
-                mainContent.style.width = '100%';
             }
         }
 
-        // Initialize on load
-        initializeLayout();
+        // Add a delay before initializing layout
+        setTimeout(initializeLayout, 500); // Adjust the delay as needed
 
         // Handle window resize
         window.addEventListener('resize', function() {
-            if (window.innerWidth >= 1024) {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.add('opacity-0', 'pointer-events-none');
-                document.body.classList.remove('overflow-hidden');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-            }
             initializeLayout();
         });
+    });
+
+    document.addEventListener('livewire:navigated', function() {
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebarOverlay');
+
+        // Function to initialize main content positioning
+        function initializeLayout() {
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                if (window.innerWidth >= 1024) {
+                    const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
+                    if (isCollapsed) {
+                        mainContent.style.marginLeft = '4rem';
+                        mainContent.style.width = 'calc(100vw - 4rem)';
+                    } else {
+                        mainContent.style.marginLeft = '16rem';
+                        mainContent.style.width = 'calc(100vw - 16rem)';
+                    }
+                } else {
+                    mainContent.style.marginLeft = '0';
+                    mainContent.style.width = '100%';
+                }
+            }
+        }
+
+        initializeLayout();
     });
 </script>

@@ -36,6 +36,7 @@
         </ol>
     </nav>
 
+    <div class="w-full flex flex-col items-center">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
         <div class="mb-4 lg:mb-0">
             <h1 class="text-4xl text-gray-800 font-bold mb-2">Tambah Kursus</h1>
@@ -43,20 +44,21 @@
         </div>
     </div>
 
-    <div class="max-w-screen-lg p-6 rounded-3xl shadow">
+
+    <div class="w-fit h-fit flex justify-center p-6 rounded-3xl shadow">
         <form wire:submit.prevent="save" class="space-y-6">
-            <div class="max-w-md">
+            <div class="max-w-full">
                 <label class="font-medium">Nama Kursus</label>
                 <input type="text" wire:model="title"
                     class="w-full border border-gray-300 rounded-lg shadow-sm mt-2">
             </div>
 
-            <div class="max-w-md" wire:ignore>
+            <div class="w-full" wire:ignore>
                 <label class="font-medium">Deskripsi</label>
                 <textarea id="description" class="w-full border border-gray-300 rounded-lg shadow-sm mt-2"></textarea>
             </div>
 
-            <div class="max-w-md">
+            <div class="max-w-full">
                 <label for="thumbnail" class="font-medium">
                     Gambar Kursus
                 </label>
@@ -71,7 +73,7 @@
                 </p>
             </div>
 
-            <div class="max-w-md">
+            <div class="max-w-full mb-6">
                 <label class="font-medium">Kategori</label>
                 <select wire:model="category_id" class="w-full border border-gray-300 rounded-lg shadow-sm mt-2">
                     <option value="">Pilih Kategori</option>
@@ -81,54 +83,55 @@
                 </select>
             </div>
 
-            <button type="submit"
-                class="px-4 py-2 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-lg mt-4">
+            <button type="submit" class="w-full px-4 py-2 h-11 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
                 Tambah Kursus
             </button>
         </form>
     </div>
 </div>
+</div>
 
 @push('scripts')
-<script src="https://cdn.tiny.cloud/1/tk53il8cfcy4hloxph6vcbh3inhxm1fn11srse1i98t67hpm/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
-<script>
-    let editor;
-    
-    function initTinyMCE() {
-        if (tinymce.get('description')) {
-            tinymce.get('description').remove();
+    <script src="https://cdn.tiny.cloud/1/tk53il8cfcy4hloxph6vcbh3inhxm1fn11srse1i98t67hpm/tinymce/8/tinymce.min.js"
+        referrerpolicy="origin" crossorigin="anonymous"></script>
+    <script>
+        let editor;
+
+        function initTinyMCE() {
+            if (tinymce.get('description')) {
+                tinymce.get('description').remove();
+            }
+
+            tinymce.init({
+                selector: 'textarea#description',
+                plugins: 'code table lists',
+                toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table',
+                setup: function(ed) {
+                    editor = ed;
+
+                    ed.on('init', function(e) {
+                        console.log('TinyMCE initialized');
+                    });
+
+                    ed.on('change keyup', function(e) {
+                        @this.set('description', ed.getContent());
+                    });
+                }
+            });
         }
-        
-        tinymce.init({
-            selector: 'textarea#description',
-            plugins: 'code table lists',
-            toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table',
-            setup: function (ed) {
-                editor = ed;
-                
-                ed.on('init', function(e) {
-                    console.log('TinyMCE initialized');
-                });
-                
-                ed.on('change keyup', function (e) {
-                    @this.set('description', ed.getContent());
-                });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initTinyMCE();
+        });
+
+        document.addEventListener('livewire:navigated', function() {
+            initTinyMCE();
+        });
+
+        window.addEventListener('beforeunload', function() {
+            if (editor) {
+                @this.set('description', editor.getContent());
             }
         });
-    }
-    
-    document.addEventListener('DOMContentLoaded', function() {
-        initTinyMCE();
-    });
-    
-    document.addEventListener('livewire:navigated', function () {
-        initTinyMCE();
-    });
-    
-    window.addEventListener('beforeunload', function() {
-        if (editor) {
-            @this.set('description', editor.getContent());
-        }
-    });
-</script>
+    </script>
 @endpush
