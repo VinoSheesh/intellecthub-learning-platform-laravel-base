@@ -66,7 +66,7 @@ Ikuti langkah ini untuk menjalankan proyek di komputer lokal Anda:
 
 1.  **Clone Repositori**
     ```bash
-    git clone [https://github.com/username-anda/intellecthub.git](https://github.com/username-anda/intellecthub.git)
+    git clone https://github.com/VinoSheesh/intellecthub-learning-platform-laravel-base.git
     cd intellecthub
     ```
 
