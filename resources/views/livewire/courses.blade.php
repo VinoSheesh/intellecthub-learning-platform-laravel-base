@@ -144,12 +144,31 @@
                     </p>
 
                     <!-- Enhanced price and action section -->
-                    <div class="flex items-center justify-between pt-4 border-t border-gray-100 group">
-
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100 group gap-2">
                         <a href="{{ route('showcourse', ['id' => $course->id]) }}" wire:navigate
-                            class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
+                            class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
                             Lihat
                         </a>
+
+                        @can('edit-course')
+                            <a href="{{ route('editcourse', ['id' => $course->id]) }}" wire:navigate
+                                class="px-4 py-2.5 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                Edit
+                            </a>
+                        @endcan
+
+                        @can('hapus-course')
+                            <button onclick="confirmDeleteCourse({{ $course->id }})"
+                                class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Hapus
+                            </button>
+                        @endcan
                     </div>
 
                 </div>
@@ -163,16 +182,54 @@
         @endforeach
     </div>
 
+    {{-- Tambahkan script ini di akhir file, sebelum closing </div> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @if (session('success'))
-        <script>
+    <script>
+        function confirmDeleteCourse(courseId) {
+            Swal.fire({
+                title: 'Hapus Kursus?',
+                text: 'Apakah anda yakin ingin menghapus kursus ini? Tindakan ini tidak dapat dibatalkan.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                backdrop: true,
+                allowOutsideClick: false,
+                willOpen: () => {
+                    document.querySelector('.swal2-confirm').focus();
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Panggil method Livewire
+                    @this.call('deleteCourse', courseId);
+                    
+                    // Tampilkan alert sukses setelah delay
+                    setTimeout(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: 'Kursus berhasil dihapus.',
+                            showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true
+                        });
+                    }, 500);
+                }
+            });
+        }
+
+        // Tampilkan notifikasi jika ada session success
+        @if (session('success'))
             Swal.fire({
                 icon: 'success',
                 title: 'Berhasil!',
                 text: '{{ session('success') }}',
                 showConfirmButton: false,
-                timer: 2000
-            })
-        </script>
-    @endif
+                timer: 2000,
+                timerProgressBar: true
+            });
+        @endif
+    </script>
 </div>

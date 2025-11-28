@@ -6,28 +6,26 @@ use Livewire\Component;
 use App\Models\Courses;
 use App\Models\Categories;
 use Livewire\WithFileUploads;
-use Illuminate\Validation\Rule;
 
 class CreateCourse extends Component
 {
     use WithFileUploads;
+
     public $title;
     public $description;
     public $thumbnail;
     public $category_id;
-
     public $categories;
 
     protected $rules = [
         'title' => 'required|string|max:255',
         'description' => 'required|string',
-        'thumbnail' => 'nullable|image|max:2048',
+        'thumbnail' => 'required|image|max:2048',
         'category_id' => 'required|exists:categories,id'
     ];
 
     public function mount()
     {
-        // Menggunakan get() untuk mengambil data kategori
         $this->categories = Categories::all();
     }
 
@@ -35,23 +33,29 @@ class CreateCourse extends Component
     {
         $this->validate();
 
+        if (!$this->thumbnail) {
+            $this->addError('thumbnail', 'Thumbnail harus diupload');
+            return;
+        }
+
         $path = $this->thumbnail->store('thumbnails', 'public');
-        
+
         Courses::create([
             'title' => $this->title,
             'description' => $this->description,
-            'thumbnail' => 'storage/'.$path,
+            'thumbnail' => 'storage/' . $path,
             'category_id' => $this->category_id,
         ]);
 
-        $this->reset();
+        session()->flash('success', 'Kursus berhasil ditambahkan!');
+        $this->dispatch('courseCreated');
 
-        return redirect()->route('allcourse')->with('success', 'Kursus berhasil ditambahkan!');
+        $this->reset();
+        return redirect()->route('allcourse');
     }
 
     public function render()
     {
-        // Memastikan categories selalu memiliki nilai
         $this->categories = $this->categories ?? Categories::all();
 
         return view('livewire.create-course', [

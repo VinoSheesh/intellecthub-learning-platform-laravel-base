@@ -13,7 +13,7 @@ class Lessons extends Model
         'title',
         'content',
         'course_id',
-        'order',
+        'order', 
         'is_preview',
     ];
 
