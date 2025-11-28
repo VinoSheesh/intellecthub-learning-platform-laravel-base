@@ -30,7 +30,7 @@ Berikut adalah fitur yang sudah diimplementasikan dan dapat digunakan:
 
 <img width="400" alt="image_2025-11-28_102157573-front" src="https://github.com/user-attachments/assets/01392e10-665c-477f-b509-6eab44622c65" />
 <img width="400" alt="image_2025-11-28_102115556-front" src="https://github.com/user-attachments/assets/4da409d8-528e-4dbe-b4a0-b35da94cd2de" />
-<img width="400" alt="image_2025-11-28_102352954-front" src="https://github.com/user-attachments/assets/e4f3bbc3-636e-4e37-9bd1-cb8094df5188" />
+<img width="400" alt="image_2025-11-28_102352954-front" src="https://github.com/user-attachments/assets/5a4285dc-a684-4f02-868c-b385d015c8f8" />
 <img width="400" alt="image_2025-11-28_102302307-front" src="https://github.com/user-attachments/assets/cfe54056-51ca-4af1-9746-a31bef8008f2" />
 <img width="400" alt="image_2025-11-28_102326897-front" src="https://github.com/user-attachments/assets/7df9bb7c-690c-4a04-b2e1-73744597e409" />
 <img width="400" alt="image_2025-11-28_102232508-front" src="https://github.com/user-attachments/assets/bff30dac-f014-4cb6-8f91-f5191706d59d" />
