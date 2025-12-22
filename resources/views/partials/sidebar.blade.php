@@ -77,123 +77,144 @@ $watch('isCollapsed', value => {
     <!-- Improved collapsed state styling with better icon centering and spacing -->
     <nav class="flex-1 py-4 space-y-1 overflow-y-auto" :class="{ 'px-2': isCollapsed, 'px-4': !isCollapsed }">
         <!-- Dashboard -->
-        <a href="{{ route('dashboard') }}"
-            class="sidebar-menu-item group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 relative overflow-hidden
+        @unlessrole('SuperAdmin')
+            <a href="{{ route('dashboard') }}"
+                class="sidebar-menu-item group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 relative overflow-hidden
             {{ request()->routeIs('dashboard') ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm' : 'text-white/80 hover:bg-white/10 hover:text-white' }}"
-            :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
-
-            <i class="fa-solid fa-house text-lg flex-shrink-0"
-                :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
-            <span class="menu-text" x-show="!isCollapsed"
-                x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100">Dashboard</span>
-
-            @if (request()->routeIs('dashboard'))
-                <div class="menu-text ml-auto w-2 h-2 bg-white rounded-full flex-shrink-0 animate-pulse"
-                    x-show="!isCollapsed"></div>
-                <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-50"></div>
-            @endif
-        </a>
-
-        <!-- My Courses -->
-        <div class="sidebar-dropdown">
-            <button @click="coursesOpen = !coursesOpen"
-                class="sidebar-menu-item w-full group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 relative overflow-hidden
-                {{ request()->routeIs('courses.*') ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm' : 'text-white/80 hover:bg-white/10 hover:text-white' }}"
                 :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
 
-                <i class="fa-solid fa-book-open text-lg flex-shrink-0"
+                <i class="fa-solid fa-house text-lg flex-shrink-0"
                     :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
-                <span class="menu-text flex-1 text-left" x-show="!isCollapsed"
+                <span class="menu-text" x-show="!isCollapsed"
                     x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0"
-                    x-transition:enter-end="opacity-100">Courses</span>
-                <i class="fa-solid fa-caret-down dropdown-arrow transition-transform duration-200 menu-text flex-shrink-0"
-                    :class="{ 'rotate-180': coursesOpen }" x-show="!isCollapsed"></i>
+                    x-transition:enter-end="opacity-100">Dashboard</span>
 
-                @if (request()->routeIs('courses.*'))
+                @if (request()->routeIs('dashboard'))
+                    <div class="menu-text ml-auto w-2 h-2 bg-white rounded-full flex-shrink-0 animate-pulse"
+                        x-show="!isCollapsed"></div>
                     <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-50"></div>
                 @endif
-            </button>
+            </a>
+        @endunlessrole
 
-            <!-- Submenu -->
-            <div x-show="coursesOpen && !isCollapsed" x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
-                class="submenu ml-6 mt-2 space-y-1 border-l-2 border-white/20 pl-4">
+        @unlessrole(['Student', 'Instructor'])
+            <a href="{{ route('admindashboard') }}"
+                class="sidebar-menu-item group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 relative overflow-hidden
+            {{ request()->routeIs('admindashboard') ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm' : 'text-white/80 hover:bg-white/10 hover:text-white' }}"
+                :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
 
-                <a href="{{ route('allcourse') }}"
-                    class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
+                <i class="fa-solid fa-screwdriver-wrench text-lg flex-shrink-0"
+                    :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
+                <span class="menu-text" x-show="!isCollapsed"
+                    x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100">Admin Panel</span>
+
+                @if (request()->routeIs('admindashboard'))
+                    <div class="menu-text ml-auto w-2 h-2 bg-white rounded-full flex-shrink-0 animate-pulse"
+                        x-show="!isCollapsed"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-50"></div>
+                @endif
+            </a>
+        @endunlessrole
+
+        <!-- My Courses -->
+        @unlessrole('SuperAdmin')
+            <div class="sidebar-dropdown">
+                <button @click="coursesOpen = !coursesOpen"
+                    class="sidebar-menu-item w-full group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 relative overflow-hidden
+                {{ request()->routeIs('courses.*') ? 'bg-white/20 text-white shadow-lg backdrop-blur-sm' : 'text-white/80 hover:bg-white/10 hover:text-white' }}"
+                    :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
+
+                    <i class="fa-solid fa-book-open text-lg flex-shrink-0"
+                        :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
+                    <span class="menu-text flex-1 text-left" x-show="!isCollapsed"
+                        x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0"
+                        x-transition:enter-end="opacity-100">Courses</span>
+                    <i class="fa-solid fa-caret-down dropdown-arrow transition-transform duration-200 menu-text flex-shrink-0"
+                        :class="{ 'rotate-180': coursesOpen }" x-show="!isCollapsed"></i>
+
+                    @if (request()->routeIs('courses.*'))
+                        <div class="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-50"></div>
+                    @endif
+                </button>
+
+                <!-- Submenu -->
+                <div x-show="coursesOpen && !isCollapsed" x-transition:enter="transition ease-out duration-200"
+                    x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+                    class="submenu ml-6 mt-2 space-y-1 border-l-2 border-white/20 pl-4">
+
+                    <a href="{{ route('allcourse') }}"
+                        class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
                     {{ request()->routeIs('allcourse') ? 'bg-white/15 text-white shadow-md' : 'text-white/70 hover:bg-white/10 hover:text-white' }}">
-                    <i class="fa-solid fa-list-ul text-xs mr-2 opacity-60"></i>
-                    All Courses
-                    @if (request()->routeIs('allcourse'))
-                        <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
-                    @endif
-                </a>
+                        <i class="fa-solid fa-list-ul text-xs mr-2 opacity-60"></i>
+                        All Courses
+                        @if (request()->routeIs('allcourse'))
+                            <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                        @endif
+                    </a>
 
-                <a href="{{ route('inprogress') }}"
-                    class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
+                    <a href="{{ route('inprogress') }}"
+                        class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
                     {{ request()->routeIs('inprogress') ? 'bg-white/15 text-white shadow-md' : 'text-white/70 hover:bg-white/10 hover:text-white' }}">
-                    <i class="fa-solid fa-clock text-xs mr-2 opacity-60"></i>
-                    In Progress
-                    @if (request()->routeIs('inprogress'))
-                        <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
-                    @endif
-                </a>
+                        <i class="fa-solid fa-clock text-xs mr-2 opacity-60"></i>
+                        In Progress
+                        @if (request()->routeIs('inprogress'))
+                            <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                        @endif
+                    </a>
 
-                <a href="{{ route('completed') }}"
-                    class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
+                    <a href="{{ route('completed') }}"
+                        class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
                     {{ request()->routeIs('completed') ? 'bg-white/15 text-white shadow-md' : 'text-white/70 hover:bg-white/10 hover:text-white' }}">
-                    <i class="fa-solid fa-check-circle text-xs mr-2 opacity-60"></i>
-                    Completed
-                    @if (request()->routeIs('completed'))
-                        <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
-                    @endif
-                </a>
+                        <i class="fa-solid fa-check-circle text-xs mr-2 opacity-60"></i>
+                        Completed
+                        @if (request()->routeIs('completed'))
+                            <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                        @endif
+                    </a>
 
-                <a href="{{ route('favorites') }}"
-                    class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
+                    <a href="{{ route('favorites') }}"
+                        class="menu-text flex items-center px-3 py-2 text-sm rounded-lg transition-all duration-200 relative
                     {{ request()->routeIs('favorites') ? 'bg-white/15 text-white shadow-md' : 'text-white/70 hover:bg-white/10 hover:text-white' }}">
-                    <i class="fa-solid fa-heart text-xs mr-2 opacity-60"></i>
-                    Favorites
-                    @if (request()->routeIs('favorites'))
-                        <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
-                    @endif
-                </a>
+                        <i class="fa-solid fa-heart text-xs mr-2 opacity-60"></i>
+                        Favorites
+                        @if (request()->routeIs('favorites'))
+                            <div class="ml-auto w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div>
+                        @endif
+                    </a>
+                </div>
             </div>
-        </div>
+        @endunlessrole
 
         <!-- Assignments -->
-        <a href="#"
-            class="sidebar-menu-item group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 text-white/80 hover:bg-white/10 hover:text-white relative overflow-hidden"
-            :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
-            <i class="fa-solid fa-clipboard-list text-lg flex-shrink-0"
-                :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
-            <span class="menu-text" x-show="!isCollapsed"
-                x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100">Assignments</span>
-        </a>
+        @unlessrole('SuperAdmin')
+            <a href="#"
+                class="sidebar-menu-item group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 text-white/80 hover:bg-white/10 hover:text-white relative overflow-hidden"
+                :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
+                <i class="fa-solid fa-clipboard-list text-lg flex-shrink-0"
+                    :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
+                <span class="menu-text" x-show="!isCollapsed"
+                    x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100">Assignments</span>
+            </a>
+        @endunlessrole
 
         <!-- Grades -->
-        <a href="#"
-            class="sidebar-menu-item group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 text-white/80 hover:bg-white/10 hover:text-white relative overflow-hidden"
-            :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
-            <i class="fa-solid fa-chart-simple text-lg flex-shrink-0"
-                :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
-            <span class="menu-text" x-show="!isCollapsed"
-                x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100">Grades & Progress</span>
-        </a>
+        @unlessrole('SuperAdmin')
+            <a href="#"
+                class="sidebar-menu-item group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 text-white/80 hover:bg-white/10 hover:text-white relative overflow-hidden"
+                :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
 
-        <!-- Calendar -->
-        <a href="#"
-            class="sidebar-menu-item group flex items-center py-3 text-sm font-medium rounded-xl transition-all duration-200 text-white/80 hover:bg-white/10 hover:text-white relative overflow-hidden"
-            :class="{ 'justify-center px-0': isCollapsed, 'px-4': !isCollapsed }">
-            <i class="fa-solid fa-calendar text-lg flex-shrink-0"
-                :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
-            <span class="menu-text" x-show="!isCollapsed"
-                x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100">Calendar</span>
-        </a>
+                <i class="fa-solid fa-chart-simple text-lg flex-shrink-0"
+                    :class="{ 'mr-0': isCollapsed, 'mr-3': !isCollapsed }"></i>
+
+                <span class="menu-text" x-show="!isCollapsed"
+                    x-transition:enter="transition ease-out duration-200 delay-100" x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100">
+                    Grades & Progress
+                </span>
+            </a>
+        @endunlessrole
 
         <!-- Divider -->
         <div class="border-t border-white/20 my-4" :class="{ 'mx-2': isCollapsed, 'mx-0': !isCollapsed }"></div>

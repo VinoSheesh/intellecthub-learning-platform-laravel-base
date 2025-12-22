@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('order')->default(1);
             $table->boolean('is_preview')->default(false);
             $table->timestamps();
-        });
+        });;
     }
 
     /**

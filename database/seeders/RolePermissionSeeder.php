@@ -14,14 +14,15 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name'=>'tambah-course']);
-        Permission::create(['name'=>'edit-course']);
-        Permission::create(['name'=>'hapus-course']);
-        Permission::create(['name'=>'lihat-course']);
+        Permission::firstOrCreate(['name'=>'tambah-course']);
+        Permission::firstOrCreate(['name'=>'edit-course']);
+        Permission::firstOrCreate(['name'=>'hapus-course']);
+        Permission::firstOrCreate(['name'=>'lihat-course']);
+        Permission::firstOrCreate(['name'=>'admin-dashboard']);
 
-        Role::create(['name' => 'SuperAdmin']);
-        Role::create(['name' => 'Student']);
-        Role::create(['name' => 'Instructor']); // Tambahkan role Instructor
+        Role::firstOrCreate(['name' => 'SuperAdmin']);
+        Role::firstOrCreate(['name' => 'Student']);
+        Role::firstOrCreate(['name' => 'Instructor']);
 
         $roleAdmin = Role::findByName('SuperAdmin');
         $roleAdmin->givePermissionTo(Permission::all());
