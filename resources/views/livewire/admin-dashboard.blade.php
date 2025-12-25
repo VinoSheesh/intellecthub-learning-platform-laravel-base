@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <a class="w-fit flex flex-col items-center justify-center gap-3 p-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-xl border border-blue-100" href="">
+    <a class="w-fit flex flex-col items-center justify-center gap-3 p-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-xl border border-blue-100" href="{{ route('managecourses') }}">
         <i class="fa-solid fa-book-open text-6xl text-white"></i>
         <h2 class="text-white text-xl font-bold">Manage Course</h2>
     </a>

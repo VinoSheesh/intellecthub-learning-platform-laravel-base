@@ -8,6 +8,6 @@ class ManageCourses extends Component
 {
     public function render()
     {
-        return view('livewire.manage-courses');
+        return view('livewire.manage-courses')->layout('layouts.app');
     }
 }

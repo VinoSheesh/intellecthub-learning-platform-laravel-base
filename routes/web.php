@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
-use App\Livewire\AdminDashboard;
 use Illuminate\Support\Facades\Route;
 
 
@@ -12,9 +11,12 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard')->middleware('role:Student');
-    route::get('/admindashboard', AdminDashboard::class)->name('admindashboard')->middleware('role:SuperAdmin');
     Route::get('/subscription', \App\Livewire\Subscription::class)->name('subscriptionplan');
     Route::get('/subscription/transaction', \App\Livewire\SubscriptionTransaction::class)->name('subscriptiontransaction');
+    Route::prefix('admin')->group(function () {
+        route::get('/admindashboard', \App\Livewire\AdminDashboard::class)->name('admindashboard')->middleware('role:SuperAdmin');
+        Route::get('/managecourses', \App\Livewire\ManageCourses::class)->name('managecourses')->middleware('role:SuperAdmin');
+    });
     Route::prefix('courses')->group(function () {
         Route::get('/allcourse', \App\Livewire\Courses::class)->name('allcourse');
         Route::get('/createcourse', \App\Livewire\Createcourse::class)->name('createcourse');
