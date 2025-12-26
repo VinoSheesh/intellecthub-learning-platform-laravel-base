@@ -10,11 +10,11 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard')->middleware('role:Student');
+    Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
     Route::get('/subscription', \App\Livewire\Subscription::class)->name('subscriptionplan');
     Route::get('/subscription/transaction', \App\Livewire\SubscriptionTransaction::class)->name('subscriptiontransaction');
     Route::prefix('admin')->group(function () {
-        route::get('/admindashboard', \App\Livewire\AdminDashboard::class)->name('admindashboard')->middleware('role:SuperAdmin');
+        Route::get('/admindashboard', \App\Livewire\AdminDashboard::class)->name('admindashboard')->middleware('role:SuperAdmin');
         Route::get('/managecourses', \App\Livewire\ManageCourses::class)->name('managecourses')->middleware('role:SuperAdmin');
     });
     Route::prefix('courses')->group(function () {
