@@ -51,7 +51,7 @@ class CreateCourse extends Component
         $this->dispatch('courseCreated');
 
         $this->reset();
-        return redirect()->route('allcourse');
+        return redirect()->route('managecourses');
     }
 
     public function render()

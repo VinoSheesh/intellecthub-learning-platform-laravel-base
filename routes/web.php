@@ -16,6 +16,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('admin')->group(function () {
         Route::get('/admindashboard', \App\Livewire\AdminDashboard::class)->name('admindashboard')->middleware('role:SuperAdmin');
         Route::get('/managecourses', \App\Livewire\ManageCourses::class)->name('managecourses')->middleware('role:SuperAdmin');
+        Route::get('/coursedetail/{id}', \App\Livewire\CourseDetail::class)->name('coursedetail')->middleware('role:SuperAdmin');
     });
     Route::prefix('courses')->group(function () {
         Route::get('/allcourse', \App\Livewire\Courses::class)->name('allcourse');

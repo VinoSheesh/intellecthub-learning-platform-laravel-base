@@ -67,7 +67,7 @@ class EditCourse extends Component
         session()->flash('success', 'Kursus berhasil diperbarui!');
         $this->dispatch('courseUpdated');
         
-        return redirect()->route('allcourse');
+        return redirect()->route('managecourses');
     }
 
     public function render()
