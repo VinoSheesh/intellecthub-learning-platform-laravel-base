@@ -11,35 +11,24 @@ class CourseDetail extends Component
 {
     public $course;
     public $lessons;
-    
+
     // Modal & Form State
     public $showModal = false;
     public $isEditing = false;
     public $editingLessonId = null;
-    
+
     // Form Fields
     #[Validate('required|string|max:150')]
     public $title = '';
-    
-    #[Validate('required|string')]
-    public $contentType = 'video';
-    
+
     #[Validate('required|string')]
     public $content = '';
-    
-    #[Validate('nullable|string|max:255')]
-    public $description = '';
-    
-    #[Validate('required|integer|min:1')]
-    public $duration = 5;
-    
-    #[Validate('nullable|string|max:100')]
-    public $sectionName = '';
 
     #[Validate]
     public function mount($id)
     {
         $this->course = Courses::with('category')->findOrFail($id);
+        $this->lessons = Lessons::orderBy('order')->get();
         $this->loadLessons();
     }
 
@@ -52,53 +41,31 @@ class CourseDetail extends Component
                 'id' => $lesson->id,
                 'title' => $lesson->title,
                 'content' => $lesson->content,
-                'content_type' => $lesson->content_type ?? 'video',
-                'description' => $lesson->description ?? '',
-                'duration' => $lesson->duration ?? 5,
-                'section_name' => $lesson->section_name ?? '',
                 'order' => $lesson->order,
             ])
             ->toArray();
     }
 
-    public function getLessonsBySection()
-    {
-        $grouped = [];
-        foreach ($this->lessons as $lesson) {
-            $section = $lesson['section_name'] ?: 'Tanpa Bagian';
-            if (!isset($grouped[$section])) {
-                $grouped[$section] = [];
-            }
-            $grouped[$section][] = $lesson;
-        }
-        return $grouped;
-    }
-
-    public function openAddLessonModal($section = null)
+    public function openAddLessonModal()
     {
         $this->resetForm();
-        if ($section) {
-            $this->sectionName = $section;
-        }
         $this->showModal = true;
         $this->isEditing = false;
+        $this->dispatchBrowserEvent('tinymce:init', ['content' => $this->content]);
     }
 
     public function openEditLessonModal($lessonId)
     {
         $lesson = Lessons::find($lessonId);
-        
+
         if ($lesson) {
             $this->editingLessonId = $lessonId;
             $this->title = $lesson->title;
-            $this->contentType = $lesson->content_type ?? 'video';
             $this->content = $lesson->content;
-            $this->description = $lesson->description ?? '';
-            $this->duration = $lesson->duration ?? 5;
-            $this->sectionName = $lesson->section_name ?? '';
-            
+
             $this->isEditing = true;
             $this->showModal = true;
+            $this->dispatchBrowserEvent('tinymce:init', ['content' => $this->content]);
         }
     }
 
@@ -111,11 +78,7 @@ class CourseDetail extends Component
     public function resetForm()
     {
         $this->title = '';
-        $this->contentType = 'video';
         $this->content = '';
-        $this->description = '';
-        $this->duration = 5;
-        $this->sectionName = '';
         $this->editingLessonId = null;
         $this->isEditing = false;
     }
@@ -131,10 +94,6 @@ class CourseDetail extends Component
                     $lesson->update([
                         'title' => $this->title,
                         'content' => $this->content,
-                        'description' => $this->description,
-                        'duration' => $this->duration,
-                        'content_type' => $this->contentType,
-                        'section_name' => $this->sectionName,
                     ]);
                     $this->dispatch('lesson-updated', [
                         'title' => $this->title,
@@ -150,10 +109,6 @@ class CourseDetail extends Component
                     'course_id' => $this->course->id,
                     'title' => $this->title,
                     'content' => $this->content,
-                    'description' => $this->description,
-                    'duration' => $this->duration,
-                    'content_type' => $this->contentType,
-                    'section_name' => $this->sectionName,
                     'order' => $maxOrder + 1,
                 ]);
                 $this->dispatch('lesson-created', [
@@ -195,29 +150,27 @@ class CourseDetail extends Component
         }
     }
 
-    public function reorderLessons($lessonsOrder)
+    public function order()
+    {
+        foreach ($this->orders as $order) {
+            Lessons::where('id', $order['value'])->update(['order' => $order['order']]);
+        }
+    }
+
+    public function reorderLessons($ids)
     {
         try {
-            \Log::debug('Reorder lessons called with:', ['lessonsOrder' => $lessonsOrder]);
-            
-            // Ensure $lessonsOrder is an array
-            if (!is_array($lessonsOrder)) {
-                $lessonsOrder = json_decode($lessonsOrder, true) ?? [];
-            }
-
-            foreach ($lessonsOrder as $index => $lessonId) {
-                Lessons::where('id', $lessonId)->update(['order' => $index + 1]);
+            foreach ($ids as $index => $id) {
+                Lessons::where('id', $id)->update(['order' => $index + 1]);
             }
             $this->loadLessons();
             $this->dispatch('lesson-reordered', [
-                'icon' => 'success',
+                'title' => 'Berhasil',
                 'message' => 'Urutan materi berhasil diperbarui!'
             ]);
         } catch (\Exception $e) {
-            \Log::error('Reorder lessons error:', ['message' => $e->getMessage()]);
             $this->dispatch('lesson-error', [
-                'icon' => 'error',
-                'message' => 'Gagal mengurutkan materi: ' . $e->getMessage()
+                'message' => 'Gagal mengurutkan: ' . $e->getMessage()
             ]);
         }
     }
@@ -226,7 +179,6 @@ class CourseDetail extends Component
     {
         return view('livewire.course-detail', [
             'lessonsCount' => count($this->lessons),
-            'groupedLessons' => $this->getLessonsBySection(),
         ])->layout('layouts.app');
     }
 }
