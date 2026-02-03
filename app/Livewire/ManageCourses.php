@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Courses;
+use App\Models\Lessons;
 use Livewire\WithPagination;
 
 class ManageCourses extends Component
