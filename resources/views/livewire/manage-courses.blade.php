@@ -49,7 +49,7 @@
     @endif
 
     <!-- Search Bar dan Filter -->
-    <div class="mb-6 flex flex-row gap-2">
+    <div class="relative mb-6 flex flex-row gap-2">
         <input type="text" wire:model.live="search" placeholder="Cari kursus..."
             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
         <button
@@ -61,11 +61,16 @@
                     d="M7.75 4H19M7.75 4a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 4h2.25m13.5 6H19m-2.25 0a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 10h11.25m-4.5 6H19M7.75 16a2.25 2.25 0 0 1-4.5 0m4.5 0a2.25 2.25 0 0 0-4.5 0M1 16h2.25" />
             </svg>
         </button>
+
+        <div id="filterPanel" style="display: none"
+            class="w-48 right-0 border border-gray-700 rounded-lg absolute bg-white p-4 mt-2">
+            @foreach ($category as $cat)
+                <a href="">{{ $cat->name }}</a>
+            @endforeach
+        </div>
     </div>
 
-    <div id="filterPanel" style="display: none" class="w-16 h-20 border border-gray-700 rounded-lg absolute">
-        <h1>Gw Ganteng</h1>
-    </div>
+
 
 
     <!-- Courses Table -->
@@ -171,12 +176,12 @@
     <script>
         function toggleFilter() {
             panel = document.getElementById('filterPanel');
-            if(panel.style.display === 'none'){
+            if (panel.style.display === 'none') {
                 panel.style.display = 'block';
             } else {
                 panel.style.display = 'none';
             }
-            
+
         }
     </script>
 
