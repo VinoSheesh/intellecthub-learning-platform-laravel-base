@@ -14,6 +14,8 @@ class ManageCourses extends Component
     public $search = '';
     public $perPage = 10;
 
+    public $categories = '';
+
     protected $queryString = ['search'];
 
     public function updatedSearch()
@@ -41,11 +43,17 @@ class ManageCourses extends Component
                 $query->where('title', 'like', '%' . $this->search . '%')
                       ->orWhere('description', 'like', '%' . $this->search . '%');
             })
+            ->when($this->categories, function($query){
+                $query->where('category_id', $this->categories);
+            })
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 
+        
+
         return view('livewire.manage-courses', [
-            'courses' => $courses
+            'courses' => $courses,
+            'category' => \App\Models\Categories::all()
         ])->layout('layouts.app');
     }
 }
