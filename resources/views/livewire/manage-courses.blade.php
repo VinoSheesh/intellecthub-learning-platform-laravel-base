@@ -63,9 +63,9 @@
         </button>
 
         <div id="filterPanel" style="display: none"
-            class="w-48 right-0 border border-gray-700 rounded-lg absolute bg-white p-4 mt-2">
+            class="w-48 right-0 border border-gray-700 rounded-lg absolute bg-white mt-4">
             @foreach ($category as $cat)
-                <a href="">{{ $cat->name }}</a>
+                <option value="{{ $cat->id }}" class="hover:bg-slate-500 p-6">{{ $cat->name }}</option>
             @endforeach
         </div>
     </div>
