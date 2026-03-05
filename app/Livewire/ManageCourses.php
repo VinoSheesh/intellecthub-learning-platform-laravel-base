@@ -14,12 +14,16 @@ class ManageCourses extends Component
     public $search = '';
     public $perPage = 10;
 
-    public $categories = '';
+    public $categories = null;
 
     protected $queryString = ['search'];
 
     public function updatedSearch()
     {
+        $this->resetPage();
+    }
+
+    public function updateCategories(){
         $this->resetPage();
     }
 
