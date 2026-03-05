@@ -122,7 +122,7 @@
                             Update Kursus
                         </div>
                     </button>
-                    <a href="{{ route('allcourse') }}"
+                    <a href="{{ route('managecourses') }}"
                         class="flex-1 px-6 py-2.5 h-11 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg font-semibold transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
                         <div class="flex items-center justify-center gap-2">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
