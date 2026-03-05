@@ -63,9 +63,18 @@
         </button>
 
         <div id="filterPanel" style="display: none"
-            class="w-48 right-0 border border-gray-700 rounded-lg absolute bg-white mt-4">
+            class="w-48 right-0 border border-gray-700 rounded-lg absolute bg-white mt-4 z-10 shadow-lg">
+
+            <button wire:click="$set('categories', null)"
+                class="w-full text-left hover:bg-slate-100 p-3 border-b text-sm {{ $categories == null ? 'bg-blue-50' : '' }}">
+                Semua Kategori
+            </button>
+
             @foreach ($category as $cat)
-                <option value="{{ $cat->id }}" class="hover:bg-slate-500 p-6">{{ $cat->name }}</option>
+                <button wire:click="$set('categories', {{ $cat->id }})"
+                    class="w-full text-left hover:bg-slate-100 p-3 text-sm {{ $categories == $cat->id ? 'bg-blue-50 font-bold' : '' }}">
+                    {{ $cat->name }}
+                </button>
             @endforeach
         </div>
     </div>
