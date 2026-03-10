@@ -147,9 +147,12 @@
 
         /* Badge animations */
         @keyframes pulse-scale {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.1);
             }
@@ -196,6 +199,7 @@
 
         /* Better desktop adjustments */
         @media (min-width: 1024px) {
+
             /* Remove default margin from main content */
             main {
                 margin-left: 0;
@@ -281,12 +285,13 @@
 <body class="flex h-screen bg-gray-100 overflow-x-hidden">
     @include('partials.sidebar')
     <!-- Removed default margin classes, let JavaScript handle positioning -->
-    <main id="mainContent" class="flex-1 overflow-auto p-6 transition-all duration-300 ease-in-out bg-white dark:bg-gray-900">
+    <main id="mainContent"
+        class="flex-1 overflow-auto p-6 transition-all duration-300 ease-in-out bg-white dark:bg-gray-900">
         {{ $slot }}
     </main>
     @livewireScripts
-    @stack('scripts') 
-
+    @stack('scripts')
+    <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v1.x.x/dist/livewire-sortable.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.getElementById('sidebar');
@@ -317,7 +322,7 @@
 
             function updateMainContentClasses() {
                 mainContent.classList.remove('sidebar-collapsed', 'sidebar-expanded');
-                
+
                 if (!isMobile) {
                     if (isCollapsed) {
                         mainContent.classList.add('sidebar-collapsed');
@@ -375,7 +380,7 @@
                 } else {
                     expandSidebar();
                 }
-                
+
                 updateMainContentClasses();
             }
 
@@ -383,7 +388,7 @@
                 sidebar.classList.add('sidebar-collapsed');
                 sidebar.classList.remove('sidebar-expanded');
                 sidebar.style.width = '4rem';
-                
+
                 sidebar.classList.add('sidebar-transitioning');
 
                 setTimeout(() => {
@@ -395,7 +400,7 @@
                 sidebar.classList.add('sidebar-expanded');
                 sidebar.classList.remove('sidebar-collapsed');
                 sidebar.style.width = '16rem';
-                
+
                 sidebar.classList.add('sidebar-transitioning');
 
                 setTimeout(() => {
