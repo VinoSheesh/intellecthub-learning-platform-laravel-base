@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v1.x.x/dist/livewire-sortable.js"></script>
     @endscript
 
     <!-- Breadcrumb Navigation -->
@@ -112,14 +112,14 @@
             </div>
         @else
             <!-- Lesson List -->
-            <div id="lessons-list" class="divide-y divide-gray-100">
+            <div id="lessons-list" class="divide-y divide-gray-100" wire:sortable="updateLessonOrder">
                 @foreach ($lessons as $index => $lesson)
-                    <div wire:key="lesson-{{ $lesson['id'] }}" data-id="{{ $lesson['id'] }}"
+                    <div wire:key="lesson-{{ $lesson['id'] }}" wire:sortable.item="{{ $lesson['id'] }}" data-id="{{ $lesson['id'] }}"
                         class="group p-5 lg:p-6 hover:bg-gray-50 transition-colors duration-200 flex items-start gap-4 lg:gap-6">
 
                         <!-- Drag Handle & Index -->
                         <div class="flex flex-col items-center gap-3 pt-1">
-                            <div class="drag-handle cursor-grab active:cursor-grabbing p-2 rounded-md hover:bg-gray-200 transition-colors"
+                            <div wire:sortable.handle class="drag-handle cursor-grab active:cursor-grabbing p-2 rounded-md hover:bg-gray-200 transition-colors"
                                 title="Seret untuk mengurutkan ulang">
                                 <i class="fa-solid fa-grip-vertical text-gray-400"></i>
                             </div>
@@ -168,78 +168,6 @@
         </div>
     @endif
 
-    @this
-
-    <!-- Add/Edit Modal -->
-    @if ($showModal)
-        <div class="fixed inset-0 z-50 overflow-y-auto" wire:click.self="closeModal">
-            <!-- Overlay -->
-            <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
-
-            <!-- Modal -->
-            <div class="relative min-h-screen flex items-center justify-center p-4">
-                <div class="relative bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-
-                    <!-- Modal Header -->
-                    <div class="sticky top-0 flex items-center justify-between p-6 border-b border-gray-100 bg-white">
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-900">
-                                {{ $isEditing ? 'Edit Materi' : 'Tambah Materi Baru' }}
-                            </h2>
-                            <p class="text-sm text-gray-500 mt-1">{{ $course->title }}</p>
-                        </div>
-                        <button wire:click="closeModal"
-                            class="inline-flex items-center justify-center w-10 h-10 rounded-lg hover:bg-gray-100 text-gray-600 transition-colors">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    <!-- Modal Body -->
-                    <form id="lessonForm" wire:submit.prevent="saveLessonLesson" class="p-6 space-y-6">
-
-                        <!-- Title -->
-                        <div>
-                            <label for="title" class="block text-sm font-semibold text-gray-900 mb-2">Judul Materi
-                                *</label>
-                            <input type="text" wire:model="title" id="title"
-                                placeholder="Masukkan judul materi"
-                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all">
-                            @error('title')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Content -->
-                        <div wire:ignore>
-                            <label for="content" class="block text-sm font-semibold text-gray-900 mb-2">Konten
-                                *</label>
-                            <textarea id="content" rows="6" placeholder="Masukkan konten materi..."
-                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all resize-none"></textarea>
-                            @error('content')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
-                        <!-- Modal Footer -->
-                        <div class="flex items-center justify-end gap-3 pt-6 border-t border-gray-100">
-                            <button type="button" wire:click="closeModal"
-                                class="px-6 py-2.5 text-gray-700 font-semibold bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200">
-                                Batal
-                            </button>
-                            <button type="submit"
-                                class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-sm hover:shadow-md hover:scale-105 active:scale-95">
-                                {{ $isEditing ? 'Perbarui Materi' : 'Tambah Materi' }}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    @endif
-
     <style>
         @keyframes fade-in-up {
             from {
@@ -264,142 +192,5 @@
             overflow: hidden;
         }
     </style>
-
-    <script src="https://cdn.tiny.cloud/1/tk53il8cfcy4hloxph6vcbh3inhxm1fn11srse1i98t67hpm/tinymce/8/tinymce.min.js"
-        referrerpolicy="origin" crossorigin="anonymous"></script>
-
-    <script>
-        let tinyEditor = null;
-
-        // Helper to find Livewire component instance
-        function getLivewireInstance() {
-            const el = document.querySelector('[wire\\:id]');
-            if (!el || typeof Livewire === 'undefined') return null;
-            return Livewire.find(el.getAttribute('wire:id'));
-        }
-
-        function callLivewireMethod(method, ...params) {
-            const inst = getLivewireInstance();
-            if (inst && typeof inst.call === 'function') {
-                inst.call(method, ...params);
-            }
-        }
-
-        // Initialize Sortable and re-init after Livewire updates
-        function initSortable() {
-            const el = document.getElementById('lessons-list');
-            if (!el) return;
-
-            if (window.lessonsSortable) {
-                try { window.lessonsSortable.destroy(); } catch (e) {}
-            }
-
-            window.lessonsSortable = Sortable.create(el, {
-                handle: '.drag-handle',
-                animation: 150,
-                ghostClass: 'opacity-50 bg-gray-100',
-                onEnd() {
-                    const ids = Array.from(el.querySelectorAll('[data-id]')).map(i => parseInt(i.dataset.id));
-                    callLivewireMethod('reorderLessons', ids);
-                }
-            });
-        }
-
-        // Initialize TinyMCE similar to create-course: sync directly to Livewire via @this.set
-        function initTinyMCE(initialContent = '') {
-            const textarea = document.querySelector('textarea#content');
-            if (!textarea) return;
-
-            // Remove existing instance
-            if (tinymce.get('content')) {
-                try { tinymce.get('content').remove(); } catch (e) {}
-            }
-
-            tinymce.init({
-                selector: 'textarea#content',
-                height: 400,
-                menubar: false,
-                branding: false,
-                plugins: 'code table lists',
-                toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table',
-                setup(ed) {
-                    tinyEditor = ed;
-
-                    ed.on('init', function() {
-                        if (initialContent) {
-                            ed.setContent(initialContent);
-                        }
-                    });
-
-                    ed.on('change keyup', function() {
-                        @this.set('content', ed.getContent());
-                    });
-                }
-            });
-        }
-
-        // Initialize when blade dispatches browser event or on Livewire updates
-        document.addEventListener('tinymce:init', (e) => setTimeout(() => initTinyMCE(e?.detail?.content || ''), 80));
-        document.addEventListener('DOMContentLoaded', function() {
-            initSortable();
-
-            // Re-init after Livewire updates
-            document.addEventListener('livewire:update', function() {
-                initSortable();
-                setTimeout(initTinyMCE, 120);
-            });
-
-            // Confirm delete using SweetAlert then call Livewire
-            window.confirmDelete = function(id, title) {
-                Swal.fire({
-                    title: 'Hapus materi?',
-                    text: "Anda akan menghapus: " + title,
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, hapus',
-                    cancelButtonText: 'Batal'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        callLivewireMethod('deleteLesson', id);
-                    }
-                });
-            }
-
-            // SweetAlert listeners (accept either object or array payload)
-            const unwrap = (data) => (Array.isArray(data) ? data[0] || {} : data || {});
-
-            Livewire.on('lesson-created', (data) => {
-                data = unwrap(data);
-                Swal.fire({ icon: 'success', title: data.title || 'Berhasil', text: data.message || 'Materi berhasil ditambahkan!', timer: 2000, showConfirmButton: false });
-            });
-
-            Livewire.on('lesson-updated', (data) => {
-                data = unwrap(data);
-                Swal.fire({ icon: 'success', title: data.title || 'Berhasil', text: data.message || 'Materi berhasil diperbarui!', timer: 2000, showConfirmButton: false });
-            });
-
-            Livewire.on('lesson-deleted', (data) => {
-                data = unwrap(data);
-                Swal.fire({ icon: 'success', title: data.title || 'Dihapus', text: data.message || 'Materi berhasil dihapus!', timer: 2000, showConfirmButton: false });
-            });
-
-            Livewire.on('lesson-reordered', (data) => {
-                data = unwrap(data);
-                Swal.fire({ icon: 'success', title: data.title || 'Berhasil', text: data.message || 'Urutan materi berhasil diperbarui!', timer: 2000, showConfirmButton: false });
-            });
-
-            Livewire.on('lesson-error', (data) => {
-                data = unwrap(data);
-                Swal.fire({ icon: 'error', title: 'Gagal', text: data.message || 'Terjadi kesalahan!' });
-            });
-        });
-
-        // Also listen for explicit Livewire browser event
-        window.addEventListener('livewire:load', () => {
-            Livewire.on('openModal', () => setTimeout(initTinyMCE, 120));
-        });
-    </script>
 
 </div>
