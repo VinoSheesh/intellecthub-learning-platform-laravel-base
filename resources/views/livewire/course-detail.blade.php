@@ -199,18 +199,23 @@
                         </div>
 
                         <!-- Action Buttons (appear on hover/mobile) -->
-                        <div
-                            class="flex items-center gap-2 flex-shrink-0 opacity-0 lg:group-hover:opacity-100 transition-opacity duration-200 lg:translate-x-2 lg:group-hover:translate-x-0">
-                            <button wire:click="openEditLessonModal({{ $lesson['id'] }})"
-                                class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-blue-100 hover:bg-blue-600 text-blue-600 hover:text-white transition-all duration-200 hover:scale-110 active:scale-95"
-                                title="Edit">
-                                <i class="fa-solid fa-pen text-sm"></i>
-                            </button>
+                        <div>
+                            <a href="{{ route('editcourse', $course->id) }}"
+                                class="inline-flex items-center px-3 py-2 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition text-sm font-medium">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                                Edit
+                            </a>
                             <button
-                                onclick="confirmDelete({{ $lesson['id'] }}, '{{ addslashes($lesson['title']) }}')"
-                                class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-100 hover:bg-red-600 text-red-600 hover:text-white transition-all duration-200 hover:scale-110 active:scale-95"
-                                title="Hapus">
-                                <i class="fa-solid fa-trash text-sm"></i>
+                                onclick="confirmDelete({{ $lesson['id'] }} , '{{ addslashes($lesson['title']) }}' )"
+                                class="inline-flex items-center px-3 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition text-sm font-medium">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Hapus
                             </button>
                         </div>
                     </div>
@@ -266,6 +271,36 @@
                 timer: 2000, // Hilang otomatis dalam 2 detik
                 showConfirmButton: false,
                 timerProgressBar: true,
+            });
+        });
+
+        function confirmDelete(id, title) {
+            Swal.fire({
+                title: 'Hapus Materi?',
+                text: "Materi '" + title + "' akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Memanggil fungsi deleteLesson di class Livewire
+                    @this.call('deleteLesson', id);
+                }
+            })
+        }
+
+        // Listen untuk notifikasi sukses (gunakan cara 'sakti' yang tadi)
+        window.addEventListener('swal', event => {
+            const data = event.detail[0];
+            Swal.fire({
+                title: data.title,
+                text: data.text,
+                icon: data.icon,
+                timer: 2000,
+                showConfirmButton: false
             });
         });
     </script>
