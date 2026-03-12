@@ -60,6 +60,27 @@ class CourseDetail extends Component
         $this->lessons = Lessons::where('course_id', $this->course->id)->orderBy('order')->get();
     }
 
+    public function deleteLesson($id)
+    {
+        $lesson = Lessons::findOrFail($id);
+
+        $lesson->delete();
+
+        $remainingLessons = Lessons::where('course_id', $this->course->id)->orderBy('order')->get();
+
+        foreach ($remainingLessons as $index => $item) {
+            $item->update(['order' => $index + 1]);
+        }
+
+        $this->lessons = Lessons::where('course_id', $this->course->id)->orderBy('order')->get();
+
+        $this->dispatch('swal', [
+            'title' => 'Dihapus!',
+            'text' => 'Materi Berhasil Dihapus!',
+            'icon' => 'success',
+        ]);
+    }
+
     public function openAddLessonModal()
     {
         $this->openAddModal = true;
