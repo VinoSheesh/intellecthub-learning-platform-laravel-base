@@ -86,7 +86,68 @@
                 <span>Tambah Materi Baru</span>
             </button>
         </div>
+
+        @if ($openAddModal)
+            <div>
+                <div
+                    class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+
+                    <div class="fixed inset-0 bg-black opacity-50 shadow-2xl"></div>
+
+                    <div class="relative w-full max-w-lg mx-auto my-6 z-[60]">
+                        <div
+                            class="relative flex flex-col w-full bg-white border-0 rounded-lg shadow-lg outline-none focus:outline-none">
+
+                            <div
+                                class="flex items-start justify-between p-4 border-b border-solid border-gray-200 rounded-t">
+                                <h3 class="text-xl font-semibold text-gray-800">
+                                    Tambah Materi
+                                </h3>
+                            </div>
+
+                            <div class="relative p-6 flex-auto">
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Judul Materi</label>
+                                        <input type="text" wire:model="title"
+                                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @error('title')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Konten / Link
+                                            Video</label>
+                                        <textarea wire:model="content" rows="3"
+                                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                            placeholder="Masukkan materi atau link YouTube..."></textarea>
+                                        @error('content')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="flex items-center justify-end p-4 border-t border-solid border-gray-200 rounded-b gap-2">
+                                    <button wire:click="closeAddLessonModal"
+                                        class="px-4 py-2 text-sm text-red-600 hover:text-gray-800 font-bold">
+                                        Batal
+                                    </button>
+                                    <button wire:click="saveLesson"
+                                        class="px-6 py-2 bg-blue-600 text-white text-sm font-bold rounded shadow hover:bg-blue-700 transition-all">
+                                        Simpan
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        @endif
     </div>
+
+
 
     <!-- Empty State or Lesson List -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
@@ -114,12 +175,14 @@
             <!-- Lesson List -->
             <div id="lessons-list" class="divide-y divide-gray-100" wire:sortable="updateLessonOrder">
                 @foreach ($lessons as $index => $lesson)
-                    <div wire:key="lesson-{{ $lesson['id'] }}" wire:sortable.item="{{ $lesson['id'] }}" data-id="{{ $lesson['id'] }}"
+                    <div wire:key="lesson-{{ $lesson['id'] }}" wire:sortable.item="{{ $lesson['id'] }}"
+                        data-id="{{ $lesson['id'] }}"
                         class="group p-5 lg:p-6 hover:bg-gray-50 transition-colors duration-200 flex items-start gap-4 lg:gap-6">
 
                         <!-- Drag Handle & Index -->
                         <div class="flex flex-col items-center gap-3 pt-1">
-                            <div wire:sortable.handle class="drag-handle cursor-grab active:cursor-grabbing p-2 rounded-md hover:bg-gray-200 transition-colors"
+                            <div wire:sortable.handle
+                                class="drag-handle cursor-grab active:cursor-grabbing p-2 rounded-md hover:bg-gray-200 transition-colors"
                                 title="Seret untuk mengurutkan ulang">
                                 <i class="fa-solid fa-grip-vertical text-gray-400"></i>
                             </div>
@@ -143,7 +206,8 @@
                                 title="Edit">
                                 <i class="fa-solid fa-pen text-sm"></i>
                             </button>
-                            <button onclick="confirmDelete({{ $lesson['id'] }}, '{{ addslashes($lesson['title']) }}')"
+                            <button
+                                onclick="confirmDelete({{ $lesson['id'] }}, '{{ addslashes($lesson['title']) }}')"
                                 class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-red-100 hover:bg-red-600 text-red-600 hover:text-white transition-all duration-200 hover:scale-110 active:scale-95"
                                 title="Hapus">
                                 <i class="fa-solid fa-trash text-sm"></i>
@@ -193,4 +257,17 @@
         }
     </style>
 
+    <script>
+        window.addEventListener('lesson-added', event => {
+            Swal.fire({
+                title: 'Berhasil!',
+                text: event.detail.message, // Mengambil pesan dari PHP
+                icon: 'success',
+                timer: 2000, // Hilang otomatis dalam 2 detik
+                showConfirmButton: false,
+                timerProgressBar: true,
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </div>
