@@ -101,7 +101,7 @@
                             <div
                                 class="flex items-start justify-between p-4 border-b border-solid border-gray-200 rounded-t">
                                 <h3 class="text-xl font-semibold text-gray-800">
-                                    Tambah Materi
+                                    {{ $isEditMode ? 'Edit Materi' : 'Tambah Materi' }}
                                 </h3>
                             </div>
 
@@ -134,10 +134,17 @@
                                         class="px-4 py-2 text-sm text-red-600 hover:text-gray-800 font-bold">
                                         Batal
                                     </button>
-                                    <button wire:click="saveLesson"
-                                        class="px-6 py-2 bg-blue-600 text-white text-sm font-bold rounded shadow hover:bg-blue-700 transition-all">
-                                        Simpan
-                                    </button>
+                                    @if ($isEditMode)
+                                        <button wire:click="updateLesson"
+                                            class="px-6 py-2 bg-blue-600 text-white text-sm font-bold rounded shadow hover:bg-blue-700 transition-all">
+                                            Update  
+                                        </button>
+                                    @else
+                                        <button wire:click="saveLesson"
+                                            class="px-6 py-2 bg-blue-600 text-white text-sm font-bold rounded shadow hover:bg-blue-700 transition-all">
+                                            Simpan
+                                        </button>
+                                    @endif
                                 </div>
 
                             </div>
@@ -200,14 +207,15 @@
 
                         <!-- Action Buttons (appear on hover/mobile) -->
                         <div>
-                            <a href="{{ route('editcourse', $course->id) }}"
+                            <button wire:click="openEditLessonModal({{ $lesson['id'] }})"
                                 class="inline-flex items-center px-3 py-2 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition text-sm font-medium">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                                 Edit
-                            </a>
+                            </button>
+
                             <button
                                 onclick="confirmDelete({{ $lesson['id'] }} , '{{ addslashes($lesson['title']) }}' )"
                                 class="inline-flex items-center px-3 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition text-sm font-medium">
