@@ -13,6 +13,8 @@ class CourseDetail extends Component
     public $course;
     public $lessons;
     public $openAddModal = false;
+    public $selectedLessonId;
+    public $isEditMode = false;
     public $title;
     public $content;
 
@@ -60,6 +62,42 @@ class CourseDetail extends Component
         $this->lessons = Lessons::where('course_id', $this->course->id)->orderBy('order')->get();
     }
 
+    public function openEditLessonModal($id)
+    {
+        $this->isEditMode = true;
+        $lesson = Lessons::findOrFail($id);
+
+        $this->selectedLessonId = $id;
+        $this->title = $lesson->title;
+        $this->content = $lesson->content;
+
+        $this->openAddModal = true;
+    }
+
+    public function updateLesson()
+    {
+        $this->validate([
+            'title' => 'required|min:3',
+            'content' => 'required',
+        ]);
+
+        $lesson = Lessons::findOrFail($this->selectedLessonId);
+        $lesson->update([
+            'title' => $this->title,
+            'content' => $this->content,
+        ]);
+
+        $this->closeModal(); // Kita buat fungsi pembantu untuk reset
+
+        $this->lessons = Lessons::where('course_id', $this->course->id)->orderBy('order')->get();
+
+        $this->dispatch('swal', [
+            'title' => 'Berhasil!',
+            'text' => 'Materi berhasil diperbarui!',
+            'icon' => 'success',
+        ]);
+    }
+
     public function deleteLesson($id)
     {
         $lesson = Lessons::findOrFail($id);
@@ -86,9 +124,11 @@ class CourseDetail extends Component
         $this->openAddModal = true;
     }
 
-    public function closeAddLessonModal()
+    public function closeModal()
     {
         $this->openAddModal = false;
+        $this->isEditMode = false;
+        $this->reset(['title', 'content', 'selectedLessonId']);
     }
 
     public function render()
