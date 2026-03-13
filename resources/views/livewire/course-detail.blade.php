@@ -6,6 +6,11 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
             crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        {{-- TinyMCE HARUS di sini, sebelum dipakai Alpine --}}
+        <script src="https://cdn.tiny.cloud/1/tk53il8cfcy4hloxph6vcbh3inhxm1fn11srse1i98t67hpm/tinymce/8/tinymce.min.js"
+            referrerpolicy="origin" crossorigin="anonymous"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v1.x.x/dist/livewire-sortable.js"></script>
     @endscript
@@ -115,7 +120,7 @@
                     <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
 
                     {{-- Modal Panel --}}
-                    <div class="relative w-full max-w-lg mx-auto z-[60] animate-modal-in">
+                    <div class="relative w-full max-w-2xl mx-auto z-[60] animate-modal-in">
                         <div
                             class="relative flex flex-col w-full bg-white border-0 rounded-2xl shadow-2xl shadow-slate-900/20 outline-none focus:outline-none overflow-hidden">
 
@@ -161,13 +166,49 @@
                                     @enderror
                                 </div>
 
-                                {{-- Konten / Link Video --}}
+                                {{-- Konten / Link Video (TinyMCE) --}}
                                 <div class="space-y-1.5">
                                     <label class="block text-sm font-semibold text-slate-700">
                                         Konten / Link Video
                                     </label>
-                                    <textarea wire:model="content" rows="4" placeholder="Masukkan materi atau link YouTube..."
-                                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 placeholder-slate-400 text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 focus:bg-white transition-all duration-200 resize-none"></textarea>
+
+                                    <div wire:ignore x-data="{
+                                        initEditor() {
+                                            if (tinymce.get('tinymce-content')) {
+                                                tinymce.remove('#tinymce-content');
+                                            }
+                                    
+                                            tinymce.init({
+                                                selector: '#tinymce-content',
+                                                menubar: false,
+                                                statusbar: false,
+                                                branding: false,
+                                                min_height: 320,
+                                                max_height: 500,
+                                                plugins: 'code table lists',
+                                                toolbar: 'bold italic underline | blocks | alignleft aligncenter alignright | bullist numlist | link | code | table | removeformat',
+                                    
+                                                setup: (ed) => {
+                                                    ed.on('init', () => {
+                                                        const val = $wire.get('content');
+                                                        if (val) ed.setContent(val);
+                                                    });
+                                    
+                                                    ed.on('input change', () => {
+                                                        $wire.set('content', ed.getContent(), false);
+                                                    });
+                                    
+                                                    ed.on('blur', () => {
+                                                        $wire.set('content', ed.getContent());
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    }" x-init="$nextTick(() => initEditor())">
+                                        <textarea id="tinymce-content"
+                                            class="w-full px-4 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-800 text-sm" rows="4"></textarea>
+                                    </div>
+
                                     @error('content')
                                         <p class="text-red-500 text-xs flex items-center gap-1 mt-1">
                                             <i class="fa-solid fa-circle-exclamation"></i>
@@ -439,5 +480,7 @@
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.tiny.cloud/1/tk53il8cfcy4hloxph6vcbh3inhxm1fn11srse1i98t67hpm/tinymce/8/tinymce.min.js"
+        referrerpolicy="origin" crossorigin="anonymous"></script>
 
 </div>
