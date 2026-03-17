@@ -14,8 +14,19 @@
         </div>
     </div>
 
-    <a class="w-fit flex flex-col items-center justify-center gap-3 p-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-xl border border-blue-100" href="{{ route('managecourses') }}">
-        <i class="fa-solid fa-book-open text-6xl text-white"></i>
-        <h2 class="text-white text-xl font-bold">Manage Course</h2>
-    </a>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 items-stretch">
+        <a class="w-full flex flex-col items-center justify-center gap-3 p-6 md:p-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-xl border border-blue-100 min-h-[160px] hover:shadow-lg transition-shadow duration-200"
+            href="{{ route('managecourses') }}">
+            <i class="fa-solid fa-book-open text-5xl md:text-6xl text-white"></i>
+            <h2 class="text-white text-lg md:text-xl font-bold">Manage Course</h2>
+        </a>
+
+        <a class="w-full flex flex-col items-center justify-center gap-3 p-6 md:p-8 bg-gradient-to-r from-blue-700 to-cyan-600 rounded-xl border border-blue-100 min-h-[160px] hover:shadow-lg transition-shadow duration-200"
+            href="{{ route('managecategories') }}">
+            <i class="fa-solid fa-filter text-5xl md:text-6xl text-white"></i>
+            <h2 class="text-white text-lg md:text-xl font-bold">Manage Categories</h2>
+        </a>
+    </div>
+
+
 </div>
