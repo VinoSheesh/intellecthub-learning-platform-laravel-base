@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('title', 150);
             $table->longText('content');
             $table->integer('order')->default(1);
-            $table->boolean('is_preview')->default(false);
             $table->timestamps();
         });;
     }
