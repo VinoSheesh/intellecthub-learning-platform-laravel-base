@@ -99,7 +99,7 @@ class ManageCategories extends Component
         $categories = Categories::when($this->search, function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->paginate($this->perPage);
 
         return view('livewire.manage-categories', [
