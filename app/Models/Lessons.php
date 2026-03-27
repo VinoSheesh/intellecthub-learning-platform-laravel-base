@@ -13,12 +13,18 @@ class Lessons extends Model
         'title',
         'content',
         'course_id',
-        'order', 
-        'is_preview',
+        'order',
     ];
 
-    public function course ()
+    public function course()
     {
         return $this->belongsTo(Courses::class, 'course_id');
+    }
+
+    public function completedUsers()
+    {
+        return $this->belongsToMany(User::class, 'lesson_user', 'lesson_id', 'user_id')
+                    ->withPivot('is_completed')
+                    ->withTimestamps();
     }
 }
