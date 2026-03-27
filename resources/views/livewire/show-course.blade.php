@@ -111,28 +111,23 @@
 
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3 pt-4">
-                        <button
-                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]">
-                            <span class="flex items-center justify-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                                    </path>
-                                </svg>
-                                <span class="text-sm font-medium">Mulai Belajar</span>
-                            </span>
-                        </button>
-                        <button
-                            class="sm:w-auto bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-5 rounded-lg border border-gray-300 hover:border-gray-400 transition-all duration-200 transform hover:scale-[1.01] active:scale-[0.99]">
-                            <span class="flex items-center justify-center gap-2">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                    </path>
-                                </svg>
-                                <span class="text-sm font-medium">Simpan</span>
-                            </span>
-                        </button>
+                        @if($isSubscribed)
+                            <button wire:click="startCourse"
+                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]">
+                                <span class="flex items-center justify-center gap-2">
+                                    <i class="far fa-play-circle"></i>
+                                    <span class="text-sm font-medium">{{ $enrollment ? 'Lanjut Belajar' : 'Mulai Belajar' }}</span>
+                                </span>
+                            </button>
+                        @else
+                            <a href="{{ route('subscriptionplan') }}"
+                                class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm text-center">
+                                <span class="flex items-center justify-center gap-2">
+                                    <i class="far fa-lock"></i>
+                                    <span class="text-sm font-medium">Berlangganan untuk Akses</span>
+                                </span>
+                            </a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -220,93 +215,82 @@
 
         <!-- Course Curriculum Section -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8 mb-8">
-            <div class="flex items-center gap-3 mb-8">
-                <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <i class="fa-solid fa-clipboard-list text-purple-700"></i>
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                        <i class="fa-solid fa-clipboard-list text-purple-700"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Lesson</h2>
+                        <p class="text-sm text-gray-500">{{ $lessons->count() }} Lesson tersedia</p>
+                    </div>
                 </div>
-                <h2 class="text-2xl font-bold text-gray-900">Kurikulum Kursus</h2>
+                @if($enrollment)
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-gray-700">{{ $progress }}% Selesai</p>
+                        <div class="w-36 bg-gray-200 rounded-full h-2 mt-1">
+                            <div class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: {{ $progress }}%"></div>
+                        </div>
+                    </div>
+                @endif
             </div>
 
-            <div class="space-y-4">
-                <div class="border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow duration-200">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-lg font-semibold text-gray-900">Week 1-2: Pengenalan & Setup</h3>
-                        <span class="bg-blue-100 text-blue-700 text-sm font-medium px-3 py-1 rounded-full">4
-                            Lessons</span>
-                    </div>
-                    <p class="text-gray-600 mb-3">Memahami konsep dasar, setup environment, dan tools yang diperlukan
-                    </p>
-                    <div class="flex items-center gap-4 text-sm text-gray-500">
-                        <span class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            3.5 jam
-                        </span>
-                        <span class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                            2 Assignment
-                        </span>
+            @if($enrollment && $progress >= 100)
+            <div class="mb-6 bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <i class="far fa-certificate text-yellow-500 text-2xl"></i>
+                    <div>
+                        <p class="font-semibold text-gray-900">Kursus Selesai! 🎉</p>
+                        <p class="text-sm text-gray-600">Unduh sertifikat penyelesaianmu.</p>
                     </div>
                 </div>
+                <a href="{{ route('certificate.download', $course->id) }}"
+                   class="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg text-sm transition">
+                    <i class="far fa-certificate"></i> Unduh
+                </a>
+            </div>
+            @endif
 
-                <div class="border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow duration-200">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-lg font-semibold text-gray-900">Week 3-4: Fundamental Skills</h3>
-                        <span class="bg-green-100 text-green-700 text-sm font-medium px-3 py-1 rounded-full">6
-                            Lessons</span>
+            <div class="space-y-3">
+                @forelse($lessons as $index => $lesson)
+                    @php
+                        $isDone = in_array($lesson->id, $completedLessonIds);
+                        $locked = !$isSubscribed;
+                    @endphp
+                    <div class="border border-gray-200 rounded-xl p-4 flex items-center gap-4 hover:shadow-sm transition-shadow duration-200 {{ $isDone ? 'bg-green-50 border-green-200' : '' }}">
+                        <!-- Status Icon -->
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center
+                            {{ $isDone ? 'bg-green-100' : ($locked ? 'bg-gray-100' : 'bg-blue-50') }}">
+                            @if($locked)
+                                <i class="far fa-lock text-gray-400"></i>
+                            @elseif($isDone)
+                                <i class="far fa-check-circle text-green-600"></i>
+                            @else
+                                <i class="far fa-circle text-blue-400"></i>
+                            @endif
+                        </div>
+                        <!-- Lesson Info -->
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs text-gray-400 mb-0.5">Lesson {{ $index + 1 }}</p>
+                            <p class="font-semibold text-gray-900 truncate">{{ $lesson->title }}</p>
+                        </div>
+                        <!-- Badge -->
+                        <div class="flex-shrink-0">
+                            @if($isDone)
+                                <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Selesai</span>
+                            @elseif($locked)
+                                <span class="px-3 py-1 bg-gray-100 text-gray-500 text-xs font-medium rounded-full">Terkunci</span>
+                            @else
+                                <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">Tersedia</span>
+                            @endif
+                        </div>
                     </div>
-                    <p class="text-gray-600 mb-3">Mendalami skill fundamental dan best practices dalam development</p>
-                    <div class="flex items-center gap-4 text-sm text-gray-500">
-                        <span class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            5.2 jam
-                        </span>
-                        <span class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                </path>
-                            </svg>
-                            3 Assignment
-                        </span>
+                @empty
+                    <div class="text-center py-10">
+                        <i class="far fa-folder-open text-4xl text-gray-300 mb-3 block"></i>
+                        <p class="text-gray-500">Belum ada lesson tersedia.</p>
                     </div>
-                </div>
-
-                <div class="border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow duration-200">
-                    <div class="flex items-center justify-between mb-3">
-                        <h3 class="text-lg font-semibold text-gray-900">Week 5-8: Advanced & Final Project</h3>
-                        <span class="bg-orange-100 text-orange-700 text-sm font-medium px-3 py-1 rounded-full">8
-                            Lessons</span>
-                    </div>
-                    <p class="text-gray-600 mb-3">Teknik advanced, optimasi, dan pengembangan final project portfolio
-                    </p>
-                    <div class="flex items-center gap-4 text-sm text-gray-500">
-                        <span class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            8.5 jam
-                        </span>
-                        <span class="flex items-center gap-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
-                                </path>
-                            </svg>
-                            Final Project
-                        </span>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
 
