@@ -39,7 +39,27 @@ class User extends Authenticatable // kalau mau email verification: implements M
         'password' => 'hashed',
     ];
 
-    public function role () {
+    public function role()
+    {
         return $this->belongsTo(Roles::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function lessonProgress()
+    {
+        return $this->belongsToMany(Lessons::class, 'lesson_user', 'user_id', 'lesson_id')
+                    ->withPivot('is_completed')
+                    ->withTimestamps();
+    }
+
+    public function hasActiveSubscription(): bool
+    {
+        return $this->subscriptions()
+            ->where('ends_at', '>=', now()->toDateString())
+            ->exists();
     }
 }
