@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CertificateController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -24,6 +25,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/createcourse', \App\Livewire\Createcourse::class)->name('createcourse');
         Route::get('/course/edit/{id}', \App\Livewire\EditCourse::class)->name('editcourse')->middleware('can:edit-course');
         Route::get('/showcourse/{id}', \App\Livewire\ShowCourse::class)->name('showcourse');
+        Route::get('/player/{courseId}/{lessonId?}', \App\Livewire\CoursePlayer::class)->name('courseplayer');
+        Route::get('/certificate/{courseId}', [CertificateController::class, 'download'])->name('certificate.download');
         Route::get('/inprogress', \App\Livewire\Inprogress::class)->name('inprogress');
         Route::get('/completed', \App\Livewire\Completed::class)->name('completed');
         Route::get('/favorites', \App\Livewire\Favorites::class)->name('favorites');
