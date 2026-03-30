@@ -6,14 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Courses extends Model
 {
-   protected $fillable = ['title', 'description', 'thumbnail', 'category_id'];
+    protected $fillable = ['title', 'description', 'thumbnail', 'category_id'];
 
-   public function lessons(){
-    return $this->hasMany(Lessons::class);
-   }
+    public function lessons()
+    {
+        return $this->hasMany(Lessons::class, 'course_id')->orderBy('order');
+    }
 
-   public function category(){
-      return $this->belongsTo(Categories::class, 'category_id');
-   }
+    public function category()
+    {
+        return $this->belongsTo(Categories::class, 'category_id');
+    }
+
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollments::class, 'course_id');
+    }
 }
-   
