@@ -1,4 +1,4 @@
-<div class="font-poppins bg-background text-foreground min-h-screen">
+<div class="font-poppins bg-background text-foreground min-h-screen p-6 lg:p-8">
     <!-- Breadcrumbs - keeping as requested -->
     <nav class="flex mb-6" aria-label="Breadcrumb">
         <ol class="inline-flex items-center space-x-1 md:space-x-3">
@@ -113,17 +113,22 @@
                     <div class="flex flex-col sm:flex-row gap-3 pt-4">
                         @if($isSubscribed)
                             <button wire:click="startCourse"
-                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]">
-                                <span class="flex items-center justify-center gap-2">
-                                    <i class="far fa-play-circle"></i>
+                                wire:loading.attr="disabled"
+                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50">
+                                <span class="flex items-center justify-center gap-2" wire:loading.remove wire:target="startCourse">
+                                    <i class="fas fa-play-circle"></i>
                                     <span class="text-sm font-medium">{{ $enrollment ? 'Lanjut Belajar' : 'Mulai Belajar' }}</span>
+                                </span>
+                                <span class="flex items-center justify-center gap-2" wire:loading wire:target="startCourse">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <span class="text-sm font-medium">Memuat...</span>
                                 </span>
                             </button>
                         @else
                             <a href="{{ route('subscriptionplan') }}"
                                 class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm text-center">
                                 <span class="flex items-center justify-center gap-2">
-                                    <i class="far fa-lock"></i>
+                                    <i class="fas fa-lock"></i>
                                     <span class="text-sm font-medium">Berlangganan untuk Akses</span>
                                 </span>
                             </a>
@@ -238,7 +243,7 @@
             @if($enrollment && $progress >= 100)
             <div class="mb-6 bg-yellow-50 border border-yellow-200 rounded-xl p-4 flex items-center justify-between gap-4">
                 <div class="flex items-center gap-3">
-                    <i class="far fa-certificate text-yellow-500 text-2xl"></i>
+                    <i class="fas fa-award text-yellow-500 text-2xl"></i>
                     <div>
                         <p class="font-semibold text-gray-900">Kursus Selesai! 🎉</p>
                         <p class="text-sm text-gray-600">Unduh sertifikat penyelesaianmu.</p>
@@ -246,7 +251,7 @@
                 </div>
                 <a href="{{ route('certificate.download', $course->id) }}"
                    class="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white font-semibold rounded-lg text-sm transition">
-                    <i class="far fa-certificate"></i> Unduh
+                    <i class="fas fa-download"></i> Unduh
                 </a>
             </div>
             @endif
@@ -262,9 +267,9 @@
                         <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center
                             {{ $isDone ? 'bg-green-100' : ($locked ? 'bg-gray-100' : 'bg-blue-50') }}">
                             @if($locked)
-                                <i class="far fa-lock text-gray-400"></i>
+                                <i class="fas fa-lock text-gray-400"></i>
                             @elseif($isDone)
-                                <i class="far fa-check-circle text-green-600"></i>
+                                <i class="fas fa-check-circle text-green-600"></i>
                             @else
                                 <i class="far fa-circle text-blue-400"></i>
                             @endif
@@ -287,7 +292,7 @@
                     </div>
                 @empty
                     <div class="text-center py-10">
-                        <i class="far fa-folder-open text-4xl text-gray-300 mb-3 block"></i>
+                        <i class="fas fa-folder-open text-4xl text-gray-300 mb-3 block"></i>
                         <p class="text-gray-500">Belum ada lesson tersedia.</p>
                     </div>
                 @endforelse
@@ -366,5 +371,4 @@
                 </div>
             </div> --}}
     </div>
-</div>
 </div>
