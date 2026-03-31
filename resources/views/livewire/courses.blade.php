@@ -81,96 +81,80 @@
         </div>
     </div>
 
-    <!-- Enhanced card grid with more attractive and interactive design -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <!-- Responsive LMS course grid -->
+    @if($courses->count() > 0)
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         @foreach ($courses as $course)
-            <div
-                class="group bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-blue-200 hover:-translate-y-2 cursor-pointer">
-                <!-- Enhanced image container with overlay effects -->
-                <div class="relative overflow-hidden">
+            <div class="group bg-white rounded-2xl border border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden hover:-translate-y-1">
+
+                <!-- Thumbnail -->
+                <a href="{{ route('showcourse', ['id' => $course->id]) }}" wire:navigate
+                   class="block relative overflow-hidden bg-gray-100 flex-shrink-0" style="aspect-ratio: 16/9;">
                     <img src="/{{ $course->thumbnail }}" alt="{{ $course->title }}"
-                        class="w-full h-52 object-cover group-hover:scale-110 transition-transform duration-700">
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                    <!-- Category badge -->
+                    <span class="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-600 text-white shadow-md tracking-widest uppercase">
+                        {{ $course->category->name }}
+                    </span>
+                </a>
 
-                    <!-- Added gradient overlay for better text readability -->
-                    <div
-                        class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    </div>
-
-                    <!-- Enhanced category badge with animation -->
-                    <div
-                        class="absolute top-4 left-4 transform group-hover:scale-105 transition-transform duration-300">
-                        <span
-                            class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-white/95 text-gray-700 shadow-lg backdrop-blur-sm border border-white/20">
-                            {{ $course->category->name }}
-                        </span>
-                    </div>
-
-                    <!-- Added floating action button -->
-                    <div
-                        class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                        <button
-                            class="w-10 h-10 bg-white/90 hover:bg-white text-gray-700 rounded-full shadow-lg backdrop-blur-sm flex items-center justify-center transition-colors duration-200">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                                </path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Enhanced card content with better typography and spacing -->
-                <div class="p-6 space-y-4">
-                    <!-- Added instructor info -->
-
-
-                    <h2
-                        class="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-300 line-clamp-2">
+                <!-- Card Body: Refined padding & layout -->
+                <div class="p-4 flex flex-col gap-2.5">
+                    <!-- Title: Premium typography -->
+                    <h2 class="text-sm font-bold text-gray-900 group-hover:text-blue-600 transition-colors duration-200 line-clamp-2 leading-snug min-h-[2.5rem]">
                         {{ $course->title }}
                     </h2>
 
-                    <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 prose prose-lg max-w-none">
-                        {!! Str::limit($course->description, 120) !!}
+                    <!-- Description: Slightly smaller, cleaner spacing -->
+                    <p class="text-gray-400 text-[12px] leading-relaxed line-clamp-2 min-h-[2.2rem]">
+                        {{ Illuminate\Support\Str::limit(strip_tags($course->description), 85) }}
                     </p>
 
-                    <!-- Enhanced price and action section -->
-                    <div class="flex items-center justify-between pt-4 border-t border-gray-100 group gap-2">
-                        <a href="{{ route('showcourse', ['id' => $course->id]) }}" wire:navigate
-                            class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105">
-                            Lihat
-                        </a>
+                    <!-- Meta row: Simplified to just lessons count -->
+                    <div class="flex items-center gap-3 text-[11px] font-medium text-gray-400/80 mb-1">
+                        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 bg-gray-50 rounded-md border border-gray-100">
+                            <i class="fas fa-layer-group text-blue-500/70 text-[10px]"></i>
+                            {{ $course->lessons->count() }} Lesson
+                        </span>
+                    </div>
 
+                    <!-- Subtle Divider -->
+                    <div class="border-t border-gray-50 mt-1"></div>
+
+                    <!-- Footer actions -->
+                    <div class="flex items-center gap-2 mt-1">
+                        <a href="{{ route('showcourse', ['id' => $course->id]) }}" wire:navigate
+                            class="flex-1 text-center py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-[12px] font-bold rounded-xl transition-all duration-300 shadow-sm shadow-blue-100 active:scale-[0.98]">
+                            Lihat Kursus
+                        </a>
                         @can('edit-course')
                             <a href="{{ route('editcourse', ['id' => $course->id]) }}" wire:navigate
-                                class="px-4 py-2.5 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                </svg>
-                                Edit
+                                title="Edit Kursus"
+                                class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 text-amber-600 hover:bg-amber-500 hover:text-white transition-all duration-200 border border-gray-100 shadow-sm">
+                                <i class="fas fa-pencil-alt text-[11px]"></i>
                             </a>
                         @endcan
-
                         @can('hapus-course')
-                            <button onclick="confirmDeleteCourse({{ $course->id }})"
-                                class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 flex items-center gap-1">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                                Hapus
+                            <button onclick="confirmDeleteCourse({{ $course->id }})" title="Hapus Kursus"
+                                class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-xl bg-gray-50 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-200 border border-gray-100 shadow-sm">
+                                <i class="fas fa-trash-alt text-[11px]"></i>
                             </button>
                         @endcan
                     </div>
-
-                </div>
-
-                <!-- Added subtle glow effect on hover -->
-                <div
-                    class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-                    <div class="absolute inset-0 rounded-2xl shadow-2xl shadow-blue-500/10"></div>
                 </div>
             </div>
         @endforeach
     </div>
+    @else
+    <div class="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-dashed border-gray-200">
+        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-5">
+            <i class="fas fa-book-open text-gray-300 text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">Tidak Ada Kursus Ditemukan</h3>
+        <p class="text-gray-500 text-center max-w-sm">Coba ubah kata kunci atau filter kategori Anda.</p>
+    </div>
+    @endif
 
     {{-- Tambahkan script ini di akhir file, sebelum closing </div> --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
