@@ -15,6 +15,7 @@ class CoursePlayer extends Component
     public $lessons;
     public $enrollment;
     public $completedLessonIds = [];
+    public $showCompletionPage = false;
     public $progress = 0;
     public $isSubscribed = false;
     public $courseId;
@@ -43,15 +44,20 @@ class CoursePlayer extends Component
             ->pluck('lessons.id')
             ->toArray();
 
+        $this->calculateProgress();
+
         // Determine lesson to show
-        if ($lessonId) {
+        if ($lessonId === 'completed' && $this->progress >= 100) {
+            $this->showCompletionPage = true;
+            $this->lesson = null;
+            $this->lessonId = null;
+        } elseif ($lessonId) {
             $this->lesson = Lessons::where('course_id', $courseId)->findOrFail($lessonId);
+            $this->lessonId = $lessonId;
         } elseif ($this->lessons->isNotEmpty()) {
             $this->lesson = $this->lessons->first();
+            $this->lessonId = $this->lesson?->id;
         }
-
-        $this->lessonId = $this->lesson?->id;
-        $this->calculateProgress();
     }
 
     public function selectLesson($lessonId)
@@ -62,6 +68,7 @@ class CoursePlayer extends Component
 
         $this->lesson = Lessons::where('course_id', $this->courseId)->findOrFail($lessonId);
         $this->lessonId = $lessonId;
+        $this->showCompletionPage = false;
     }
 
     public function markComplete()
@@ -85,6 +92,7 @@ class CoursePlayer extends Component
             $this->enrollment->update([
                 'status' => 'completed',
             ]);
+            return redirect()->route('courseplayer', ['courseId' => $this->courseId, 'lessonId' => 'completed']);
         }
     }
 
