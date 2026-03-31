@@ -8,8 +8,8 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'DejaVu Sans', sans-serif;
-            background: #fff;
-            color: #1a1a2e;
+            background: #ffffff;
+            color: #1e293b;
             width: 297mm;
             height: 210mm;
             position: relative;
@@ -39,83 +39,96 @@
         }
         .logo-area {
             margin-bottom: 6mm;
+            margin-top: 8mm;
         }
         .logo-text {
-            font-size: 22pt;
+            font-size: 26pt;
             font-weight: bold;
             color: #1e40af;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
         .cert-title {
-            font-size: 11pt;
-            letter-spacing: 6px;
+            font-size: 13pt;
+            letter-spacing: 8px;
             text-transform: uppercase;
-            color: #64748b;
-            margin-bottom: 8mm;
+            color: #475569;
+            margin-bottom: 12mm;
         }
         .is-presented {
-            font-size: 9pt;
-            color: #6b7280;
-            margin-bottom: 4mm;
+            font-size: 11pt;
+            color: #64748b;
+            margin-bottom: 5mm;
+            font-style: italic;
         }
         .recipient-name {
-            font-size: 30pt;
+            font-size: 36pt;
             font-weight: bold;
             color: #1e3a8a;
-            margin-bottom: 5mm;
+            margin-bottom: 6mm;
             border-bottom: 2px solid #93c5fd;
             padding-bottom: 3mm;
+            width: 80%;
+            margin-left: auto;
+            margin-right: auto;
         }
         .description {
-            font-size: 9pt;
-            color: #6b7280;
-            max-width: 200mm;
-            line-height: 1.5;
-            margin-bottom: 4mm;
+            font-size: 11pt;
+            color: #475569;
+            max-width: 220mm;
+            line-height: 1.6;
+            margin-bottom: 5mm;
+            margin-left: auto;
+            margin-right: auto;
         }
         .course-name {
-            font-size: 14pt;
+            font-size: 18pt;
             font-weight: bold;
             color: #1e40af;
-            margin-bottom: 8mm;
+            margin-bottom: 10mm;
         }
         .footer {
             display: flex;
             justify-content: space-between;
-            width: 100%;
-            margin-top: 6mm;
+            width: 85%;
+            margin-top: 8mm;
+            margin-left: auto;
+            margin-right: auto;
         }
         .footer-item {
             text-align: center;
-            width: 45%;
+            width: 40%;
         }
         .footer-line {
             border-top: 1px solid #cbd5e1;
             padding-top: 2mm;
-            font-size: 8pt;
-            color: #6b7280;
+            font-size: 10pt;
+            font-weight: bold;
+            color: #334155;
         }
         .footer-label {
-            font-size: 7pt;
-            color: #94a3b8;
-            margin-top: 1mm;
+            font-size: 8pt;
+            color: #64748b;
+            margin-top: 1.5mm;
         }
         .seal {
             position: absolute;
             bottom: 22mm;
             right: 22mm;
-            width: 25mm;
-            height: 25mm;
+            width: 28mm;
+            height: 28mm;
             border: 3px solid #1e40af;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #1e40af;
-            font-size: 7pt;
+            font-size: 7.5pt;
             font-weight: bold;
             text-align: center;
-            line-height: 1.3;
+            line-height: 1.4;
+            letter-spacing: 1px;
+            background-color: #eff6ff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
         .corner-ornament {
             position: absolute;
