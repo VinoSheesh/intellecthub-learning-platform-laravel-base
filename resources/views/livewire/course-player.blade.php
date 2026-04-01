@@ -186,4 +186,49 @@
             @endif
         </main>
     </div>
+
+    {{-- Responsive styles for rich lesson content (images & YouTube embeds) --}}
+    <style>
+        /* Responsive images inside lesson content */
+        .prose img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin-top: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        /* Responsive YouTube embeds - wrapper div from TinyMCE */
+        .prose div[style*="padding-bottom"] {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .prose div[style*="padding-bottom"] iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 0.5rem;
+        }
+
+        /* Direct iframe (fallback if not wrapped in div) */
+        .prose iframe {
+            max-width: 100%;
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
 </div>
