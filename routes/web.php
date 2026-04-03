@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CertificateController;
+use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/managecourses', \App\Livewire\ManageCourses::class)->name('managecourses')->middleware('role:SuperAdmin');
         Route::get('/managecategories', \App\Livewire\ManageCategories::class)->name('managecategories')->middleware('role:SuperAdmin');
         Route::get('/coursedetail/{id}', \App\Livewire\CourseDetail::class)->name('coursedetail')->middleware('role:SuperAdmin');
+        Route::post('/upload/image', [UploadController::class, 'uploadImage'])->name('upload.image')->middleware('role:SuperAdmin');
     });
     Route::prefix('courses')->group(function () {
         Route::get('/allcourse', \App\Livewire\Courses::class)->name('allcourse');
