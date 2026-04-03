@@ -47,51 +47,55 @@
     </div>
 
     <!-- Categories Table -->
-    <div class="overflow-x-auto shadow-md rounded-lg">
-        <table class="w-full bg-white">
-            <thead class="bg-gray-100 border-b border-gray-300">
+    <div class="overflow-hidden bg-white border border-slate-200 rounded-2xl shadow-sm">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-slate-50 border-b border-slate-200">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700 w-16">No</th>
-                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Nama Kategori</th>
-                    <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700 w-48">Aksi</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-20">No</th>
+                    <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Nama Kategori</th>
+                    <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider w-40">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-slate-200">
                 @forelse ($categories as $category)
-                <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
-                    <td class="px-6 py-4 text-sm text-gray-600">{{ ($categories->currentPage() - 1) * $categories->perPage() + $loop->iteration }}</td>
-                    <td class="px-6 py-4">
-                        <p class="font-medium text-gray-900">{{ $category->name }}</p>
+                <tr class="group hover:bg-slate-50/50 transition-colors duration-200">
+                    <td class="px-6 py-5 text-sm font-medium text-slate-400">
+                        {{ ($categories->currentPage() - 1) * $categories->perPage() + $loop->iteration }}
                     </td>
-                    <td class="px-6 py-4">
-                        <div class="flex items-center justify-center gap-2">
+                    <td class="px-6 py-5">
+                        <p class="font-bold text-slate-800 text-base">{{ $category->name }}</p>
+                    </td>
+                    <td class="px-6 py-5 text-center">
+                        <div class="flex items-center justify-center gap-3 opacity-90 group-hover:opacity-100 transition-opacity">
                             <button wire:click="edit({{ $category->id }})"
-                                class="inline-flex items-center px-3 py-2 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition text-sm font-medium">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
+                                class="inline-flex items-center p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 hover:text-amber-700 transition-all border border-amber-100 shadow-sm"
+                                title="Edit Kategori">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
-                                Edit
                             </button>
                             <button onclick="confirmDelete({{ $category->id }})"
-                                class="inline-flex items-center px-3 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition text-sm font-medium">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
+                                class="inline-flex items-center p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 hover:text-red-700 transition-all border border-red-100 shadow-sm"
+                                title="Hapus Kategori">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                 </svg>
-                                Hapus
                             </button>
                         </div>
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="3" class="px-6 py-12 text-center">
-                        <i class="fa-regular fa-folder-open text-6xl text-gray-400 mb-4 block"></i>
-                        <h3 class="text-xl font-medium text-gray-900 mb-2">Tidak ada kategori ditemukan</h3>
-                        <p class="text-gray-600">Mulai dengan menambahkan kategori baru.</p>
+                    <td colspan="3" class="px-6 py-16 text-center">
+                        <div class="flex flex-col items-center">
+                            <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-4 border border-dashed border-slate-200 text-slate-300">
+                                <i class="fa-regular fa-folder-open text-3xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-800 mb-2">Tidak ada kategori</h3>
+                            <p class="text-slate-500 max-w-xs mx-auto">Mulai dengan menambahkan kategori baru untuk mengelompokkan kursus Anda.</p>
+                        </div>
                     </td>
                 </tr>
                 @endforelse
