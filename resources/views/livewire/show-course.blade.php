@@ -112,18 +112,26 @@
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3 pt-4">
                         @if($isSubscribed)
-                            <button wire:click="startCourse"
-                                wire:loading.attr="disabled"
-                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50">
-                                <span class="flex items-center justify-center gap-2" wire:loading.remove wire:target="startCourse">
-                                    <i class="fas fa-play-circle"></i>
-                                    <span class="text-sm font-medium">{{ $enrollment ? 'Lanjut Belajar' : 'Mulai Belajar' }}</span>
-                                </span>
-                                <span class="flex items-center justify-center gap-2" wire:loading wire:target="startCourse">
-                                    <i class="fas fa-spinner fa-spin"></i>
-                                    <span class="text-sm font-medium">Memuat...</span>
-                                </span>
-                            </button>
+                            @if($course->is_published)
+                                <button wire:click="startCourse"
+                                    wire:loading.attr="disabled"
+                                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-50">
+                                    <span class="flex items-center justify-center gap-2" wire:loading.remove wire:target="startCourse">
+                                        <i class="fas fa-play-circle"></i>
+                                        <span class="text-sm font-medium">{{ $enrollment ? 'Lanjut Belajar' : 'Mulai Belajar' }}</span>
+                                    </span>
+                                    <span class="flex items-center justify-center gap-2" wire:loading wire:target="startCourse">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        <span class="text-sm font-medium">Memuat...</span>
+                                    </span>
+                                </button>
+                            @else
+                                <button disabled
+                                    class="flex-1 bg-gray-500 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm cursor-not-allowed flex items-center justify-center gap-2 opacity-80">
+                                    <i class="fas fa-lock"></i>
+                                    <span class="text-sm font-medium">Kursus Sedang Diarsipkan (Draft)</span>
+                                </button>
+                            @endif
                         @else
                             <a href="{{ route('subscriptionplan') }}"
                                 class="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm text-center">
@@ -133,6 +141,13 @@
                                 </span>
                             </a>
                         @endif
+
+                        <!-- Favorite Button -->
+                        <button wire:click="toggleFavorite"
+                            class="flex-shrink-0 flex items-center justify-center gap-2 {{ $isFavorite ? 'bg-rose-50 hover:bg-rose-100 text-rose-500 border-rose-200' : 'bg-white hover:bg-gray-50 text-gray-600 border-gray-200' }} border font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]">
+                            <i class="{{ $isFavorite ? 'fa-solid text-red-500' : 'fa-regular' }} fa-heart text-lg"></i>
+                            <span class="text-sm font-medium">{{ $isFavorite ? 'Difavoritkan' : 'Tambah Favorit' }}</span>
+                        </button>
                     </div>
                 </div>
             </div>
