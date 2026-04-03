@@ -42,11 +42,7 @@
         </a>
     </div>
 
-    @if (session('success'))
-        <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg">
-            {{ session('success') }}
-        </div>
-    @endif
+<!-- Flash Message Handler -->
 
     <!-- Search Bar dan Filter -->
     <div class="relative mb-6 flex flex-row gap-2">
@@ -84,83 +80,95 @@
 
     <!-- Courses Table -->
     @if ($courses->count() > 0)
-        <div class="overflow-x-auto shadow-md rounded-lg">
-            <table class="w-full bg-white">
-                <thead class="bg-gray-100 border-b border-gray-300">
+        <div class="overflow-hidden bg-white border border-slate-200 rounded-2xl shadow-sm">
+            <table class="w-full text-left border-collapse table-fixed">
+                <thead class="bg-slate-50 border-b border-slate-200">
                     <tr>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Nama Kursus</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Kategori</th>
-                        <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Deskripsi</th>
-                        <th class="px-6 py-3 text-center text-sm font-semibold text-gray-700">Aksi</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-[25%]">Nama Kursus</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-[18%]">Kategori</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-[12%] text-center">Status</th>
+                        <th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider w-[25%]">Deskripsi</th>
+                        <th class="px-6 py-4 text-center text-xs font-bold text-slate-500 uppercase tracking-wider w-48">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-200">
                     @foreach ($courses as $course)
-                        <tr class="border-b border-gray-200 hover:bg-gray-50 transition">
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    @if ($course->thumbnail)
-                                        <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}"
-                                            class="w-12 h-12 rounded object-cover">
-                                    @else
-                                        <div class="w-12 h-12 rounded bg-gray-300 flex items-center justify-center">
-                                            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                        </div>
-                                    @endif
-                                    <div>
-                                        <p class="font-medium text-gray-900">{{ $course->title }}</p>
-                                        <p class="text-xs text-gray-500">ID: {{ $course->id }}</p>
+                        <tr class="group hover:bg-slate-50/50 transition-colors duration-200">
+                            <td class="px-6 py-5 align-top">
+                                <div class="flex items-center gap-4">
+                                    <div class="relative flex-shrink-0">
+                                        @if ($course->thumbnail)
+                                            <img src="{{ asset($course->thumbnail) }}" alt="{{ $course->title }}"
+                                                class="w-14 h-14 rounded-xl object-cover shadow-sm ring-1 ring-slate-200">
+                                        @else
+                                            <div class="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center ring-1 ring-slate-200">
+                                                <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="min-w-0">
+                                        <p class="font-bold text-slate-800 text-base leading-tight truncate" title="{{ $course->title }}">{{ $course->title }}</p>
+                                        <span class="text-[10px] font-bold text-slate-400 block mt-1 uppercase tracking-tighter">ID: #{{ $course->id }}</span>
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-600">
+                            <td class="px-6 py-5 align-top">
                                 @if ($course->category)
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                    <span class="inline-flex items-center px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold border border-blue-100 whitespace-nowrap">
                                         {{ $course->category->name }}
                                     </span>
                                 @else
-                                    <span class="text-gray-400">-</span>
+                                    <span class="text-slate-300 italic text-sm">Tanpa Kategori</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-600">
-                                <div class="max-w-xs">
-                                    {{ Str::limit(strip_tags($course->description), 50) }}
-                                </div>
+                            <td class="px-6 py-5 align-top text-center">
+                                @if($course->is_published)
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold uppercase tracking-wider border border-emerald-100 shadow-sm">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2 animate-pulse"></span>
+                                        Published
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[11px] font-bold uppercase tracking-wider border border-slate-200 shadow-sm">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-slate-400 mr-2"></span>
+                                        Draft
+                                    </span>
+                                @endif
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-5 align-top">
+                                <p class="text-sm text-slate-600 truncate" title="{{ strip_tags($course->description) }}">
+                                    {{ Str::limit(strip_tags($course->description), 45) }}
+                                </p>
+                            </td>
+                            <td class="px-6 py-5 align-top text-center">
                                 <div class="flex items-center justify-center gap-2">
                                     <a href="{{ route('editcourse', $course->id) }}"
-                                        class="inline-flex items-center px-3 py-2 bg-amber-50 text-amber-700 rounded-lg hover:bg-amber-100 transition text-sm font-medium">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                        class="p-2 bg-amber-50 text-amber-600 rounded-lg hover:bg-amber-100 hover:text-amber-700 transition-all border border-amber-100 shadow-sm"
+                                        title="Edit Kursus">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
-                                        Edit
                                     </a>
                                     <a href="{{ route('coursedetail', $course->id) }}"
-                                        class="inline-flex items-center px-3 py-2 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition text-sm font-medium">
-                                        <svg class="h-4 w-4 mr-1 text-blue-700 fill-current"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 576 512"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                                            <path
-                                                d="M288 80C222.8 80 169.2 109.6 128.1 147.7 89.6 183.5 63 226 49.4 256 63 286 89.6 328.5 128.1 364.3 169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256 513 226 486.4 183.5 447.9 147.7 406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1 3.3 7.9 3.3 16.7 0 24.6-14.9 35.7-46.2 87.7-93 131.1-47.1 43.7-111.8 80.6-192.6 80.6S142.5 443.2 95.4 399.4c-46.8-43.5-78.1-95.4-93-131.1-3.3-7.9-3.3-16.7 0-24.6 14.9-35.7 46.2-87.7 93-131.1zM288 336c44.2 0 80-35.8 80-80 0-29.6-16.1-55.5-40-69.3-1.4 59.7-49.6 107.9-109.3 109.3 13.8 23.9 39.7 40 69.3 40zm-79.6-88.4c2.5 .3 5 .4 7.6 .4 35.3 0 64-28.7 64-64 0-2.6-.2-5.1-.4-7.6-37.4 3.9-67.2 33.7-71.1 71.1zm45.6-115c10.8-3 22.2-4.5 33.9-4.5 8.8 0 17.5 .9 25.8 2.6 .3 .1 .5 .1 .8 .2 57.9 12.2 101.4 63.7 101.4 125.2 0 70.7-57.3 128-128 128-61.6 0-113-43.5-125.2-101.4-1.8-8.6-2.8-17.5-2.8-26.6 0-11 1.4-21.8 4-32 .2-.7 .3-1.3 .5-1.9 11.9-43.4 46.1-77.6 89.5-89.5z" />
+                                        class="p-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-all border border-blue-100 shadow-sm"
+                                        title="Lihat Materi">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                         </svg>
-                                        lihat
                                     </a>
                                     <button wire:click="deleteCourse({{ $course->id }})"
                                         wire:confirm="Apakah Anda yakin ingin menghapus kursus ini?"
-                                        class="inline-flex items-center px-3 py-2 bg-red-50 text-red-700 rounded-lg hover:bg-red-100 transition text-sm font-medium">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
+                                        class="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 hover:text-red-700 transition-all border border-red-100 shadow-sm"
+                                        title="Hapus Kursus">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                         </svg>
-                                        Hapus
                                     </button>
                                 </div>
                             </td>
@@ -182,16 +190,42 @@
         </div>
     @endif
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        // Restoring the filter toggle functionality
         function toggleFilter() {
-            panel = document.getElementById('filterPanel');
-            if (panel.style.display === 'none') {
-                panel.style.display = 'block';
-            } else {
-                panel.style.display = 'none';
+            const panel = document.getElementById('filterPanel');
+            if (panel) {
+                if (!panel.style.display || panel.style.display === 'none') {
+                    panel.style.display = 'block';
+                } else {
+                    panel.style.display = 'none';
+                }
             }
-
         }
-    </script>
 
+        // Global function to check and show flash messages
+        window.checkFlash = function() {
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: "{{ session('success') }}",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    background: '#ffffff',
+                    customClass: {
+                        popup: 'rounded-2xl shadow-xl border border-slate-100',
+                        title: 'text-slate-800 font-poppins font-bold',
+                        htmlContainer: 'text-slate-600 font-poppins'
+                    }
+                });
+            @endif
+        }
+
+        // Initialize on both page load and livewire navigation (for wire:navigate)
+        document.addEventListener('DOMContentLoaded', window.checkFlash);
+        document.addEventListener('livewire:navigated', window.checkFlash);
+    </script>
 </div>
