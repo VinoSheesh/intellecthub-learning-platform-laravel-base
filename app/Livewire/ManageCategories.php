@@ -26,7 +26,7 @@ class ManageCategories extends Component
     }
 
     protected $rules = [
-        'name' => 'required|min:3|unique:categories,name',
+        'name' => 'required|min:3|max:30|unique:categories,name',
     ];
 
     public function create()
@@ -51,7 +51,7 @@ class ManageCategories extends Component
     {
         // Ignore unique check for updates
         $rules = [
-            'name' => 'required|min:3|unique:categories,name' . ($this->categoryId ? ',' . $this->categoryId : ''),
+            'name' => 'required|min:3|max:30|unique:categories,name' . ($this->categoryId ? ',' . $this->categoryId : ''),
         ];
         $this->validate($rules);
 
