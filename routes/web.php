@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('auth.login');
-});
+    return view('landing');
+})->name('landing');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
@@ -19,6 +19,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/admindashboard', \App\Livewire\AdminDashboard::class)->name('admindashboard')->middleware('role:SuperAdmin');
         Route::get('/managecourses', \App\Livewire\ManageCourses::class)->name('managecourses')->middleware('role:SuperAdmin');
         Route::get('/managecategories', \App\Livewire\ManageCategories::class)->name('managecategories')->middleware('role:SuperAdmin');
+        Route::get('/manageusers', \App\Livewire\ManageUsers::class)->name('manageusers')->middleware('role:SuperAdmin');
         Route::get('/coursedetail/{id}', \App\Livewire\CourseDetail::class)->name('coursedetail')->middleware('role:SuperAdmin');
         Route::post('/upload/image', [UploadController::class, 'uploadImage'])->name('upload.image')->middleware('role:SuperAdmin');
     });
