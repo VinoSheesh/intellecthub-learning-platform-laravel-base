@@ -21,6 +21,8 @@ class User extends Authenticatable // kalau mau email verification: implements M
         'email',
         'password',
         'role_id',
+        'is_active',
+        'subscription_until',
     ];
 
     /**
@@ -37,6 +39,8 @@ class User extends Authenticatable // kalau mau email verification: implements M
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'is_active' => 'boolean',
+        'subscription_until' => 'datetime',
     ];
 
     public function role()
