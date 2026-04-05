@@ -15,6 +15,7 @@ class ShowCourse extends Component
     public $completedLessonIds = [];
     public $progress = 0;
     public $isSubscribed = false;
+    public $isFavorite = false;
 
     public function mount($id)
     {
@@ -29,6 +30,7 @@ class ShowCourse extends Component
             ->first();
 
         if ($this->enrollment) {
+            $this->isFavorite = $this->enrollment->is_favorite;
             $this->completedLessonIds = $user->lessonProgress()
                 ->where('lesson_user.is_completed', true)
                 ->where('lessons.course_id', $id)
@@ -39,6 +41,20 @@ class ShowCourse extends Component
             $completed = count($this->completedLessonIds);
             $this->progress = $total > 0 ? (int) round(($completed / $total) * 100) : 0;
         }
+    }
+
+    public function toggleFavorite()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $this->isFavorite = !$this->isFavorite;
+        
+        Enrollments::updateOrCreate(
+            ['user_id' => Auth::id(), 'course_id' => $this->course->id],
+            ['is_favorite' => $this->isFavorite]
+        );
     }
 
     public function startCourse()
