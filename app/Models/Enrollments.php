@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Enrollments extends Model
 {
-    protected $fillable = ['user_id', 'course_id', 'status'];
+    protected $fillable = ['user_id', 'course_id', 'status', 'last_lesson_id', 'is_favorite'];
 
     public function user()
     {
@@ -16,5 +16,10 @@ class Enrollments extends Model
     public function course()
     {
         return $this->belongsTo(Courses::class, 'course_id');
+    }
+
+    public function lastLesson()
+    {
+        return $this->belongsTo(Lessons::class, 'last_lesson_id');
     }
 }
