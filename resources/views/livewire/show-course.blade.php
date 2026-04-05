@@ -143,9 +143,13 @@
                         @endif
 
                         <!-- Favorite Button -->
-                        <button wire:click="toggleFavorite"
-                            class="flex-shrink-0 flex items-center justify-center gap-2 {{ $isFavorite ? 'bg-rose-50 hover:bg-rose-100 text-rose-500 border-rose-200' : 'bg-white hover:bg-gray-50 text-gray-600 border-gray-200' }} border font-medium py-3 px-5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]">
-                            <i class="{{ $isFavorite ? 'fa-solid text-red-500' : 'fa-regular' }} fa-heart text-lg"></i>
+                        <button wire:click.prevent="toggleFavorite"
+                            class="flex-shrink-0 flex items-center justify-center gap-2 {{ $isFavorite ? 'bg-rose-50 hover:bg-rose-100 text-rose-500 border-rose-200' : 'bg-white hover:bg-gray-50 text-gray-600 border-gray-200' }} border font-medium py-3 px-5 rounded-lg transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99] group/detail">
+                            @if($isFavorite)
+                                <i class="fa-solid fa-heart text-red-500 text-lg"></i>
+                            @else
+                                <i class="fa-regular fa-heart text-lg"></i>
+                            @endif
                             <span class="text-sm font-medium">{{ $isFavorite ? 'Difavoritkan' : 'Tambah Favorit' }}</span>
                         </button>
                     </div>
