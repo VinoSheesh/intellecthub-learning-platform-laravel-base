@@ -37,7 +37,7 @@ class Courses extends Component
 
     public function render()
     {
-        $query = CoursesModel::with('category');
+        $query = CoursesModel::with('category')->where('is_published', true);
 
         if (!empty($this->category)) {
             $query->where('category_id', $this->category);
