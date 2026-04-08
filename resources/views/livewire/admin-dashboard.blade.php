@@ -1,19 +1,19 @@
-<div class="w-full min-h-screen font-poppins bg-white p-6 lg:p-8">
+<div class="w-full min-h-screen font-poppins bg-white p-4 pt-20 sm:p-6 lg:p-8 overflow-x-hidden">
     <!-- Header -->
-    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div class="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
                 <i class="fas fa-chart-line text-blue-600"></i> Dashboard Utama
             </h1>
-            <p class="text-gray-500 mt-1">Ringkasan statistik dan aktivitas terbaru pada platform.</p>
+            <p class="text-gray-500 mt-1 text-sm sm:text-base">Ringkasan statistik dan aktivitas terbaru pada platform.</p>
         </div>
-        <div class="text-sm font-bold text-blue-800 bg-blue-50 px-4 py-2 rounded-full border border-blue-200 shadow-sm flex items-center gap-2">
+        <div class="text-xs sm:text-sm font-bold text-blue-800 bg-blue-50 px-4 py-2 rounded-full border border-blue-200 shadow-sm flex items-center gap-2 self-start md:self-auto w-fit">
             <i class="far fa-calendar text-blue-600"></i> {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}
         </div>
     </div>
 
     <!-- Stat Cards Top Row -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
         <!-- Total Users -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition-shadow duration-300">
             <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">

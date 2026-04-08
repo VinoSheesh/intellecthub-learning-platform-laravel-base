@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dashboard</title>
     <style>
         /* Custom CSS untuk Laravel E-Learning Navbar & Sidebar */
@@ -16,7 +17,7 @@
             overflow-y: auto;
             /* Fixed minimum width for collapsed state */
             min-width: 4rem;
-            max-width: 16rem;
+            max-width: 18rem;
         }
 
         #sidebar .menu-text {
@@ -56,8 +57,8 @@
         }
 
         main.sidebar-expanded {
-            margin-left: 16rem !important;
-            width: calc(100vw - 16rem) !important;
+            margin-left: 18rem !important;
+            width: calc(100vw - 18rem) !important;
         }
 
         /* Gradient backgrounds */
@@ -125,7 +126,7 @@
         }
 
         .sidebar-expanded {
-            width: 16rem !important;
+            width: 18rem !important;
         }
 
         /* Better collapsed state styling */
@@ -199,10 +200,10 @@
 
         /* Better desktop adjustments */
         @media (min-width: 1024px) {
-
-            /* Remove default margin from main content */
+            /* Match default expanded sidebar width */
             main {
-                margin-left: 0;
+                margin-left: 18rem;
+                width: calc(100vw - 18rem);
             }
         }
 
@@ -280,6 +281,7 @@
     @include('includes.cdn')
     @vite('resources/css/app.css')
     @livewireStyles
+    @stack('styles')
 </head>
 
 <body class="flex h-screen bg-gray-100 overflow-x-hidden">
@@ -291,166 +293,8 @@
     </main>
     @livewireScripts
     @stack('scripts')
-    <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v1.x.x/dist/livewire-sortable.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebarOverlay = document.getElementById('sidebarOverlay');
-            const mainContent = document.getElementById('mainContent');
-            const body = document.body;
+    <script src="https://cdn.jsdelivr.net/gh/livewire/sortable@v1.x.x/dist/livewire-sortable.js" data-navigate-once></script>
 
-            let isCollapsed = false;
-            let isMobile = window.innerWidth < 1024;
-
-            function initializeSidebar() {
-                if (isMobile) {
-                    sidebar.classList.add('-translate-x-full');
-                    mainContent.style.marginLeft = '0';
-                    mainContent.style.width = '100%';
-                    mainContent.classList.remove('sidebar-collapsed', 'sidebar-expanded');
-                } else {
-                    sidebar.classList.remove('-translate-x-full');
-                    if (isCollapsed) {
-                        collapseSidebar();
-                    } else {
-                        expandSidebar();
-                    }
-                    updateMainContentClasses();
-                }
-            }
-
-            function updateMainContentClasses() {
-                mainContent.classList.remove('sidebar-collapsed', 'sidebar-expanded');
-
-                if (!isMobile) {
-                    if (isCollapsed) {
-                        mainContent.classList.add('sidebar-collapsed');
-                        mainContent.style.marginLeft = '4rem';
-                        mainContent.style.width = 'calc(100vw - 4rem)';
-                    } else {
-                        mainContent.classList.add('sidebar-expanded');
-                        mainContent.style.marginLeft = '16rem';
-                        mainContent.style.width = 'calc(100vw - 16rem)';
-                    }
-                }
-            }
-
-            // Toggle sidebar function
-            function toggleSidebar() {
-                if (isMobile) {
-                    toggleMobileSidebar();
-                } else {
-                    toggleDesktopSidebar();
-                }
-            }
-
-            // Mobile sidebar toggle
-            function toggleMobileSidebar() {
-                const isHidden = sidebar.classList.contains('-translate-x-full');
-
-                if (isHidden) {
-                    // Show sidebar
-                    sidebar.classList.remove('-translate-x-full');
-                    if (sidebarOverlay) {
-                        sidebarOverlay.classList.remove('opacity-0', 'pointer-events-none');
-                    }
-                    body.classList.add('overflow-hidden');
-                } else {
-                    // Hide sidebar
-                    closeMobileSidebar();
-                }
-            }
-
-            // Close mobile sidebar
-            function closeMobileSidebar() {
-                sidebar.classList.add('-translate-x-full');
-                if (sidebarOverlay) {
-                    sidebarOverlay.classList.add('opacity-0', 'pointer-events-none');
-                }
-                body.classList.remove('overflow-hidden');
-            }
-
-            // Desktop sidebar toggle
-            function toggleDesktopSidebar() {
-                isCollapsed = !isCollapsed;
-
-                if (isCollapsed) {
-                    collapseSidebar();
-                } else {
-                    expandSidebar();
-                }
-
-                updateMainContentClasses();
-            }
-
-            function collapseSidebar() {
-                sidebar.classList.add('sidebar-collapsed');
-                sidebar.classList.remove('sidebar-expanded');
-                sidebar.style.width = '4rem';
-
-                sidebar.classList.add('sidebar-transitioning');
-
-                setTimeout(() => {
-                    sidebar.classList.remove('sidebar-transitioning');
-                }, 300);
-            }
-
-            function expandSidebar() {
-                sidebar.classList.add('sidebar-expanded');
-                sidebar.classList.remove('sidebar-collapsed');
-                sidebar.style.width = '16rem';
-
-                sidebar.classList.add('sidebar-transitioning');
-
-                setTimeout(() => {
-                    sidebar.classList.remove('sidebar-transitioning');
-                }, 300);
-            }
-
-            // Handle window resize
-            function handleResize() {
-                const newIsMobile = window.innerWidth < 1024;
-
-                if (newIsMobile !== isMobile) {
-                    isMobile = newIsMobile;
-                    initializeSidebar();
-                }
-            }
-
-            // Event listeners
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', toggleSidebar);
-            }
-
-            if (sidebarOverlay) {
-                sidebarOverlay.addEventListener('click', function() {
-                    if (isMobile) {
-                        closeMobileSidebar();
-                    }
-                });
-            }
-
-            // Handle ESC key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && isMobile && !sidebar.classList.contains('-translate-x-full')) {
-                    closeMobileSidebar();
-                }
-            });
-
-            // Handle window resize with debounce
-            let resizeTimeout;
-            window.addEventListener('resize', function() {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(handleResize, 100);
-            });
-
-            // Initialize on page load
-            initializeSidebar();
-
-            console.log('[v0] Sidebar initialized successfully');
-        });
-    </script>
 </body>
 
 </html>

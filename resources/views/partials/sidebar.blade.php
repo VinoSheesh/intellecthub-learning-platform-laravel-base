@@ -1,28 +1,27 @@
-<!-- Modern Sidebar -->
-<aside id="sidebar" x-data="{
+<div x-data="{
+    mobileOpen: false,
     isCollapsed: false,
     isMobile: window.innerWidth < 1024,
     coursesOpen: {{ request()->routeIs('courses') || request()->routeIs('courses.*') ? 'true' : 'false' }},
     userMenuOpen: false
-}" x-init="const updateMobileState = () => {
+}" x-init="const updateState = () => {
     isMobile = window.innerWidth < 1024;
-    if (isMobile) {
-        $el.classList.add('-translate-x-full');
-        isCollapsed = false; // Reset collapse state on mobile
-    } else {
-        $el.classList.remove('-translate-x-full');
-    }
+    if (!isMobile) mobileOpen = false;
 };
-updateMobileState();
-window.addEventListener('resize', updateMobileState);
+window.addEventListener('resize', updateState);
+
+$watch('mobileOpen', value => {
+    if (isMobile) {
+        document.body.style.overflow = value ? 'hidden' : '';
+    }
+});
 
 $watch('isCollapsed', value => {
     if (!isMobile) {
         const mainContent = document.getElementById('mainContent');
         if (value) {
-            $el.style.width = '4rem';
-            $el.classList.add('sidebar-collapsed');
-            $el.classList.remove('sidebar-expanded');
+            const sidebar = document.getElementById('sidebar');
+            if(sidebar) sidebar.style.width = '4rem';
             if (mainContent) {
                 mainContent.style.marginLeft = '4rem';
                 mainContent.style.width = 'calc(100vw - 4rem)';
@@ -30,9 +29,8 @@ $watch('isCollapsed', value => {
                 mainContent.classList.remove('sidebar-expanded');
             }
         } else {
-            $el.style.width = '18rem';
-            $el.classList.add('sidebar-expanded');
-            $el.classList.remove('sidebar-collapsed');
+            const sidebar = document.getElementById('sidebar');
+            if(sidebar) sidebar.style.width = '18rem';
             if (mainContent) {
                 mainContent.style.marginLeft = '18rem';
                 mainContent.style.width = 'calc(100vw - 18rem)';
@@ -41,11 +39,19 @@ $watch('isCollapsed', value => {
             }
         }
     }
-})"
+})" class="sidebar-wrapper">
+<!-- Modern Sidebar -->
+<aside id="sidebar" 
+    :class="{ 
+        '-translate-x-full': isMobile && !mobileOpen,
+        'translate-x-0': !isMobile || mobileOpen,
+        'sidebar-collapsed': isCollapsed && !isMobile,
+        'sidebar-expanded': !isCollapsed && !isMobile
+    }"
     class="fixed left-0 top-0 bottom-0 w-72 bg-gradient-to-b from-blue-600 via-blue-700 to-blue-800 shadow-2xl transform transition-all duration-300 ease-in-out z-50 overflow-hidden font-poppins">
 
     <!-- Sidebar Header -->
-    <div class="flex items-center justify-center p-4 border-b border-blue-500/30"
+    <div class="flex items-center justify-between p-4 border-b border-blue-500/30"
         :class="{ 'justify-center px-2': isCollapsed }">
         <!-- Logo & Brand -->
         <div class="flex items-center space-x-3" :class="{ 'justify-center space-x-0': isCollapsed }">
@@ -62,11 +68,11 @@ $watch('isCollapsed', value => {
             </div>
         </div>
 
-        <!-- Toggle Button -->
-        <button @click="isCollapsed = !isCollapsed" id="sidebarToggle"
-            class="hidden lg:flex items-center justify-center w-7 h-7 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 flex-shrink-0"
-            :class="{ 'ml-2': !isCollapsed }">
-            <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': isCollapsed }" fill="none"
+        <!-- Toggle Button (Chevron) -->
+        <button @click="isMobile ? mobileOpen = false : isCollapsed = !isCollapsed" id="sidebarToggle"
+            class="flex items-center justify-center w-8 h-8 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 flex-shrink-0"
+            :class="{ 'ml-2': !isCollapsed && !isMobile, 'hidden': isMobile && !mobileOpen }">
+            <svg class="w-5 h-5 transition-transform duration-200" :class="{ 'rotate-180': isCollapsed && !isMobile }" fill="none"
                 stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
@@ -284,30 +290,7 @@ $watch('isCollapsed', value => {
                 @click.outside="userMenuOpen = false"
                 class="absolute bottom-full left-0 right-0 mb-2 bg-white rounded-xl shadow-xl border border-gray-100 py-2 overflow-hidden">
 
-                <a href="#"
-                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors group">
-                    <svg class="w-4 h-4 mr-3 text-gray-400 group-hover:text-blue-500" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                    </svg>
-                    <span class="text-sm">Profile Settings</span>
-                </a>
 
-                <a href="#"
-                    class="flex items-center px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors group">
-                    <svg class="w-4 h-4 mr-3 text-gray-400 group-hover:text-blue-500" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                        </path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    <span class="text-sm">Account Settings</span>
-                </a>
-
-                <div class="border-t border-gray-100 my-1"></div>
 
                 <form action="{{ route('logout') }}" method="POST">
                     @csrf
@@ -327,23 +310,9 @@ $watch('isCollapsed', value => {
 </aside>
 
 <!-- Mobile Toggle Button -->
-<!-- Simplified mobile toggle with better Alpine.js integration -->
-<button x-data
-    @click="
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebarOverlay');
-    const isHidden = sidebar.classList.contains('-translate-x-full');
-    
-    if (isHidden) {
-        sidebar.classList.remove('-translate-x-full');
-        overlay.classList.remove('opacity-0', 'pointer-events-none');
-        document.body.classList.add('overflow-hidden');
-    } else {
-        sidebar.classList.add('-translate-x-full');
-        overlay.classList.add('opacity-0', 'pointer-events-none');
-        document.body.classList.remove('overflow-hidden');
-    }
-"
+<button x-show="isMobile && !mobileOpen" x-transition:enter="transition ease-out duration-300"
+    x-transition:enter-start="opacity-0 -translate-x-4" x-transition:enter-end="opacity-100 translate-x-0"
+    @click="mobileOpen = true"
     class="lg:hidden fixed top-4 left-4 z-50 bg-blue-600 text-white p-3 rounded-xl shadow-lg hover:bg-blue-700 transition-colors">
     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -351,14 +320,10 @@ $watch('isCollapsed', value => {
 </button>
 
 <!-- Mobile Overlay -->
-<div id="sidebarOverlay" x-data
-    @click="
-        const sidebar = document.getElementById('sidebar');
-        sidebar.classList.add('-translate-x-full');
-        $el.classList.add('opacity-0', 'pointer-events-none');
-        document.body.classList.remove('overflow-hidden');
-     "
-    class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden opacity-0 pointer-events-none transition-opacity duration-300">
+<div id="sidebarOverlay" x-show="mobileOpen" x-transition:opacity
+    @click="mobileOpen = false"
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden transition-opacity duration-300">
+</div>
 </div>
 
 <style>
@@ -425,66 +390,3 @@ $watch('isCollapsed', value => {
 
 <!-- Alpine.js for interactivity -->
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-
-<!-- Simplified JavaScript with better mobile handling -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-
-        // Function to initialize main content positioning
-        function initializeLayout() {
-            const mainContent = document.getElementById('mainContent');
-            if (mainContent) {
-                if (window.innerWidth >= 1024) {
-                    const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
-                    if (isCollapsed) {
-                        mainContent.style.marginLeft = '4rem';
-                        mainContent.style.width = 'calc(100vw - 4rem)';
-                    } else {
-                        mainContent.style.marginLeft = '18rem';
-                        mainContent.style.width = 'calc(100vw - 18rem)';
-                    }
-                } else {
-                    mainContent.style.marginLeft = '0';
-                    mainContent.style.width = '100%';
-                }
-            }
-        }
-
-        // Add a delay before initializing layout
-        setTimeout(initializeLayout, 500); // Adjust the delay as needed
-
-        // Handle window resize
-        window.addEventListener('resize', function() {
-            initializeLayout();
-        });
-    });
-
-    document.addEventListener('livewire:navigated', function() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-
-        // Function to initialize main content positioning
-        function initializeLayout() {
-            const mainContent = document.getElementById('mainContent');
-            if (mainContent) {
-                if (window.innerWidth >= 1024) {
-                    const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
-                    if (isCollapsed) {
-                        mainContent.style.marginLeft = '4rem';
-                        mainContent.style.width = 'calc(100vw - 4rem)';
-                    } else {
-                        mainContent.style.marginLeft = '18rem';
-                        mainContent.style.width = 'calc(100vw - 18rem)';
-                    }
-                } else {
-                    mainContent.style.marginLeft = '0';
-                    mainContent.style.width = '100%';
-                }
-            }
-        }
-
-        initializeLayout();
-    });
-</script>

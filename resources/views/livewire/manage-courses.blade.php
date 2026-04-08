@@ -1,14 +1,14 @@
-<div class="w-full min-h-screen font-poppins bg-white p-6 lg:p-8">
+<div class="w-full min-h-screen font-poppins bg-white p-4 pt-20 sm:p-6 lg:p-8 overflow-x-hidden">
 
-    <div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+    <div class="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3 mb-1">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3 mb-1">
                 <i class="fas fa-book text-blue-600"></i> Manage Courses
             </h1>
-            <p class="text-gray-500">Kelola daftar kursus, modul, dan publikasi.</p>
+            <p class="text-gray-500 text-sm sm:text-base">Kelola daftar kursus, modul, dan publikasi.</p>
         </div>
         <a href="{{ route('createcourse') }}"
-            class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
+            class="inline-flex items-center justify-center w-full sm:w-auto px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
             <i class="fas fa-plus mr-2"></i>
             Tambah Kursus
         </a>
@@ -57,14 +57,14 @@
     @if ($courses->count() > 0)
         <div class="overflow-hidden bg-white border border-gray-100 rounded-2xl shadow-sm">
             <div class="overflow-x-auto">
-                <table class="w-full text-left text-sm text-gray-600 table-fixed">
+                <table class="w-full text-left text-sm text-gray-600 min-w-[850px]">
                     <thead class="bg-gray-50/80 border-b border-gray-200 text-gray-700 uppercase font-semibold text-[10px] sm:text-xs">
                         <tr>
-                            <th scope="col" class="px-6 py-4 w-[25%]">Nama Kursus</th>
-                            <th scope="col" class="px-6 py-4 w-[18%]">Kategori</th>
-                            <th scope="col" class="px-6 py-4 w-[12%] text-center">Status</th>
-                            <th scope="col" class="px-6 py-4 w-[25%]">Deskripsi</th>
-                            <th scope="col" class="px-6 py-4 text-center w-40">Aksi</th>
+                            <th scope="col" class="px-6 py-4 w-[25%] sm:min-w-[220px]">Nama Kursus</th>
+                            <th scope="col" class="px-6 py-4 w-[18%] sm:min-w-[150px]">Kategori</th>
+                            <th scope="col" class="px-6 py-4 w-[12%] sm:min-w-[120px] text-center">Status</th>
+                            <th scope="col" class="px-6 py-4 w-[25%] sm:min-w-[200px]">Deskripsi</th>
+                            <th scope="col" class="px-6 py-4 sm:min-w-[140px] text-center w-40">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">

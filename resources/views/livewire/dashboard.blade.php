@@ -1,4 +1,4 @@
-<div class="w-full min-h-screen font-poppins bg-white p-4 sm:p-6 lg:p-8 text-slate-900">
+<div class="w-full min-h-screen font-poppins bg-white p-4 pt-20 sm:p-6 lg:p-8 text-slate-900 overflow-x-hidden">
     {{-- HEADER --}}
     <div class="mb-6 sm:mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -12,8 +12,8 @@
         </div>
     </div>
 
-    {{-- STATS SECTION - 2 kolom di mobile, 4 kolom di desktop --}}
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+    {{-- STATS SECTION - 1 kolom di mobile, 2 sm, 4 desktop --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
         {{-- Kursus Terdaftar --}}
         <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-slate-100 hover:border-blue-200 transition-all group">
             <div class="flex items-center justify-between">
@@ -81,8 +81,8 @@
         <div class="relative overflow-hidden {{ $subscriptionExpiringSoon ? 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-orange-200' : 'bg-gradient-to-r from-blue-700 to-blue-600 shadow-blue-200' }} rounded-2xl shadow-xl p-5 sm:p-8 mb-6 sm:mb-8 text-white">
             <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white opacity-10 blur-2xl"></div>
             
-            <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
-                <div class="flex items-center space-x-4 sm:space-x-5">
+            <div class="relative z-10 flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4 sm:gap-6 w-full">
+                <div class="flex items-center space-x-3 sm:space-x-5 w-full">
                     <div class="bg-white/20 backdrop-blur-md p-3 sm:p-4 rounded-2xl border border-white/20 shrink-0">
                         @if ($subscriptionExpiringSoon)
                             <i class="fas fa-exclamation-triangle text-2xl sm:text-3xl text-white"></i>
@@ -100,7 +100,7 @@
                         @endif
                     </div>
                 </div>
-                <a href="{{ route('subscriptionplan') }}" class="{{ $subscriptionExpiringSoon ? 'bg-white text-orange-600 hover:bg-orange-50' : 'bg-blue-800/50 backdrop-blur-sm text-white border border-white/20 hover:bg-blue-800/70' }} px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-bold transition-all whitespace-nowrap shrink-0 text-sm sm:text-base">
+                <a href="{{ route('subscriptionplan') }}" class="{{ $subscriptionExpiringSoon ? 'bg-white text-orange-600 hover:bg-orange-50' : 'bg-blue-800/50 backdrop-blur-sm text-white border border-white/20 hover:bg-blue-800/70' }} px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-bold transition-all whitespace-nowrap lg:shrink-0 text-sm sm:text-base w-full sm:w-auto text-center mt-2 sm:mt-0">
                     Perpanjang
                 </a>
             </div>
@@ -109,8 +109,8 @@
         <div class="relative overflow-hidden bg-gradient-to-r from-blue-700 to-blue-600 rounded-2xl shadow-xl shadow-blue-200 p-5 sm:p-8 mb-6 sm:mb-8 text-white">
             <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white opacity-10 blur-2xl"></div>
             
-            <div class="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-6">
-                <div class="flex items-center space-x-4 sm:space-x-5">
+            <div class="relative z-10 flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4 sm:gap-6 w-full">
+                <div class="flex items-center space-x-3 sm:space-x-5 w-full">
                     <div class="bg-white/20 backdrop-blur-md p-3 sm:p-4 rounded-2xl border border-white/20 shrink-0">
                         <i class="fas fa-gem text-2xl sm:text-3xl text-white"></i>
                     </div>
@@ -119,7 +119,7 @@
                         <p class="text-blue-100 mt-1 font-medium text-sm sm:text-base">Dapatkan akses penuh ke semua kursus</p>
                     </div>
                 </div>
-                <a href="{{ route('subscriptionplan') }}" class="bg-white text-blue-700 px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-bold hover:bg-gray-50 hover:shadow-lg transition-all transform hover:-translate-y-0.5 whitespace-nowrap shrink-0 text-sm sm:text-base">
+                <a href="{{ route('subscriptionplan') }}" class="bg-white text-blue-700 px-6 sm:px-8 py-2.5 sm:py-3 rounded-xl font-bold hover:bg-gray-50 hover:shadow-lg transition-all transform hover:-translate-y-0.5 whitespace-nowrap lg:shrink-0 text-sm sm:text-base w-full sm:w-auto text-center mt-2 sm:mt-0">
                     Pilih Paket
                 </a>
             </div>
@@ -131,14 +131,16 @@
         {{-- PEMBELAJARAN LANJUTAN --}}
         <div class="lg:col-span-2 space-y-6 relative" wire:loading.class="opacity-50">
             <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-4 sm:p-6">
-                <div class="flex items-center justify-between mb-4 sm:mb-6">
-                    <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2 sm:gap-3">
-                        <span class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center border border-blue-200">
+                <div class="flex flex-wrap items-center justify-between gap-y-3 mb-4 sm:mb-6">
+                    <h2 class="text-lg sm:text-x font-bold text-slate-900 flex items-center gap-2 sm:gap-3 mr-4">
+                        <span class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center border border-blue-200 shrink-0">
                             <i class="fas fa-play-circle text-sm sm:text-base"></i>
                         </span>
-                        Pembelajaran Lanjutan
+                        <span class="truncate sm:whitespace-normal">Pembelajaran Lanjutan</span>
                     </h2>
-                    <a href="{{ route('inprogress') }}" class="text-blue-700 hover:text-blue-800 font-bold text-xs sm:text-sm bg-blue-50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-blue-100 transition-all whitespace-nowrap">Lihat Semua →</a>
+                    <a href="{{ route('inprogress') }}" class="text-blue-700 hover:text-blue-800 font-bold text-[10px] sm:text-sm bg-blue-50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-blue-100 transition-all whitespace-nowrap shadow-sm border border-blue-100">
+                        Lihat Semua <i class="fas fa-arrow-right ml-1 text-[8px] sm:text-xs"></i>
+                    </a>
                 </div>
 
                 <div class="space-y-4">
