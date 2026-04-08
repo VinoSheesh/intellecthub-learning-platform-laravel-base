@@ -11,26 +11,26 @@ Route::get('/', function () {
     return view('landing');
 })->name('landing');
 
-Route::middleware(['auth'])->group(function () {
+    Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', \App\Livewire\Dashboard::class)->name('dashboard');
     Route::get('/subscription', \App\Livewire\Subscription::class)->name('subscriptionplan');
     Route::get('/subscription/transaction', \App\Livewire\SubscriptionTransaction::class)->name('subscriptiontransaction');
     Route::prefix('admin')->group(function () {
-        Route::get('/admindashboard', \App\Livewire\AdminDashboard::class)->name('admindashboard')->middleware('role:SuperAdmin');
-        Route::get('/managecourses', \App\Livewire\ManageCourses::class)->name('managecourses')->middleware('role:SuperAdmin');
-        Route::get('/managecategories', \App\Livewire\ManageCategories::class)->name('managecategories')->middleware('role:SuperAdmin');
-        Route::get('/manageusers', \App\Livewire\ManageUsers::class)->name('manageusers')->middleware('role:SuperAdmin');
-        Route::get('/coursedetail/{id}', \App\Livewire\CourseDetail::class)->name('coursedetail')->middleware('role:SuperAdmin');
+        Route::get('/admin-dashboard', \App\Livewire\AdminDashboard::class)->name('admindashboard')->middleware('role:SuperAdmin');
+        Route::get('/manage-courses', \App\Livewire\ManageCourses::class)->name('managecourses')->middleware('role:SuperAdmin');
+        Route::get('/manage-categories', \App\Livewire\ManageCategories::class)->name('managecategories')->middleware('role:SuperAdmin');
+        Route::get('/manage-users', \App\Livewire\ManageUsers::class)->name('manageusers')->middleware('role:SuperAdmin');
+        Route::get('/course-detail/{id}', \App\Livewire\CourseDetail::class)->name('coursedetail')->middleware('role:SuperAdmin');
         Route::post('/upload/image', [UploadController::class, 'uploadImage'])->name('upload.image')->middleware('role:SuperAdmin');
     });
     Route::prefix('courses')->group(function () {
-        Route::get('/allcourse', \App\Livewire\Courses::class)->name('allcourse');
-        Route::get('/createcourse', \App\Livewire\CreateCourse::class)->name('createcourse');
+        Route::get('/all-course', \App\Livewire\Courses::class)->name('allcourse');
+        Route::get('/create-course', \App\Livewire\CreateCourse::class)->name('createcourse');
         Route::get('/course/edit/{id}', \App\Livewire\EditCourse::class)->name('editcourse')->middleware('can:edit-course');
-        Route::get('/showcourse/{id}', \App\Livewire\ShowCourse::class)->name('showcourse');
+        Route::get('/show-course/{id}', \App\Livewire\ShowCourse::class)->name('showcourse');
         Route::get('/player/{courseId}/{lessonId?}', \App\Livewire\CoursePlayer::class)->name('courseplayer');
         Route::get('/certificate/{courseId}', [CertificateController::class, 'download'])->name('certificate.download');
-        Route::get('/inprogress', \App\Livewire\Inprogress::class)->name('inprogress');
+        Route::get('/in-progress', \App\Livewire\Inprogress::class)->name('inprogress');
         Route::get('/completed', \App\Livewire\Completed::class)->name('completed');
         Route::get('/favorites', \App\Livewire\Favorites::class)->name('favorites');
     });
