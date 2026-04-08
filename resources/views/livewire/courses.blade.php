@@ -52,12 +52,12 @@
         @endforeach
     </div>
     @else
-    <div class="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-dashed border-gray-200">
-        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-5">
-            <i class="fas fa-book-open text-gray-300 text-3xl"></i>
+    <div class="flex flex-col items-center justify-center py-12 md:py-20 bg-white rounded-3xl border border-dashed border-gray-200">
+        <div class="w-14 h-14 md:w-20 md:h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4 md:mb-5">
+            <i class="fas fa-book-open text-gray-300 text-xl md:text-3xl"></i>
         </div>
-        <h3 class="text-xl font-bold text-gray-800 mb-2">Tidak Ada Kursus Ditemukan</h3>
-        <p class="text-gray-500 text-center max-w-sm">Coba ubah kata kunci atau filter kategori Anda.</p>
+        <h3 class="text-base md:text-xl font-bold text-gray-800 mb-2">Tidak Ada Kursus Ditemukan</h3>
+        <p class="text-gray-500 text-xs md:text-base text-center max-w-[260px] md:max-w-sm">Coba ubah kata kunci atau filter kategori Anda.</p>
     </div>
     @endif
 

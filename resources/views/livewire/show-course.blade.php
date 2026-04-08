@@ -1,7 +1,7 @@
 <div class="w-full min-h-screen font-poppins bg-white py-6 lg:py-10">
 
     <!-- Main Container -->
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <div class="max-w-5xl mx-auto px-2 sm:px-2 lg:px-8 pb-12">
 
         <!-- Course Hero Section -->
         <div class="bg-white rounded-3xl shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] border border-slate-100 p-5 sm:p-8 mb-8 relative overflow-hidden">
