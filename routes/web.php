@@ -25,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
     });
     Route::prefix('courses')->group(function () {
         Route::get('/allcourse', \App\Livewire\Courses::class)->name('allcourse');
-        Route::get('/createcourse', \App\Livewire\Createcourse::class)->name('createcourse');
+        Route::get('/createcourse', \App\Livewire\CreateCourse::class)->name('createcourse');
         Route::get('/course/edit/{id}', \App\Livewire\EditCourse::class)->name('editcourse')->middleware('can:edit-course');
         Route::get('/showcourse/{id}', \App\Livewire\ShowCourse::class)->name('showcourse');
         Route::get('/player/{courseId}/{lessonId?}', \App\Livewire\CoursePlayer::class)->name('courseplayer');
