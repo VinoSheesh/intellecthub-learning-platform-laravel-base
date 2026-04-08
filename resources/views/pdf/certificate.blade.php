@@ -3,184 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sertifikat Penyelesaian</title>
+    <title>Sertifikat Penyelesaian — IntellectHub</title>
     <style>
+        /* ─── Reset ─────────────────────────────────────────── */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ─── Page: Landscape A4 ─────────────────────────────
+           domPDF uses px at 96dpi: 297mm ≈ 1123px, 210mm ≈ 794px
+           We define em both ways to be safe.                   */
         body {
-            font-family: 'DejaVu Sans', sans-serif;
+            font-family: 'DejaVu Sans', Arial, sans-serif;
             background: #ffffff;
             color: #1e293b;
-            width: 297mm;
+            width:  297mm;
             height: 210mm;
             position: relative;
             overflow: hidden;
         }
+
+        /* ─── Watermark ──────────────────────────────────────── */
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 110pt;
+            font-weight: 900;
+            color: #1e293b;
+            opacity: 0.030;
+            letter-spacing: 10px;
+            white-space: nowrap;
+            font-family: 'DejaVu Sans', Arial, sans-serif;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ─── Double Border Frame ────────────────────────────── */
         .border-outer {
             position: absolute;
-            inset: 10mm;
-            border: 4px solid #1e40af;
-            border-radius: 4px;
+            top: 7mm; left: 7mm; right: 7mm; bottom: 7mm;
+            border: 3px solid #d4af37;
         }
         .border-inner {
             position: absolute;
-            inset: 13mm;
-            border: 1px solid #93c5fd;
-            border-radius: 2px;
+            top: 10.5mm; left: 10.5mm; right: 10.5mm; bottom: 10.5mm;
+            border: 1px solid #d4af37;
+            opacity: 0.55;
         }
-        .content {
+
+        /* ─── Gold Corner Ornaments ──────────────────────────── */
+        .corner {
             position: absolute;
-            inset: 16mm;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 10mm;
-        }
-        .logo-area {
-            margin-bottom: 6mm;
-            margin-top: 8mm;
-        }
-        .logo-text {
-            font-size: 26pt;
-            font-weight: bold;
-            color: #1e40af;
-            letter-spacing: 3px;
-        }
-        .cert-title {
-            font-size: 13pt;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            color: #475569;
-            margin-bottom: 12mm;
-        }
-        .is-presented {
-            font-size: 11pt;
-            color: #64748b;
-            margin-bottom: 5mm;
-            font-style: italic;
-        }
-        .recipient-name {
-            font-size: 36pt;
-            font-weight: bold;
-            color: #1e3a8a;
-            margin-bottom: 6mm;
-            border-bottom: 2px solid #93c5fd;
-            padding-bottom: 3mm;
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .description {
-            font-size: 11pt;
-            color: #475569;
-            max-width: 220mm;
-            line-height: 1.6;
-            margin-bottom: 5mm;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .course-name {
-            font-size: 18pt;
-            font-weight: bold;
-            color: #1e40af;
-            margin-bottom: 10mm;
-        }
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            width: 85%;
-            margin-top: 8mm;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .footer-item {
-            text-align: center;
-            width: 40%;
-        }
-        .footer-line {
-            border-top: 1px solid #cbd5e1;
-            padding-top: 2mm;
-            font-size: 10pt;
-            font-weight: bold;
-            color: #334155;
-        }
-        .footer-label {
-            font-size: 8pt;
-            color: #64748b;
-            margin-top: 1.5mm;
-        }
-        .seal {
-            position: absolute;
-            bottom: 22mm;
-            right: 22mm;
-            width: 28mm;
-            height: 28mm;
-            border: 3px solid #1e40af;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #1e40af;
-            font-size: 7.5pt;
-            font-weight: bold;
-            text-align: center;
-            line-height: 1.4;
-            letter-spacing: 1px;
-            background-color: #eff6ff;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        .corner-ornament {
-            position: absolute;
-            width: 15mm;
-            height: 15mm;
-            border-color: #bfdbfe;
+            width: 10mm;
+            height: 10mm;
+            border-color: #d4af37;
             border-style: solid;
             border-width: 0;
         }
-        .top-left { top: 14mm; left: 14mm; border-top-width: 3px; border-left-width: 3px; }
-        .top-right { top: 14mm; right: 14mm; border-top-width: 3px; border-right-width: 3px; }
-        .bottom-left { bottom: 14mm; left: 14mm; border-bottom-width: 3px; border-left-width: 3px; }
-        .bottom-right { bottom: 14mm; right: 14mm; border-bottom-width: 3px; border-right-width: 3px; }
+        .corner-tl { top: 13mm;  left:  13mm;  border-top-width: 2.5px; border-left-width:  2.5px; }
+        .corner-tr { top: 13mm;  right: 13mm;  border-top-width: 2.5px; border-right-width: 2.5px; }
+        .corner-bl { bottom: 13mm; left:  13mm; border-bottom-width: 2.5px; border-left-width: 2.5px; }
+        .corner-br { bottom: 13mm; right: 13mm; border-bottom-width: 2.5px; border-right-width: 2.5px; }
+
+        /* ─── Left Accent Bar ────────────────────────────────── */
+        .accent-bar {
+            position: absolute;
+            top: 15mm; bottom: 15mm; left: 15mm;
+            width: 1.8mm;
+            background: #d4af37;
+        }
+        .accent-bar-right {
+            position: absolute;
+            top: 15mm; bottom: 15mm; right: 15mm;
+            width: 1.8mm;
+            background: #d4af37;
+            opacity: 0.35;
+        }
+
+        /* ─── Main Content wrapper ───────────────────────────── */
+        .content {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            padding: 40mm 26mm 14mm 26mm;
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* ─── Header: Logo + Subtitle ────────────────────────── */
+        .logo-row {
+            display: block;
+            margin-bottom: 1.5mm;
+        }
+        .logo-name {
+            font-size: 22pt;
+            font-weight: 900;
+            color: #1e293b;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+        .logo-name span {
+            color: #d4af37;
+        }
+        .logo-tagline {
+            font-size: 7pt;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-top: 1mm;
+        }
+
+        /* ─── Gold Divider ───────────────────────────────────── */
+        .divider {
+            display: block;
+            margin: 3.5mm auto;
+            width: 60mm;
+            height: 1px;
+            background: #d4af37;
+            opacity: 0.70;
+        }
+        .divider-thin {
+            display: block;
+            margin: 0 auto;
+            width: 20mm;
+            height: 1px;
+            background: #d4af37;
+            opacity: 0.40;
+        }
+
+        /* ─── Certificate Title ──────────────────────────────── */
+        .cert-title {
+            font-size: 9pt;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            color: #64748b;
+            margin-top: 1mm;
+            margin-bottom: 4mm;
+        }
+
+        /* ─── Presented To ───────────────────────────────────── */
+        .presented-to {
+            font-size: 9pt;
+            color: #94a3b8;
+            letter-spacing: 2px;
+            font-style: italic;
+            margin-bottom: 2mm;
+        }
+
+        /* ─── Recipient Name (Serif fallback via DejaVu Serif) ── */
+        .recipient-name {
+            font-family: 'DejaVu Serif', Georgia, serif;
+            font-size: 34pt;
+            font-weight: bold;
+            color: #1e293b;
+            line-height: 1.1;
+            margin-bottom: 2mm;
+            /* domPDF does not support text-shadow */
+        }
+
+        /* ─── Completion Text ────────────────────────────────── */
+        .completion-text {
+            font-size: 9.5pt;
+            color: #64748b;
+            margin-bottom: 1.5mm;
+            letter-spacing: 0.3px;
+        }
+
+        /* ─── Course Name ────────────────────────────────────── */
+        .course-name {
+            font-size: 15pt;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 1.5mm;
+            letter-spacing: 0.5px;
+        }
+
+        /* ─── Date Row ───────────────────────────────────────── */
+        .date-text {
+            font-size: 9pt;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            margin-bottom: 4mm;
+        }
+
+        /* ─── Footer: Signature Table ────────────────────────── /
+           Using display:table for domPDF compatibility (no grid) */
+        .footer-table {
+            display: table;
+            width: 160mm;
+            margin: 0 auto;
+        }
+        .footer-col {
+            display: table-cell;
+            width: 50%;
+            text-align: center;
+            vertical-align: bottom;
+            padding: 0 8mm;
+        }
+        .sig-line {
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: #cbd5e1;
+            margin-bottom: 2.5mm;
+        }
+        .sig-name {
+            font-size: 9pt;
+            font-weight: bold;
+            color: #1e293b;
+            letter-spacing: 0.5px;
+        }
+        .sig-label {
+            font-size: 7.5pt;
+            color: #94a3b8;
+            margin-top: 0.8mm;
+            letter-spacing: 0.5px;
+        }
+
+        /* ─── Certificate ID ─────────────────────────────────── */
+        .cert-id {
+            position: absolute;
+            bottom: 10mm;
+            left: 50%;
+            /* domPDF: approximate centering via margin */
+            margin-left: -50mm;
+            width: 100mm;
+            text-align: center;
+            font-size: 7pt;
+            color: #cbd5e1;
+            letter-spacing: 2px;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
+
+    {{-- ── Watermark ── --}}
+    <div class="watermark">INTELLECTHUB</div>
+
+    {{-- ── Double Border Frame ── --}}
     <div class="border-outer"></div>
     <div class="border-inner"></div>
-    <div class="corner-ornament top-left"></div>
-    <div class="corner-ornament top-right"></div>
-    <div class="corner-ornament bottom-left"></div>
-    <div class="corner-ornament bottom-right"></div>
 
+    {{-- ── Corner Ornaments ── --}}
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+
+    {{-- ── Side Accent Bars ── --}}
+    <div class="accent-bar"></div>
+    <div class="accent-bar-right"></div>
+
+    {{-- ── Certificate ID ── --}}
+    <div class="cert-id">NO. SERTIFIKAT: {{ $certificateId }}</div>
+
+    {{-- ── Main Content ── --}}
     <div class="content">
-        <div class="logo-area">
-            <div class="logo-text">IntellectHub</div>
+
+        {{-- Logo --}}
+        <div class="logo-row">
+            <div class="logo-name">Intellect<span>Hub</span></div>
+            <div class="logo-tagline">Learning Platform</div>
         </div>
+
+        {{-- Top gold divider --}}
+        <div class="divider"></div>
+
+        {{-- Title --}}
         <div class="cert-title">Certificate of Completion</div>
-        <div class="is-presented">Dengan bangga diberikan kepada</div>
+
+        {{-- Presented to --}}
+        <div class="presented-to">dengan bangga diberikan kepada</div>
+
+        {{-- Recipient Name --}}
         <div class="recipient-name">{{ $user->name }}</div>
-        <div class="description">
-            yang telah berhasil menyelesaikan seluruh materi kursus
-        </div>
-        <div class="course-name">{{ $course->title }}</div>
-        <div class="description">
-            pada tanggal {{ $completedAt->translatedFormat('d F Y') }}
+
+        {{-- Thin divider below name --}}
+        <div class="divider" style="width:45mm; margin-top:2mm; margin-bottom:3.5mm;"></div>
+
+        {{-- Completion text --}}
+        <div class="completion-text">yang telah berhasil menyelesaikan seluruh materi dalam kursus</div>
+
+        {{-- Course name --}}
+        <div class="course-name">&ldquo;{{ $course->title }}&rdquo;</div>
+
+        {{-- Date --}}
+        <div class="date-text">
+            Diselesaikan pada &nbsp;{{ $completedAt->translatedFormat('d F Y') }}
         </div>
 
-        <div class="footer">
-            <div class="footer-item">
-                <div class="footer-line">IntellectHub Platform</div>
-                <div class="footer-label">Diterbitkan oleh</div>
+        {{-- Signature Row --}}
+        <div class="footer-table">
+            <div class="footer-col">
+                <span class="sig-line"></span>
+                <div class="sig-name">IntellectHub Platform</div>
+                <div class="sig-label">Diterbitkan Oleh</div>
             </div>
-            <div class="footer-item">
-                <div class="footer-line">{{ $completedAt->translatedFormat('d F Y') }}</div>
-                <div class="footer-label">Tanggal Penyelesaian</div>
+            <div class="footer-col">
+                <span class="sig-line"></span>
+                <div class="sig-name">{{ $completedAt->translatedFormat('d F Y') }}</div>
+                <div class="sig-label">Tanggal Penyelesaian</div>
             </div>
         </div>
-    </div>
 
-    <div class="seal">
-        <span>RESMI<br>TERVERIFIKASI</span>
-    </div>
+    </div>{{-- /content --}}
+
 </body>
 </html>

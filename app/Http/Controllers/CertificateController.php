@@ -33,10 +33,13 @@ class CertificateController extends Controller
 
         $completedAt = $enrollment->updated_at;
 
+        $certificateId = 'IH-' . str_pad($enrollment->id, 5, '0', STR_PAD_LEFT) . '-' . str_pad($user->id, 4, '0', STR_PAD_LEFT);
+
         $pdf = Pdf::loadView('pdf.certificate', [
             'user' => $user,
             'course' => $course,
             'completedAt' => $completedAt,
+            'certificateId' => $certificateId,
         ])->setPaper('a4', 'landscape');
 
         return $pdf->download("Sertifikat-{$course->title}.pdf");
