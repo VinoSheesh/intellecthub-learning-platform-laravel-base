@@ -30,7 +30,7 @@ Route::get('/', function () {
         Route::get('/show-course/{id}', \App\Livewire\ShowCourse::class)->name('showcourse');
         Route::get('/player/{courseId}/{lessonId?}', \App\Livewire\CoursePlayer::class)->name('courseplayer');
         Route::get('/certificate/{courseId}', [CertificateController::class, 'download'])->name('certificate.download');
-        Route::get('/in-progress', \App\Livewire\Inprogress::class)->name('inprogress');
+        Route::get('/in-progress', \App\Livewire\InProgress::class)->name('inprogress');
         Route::get('/completed', \App\Livewire\Completed::class)->name('completed');
         Route::get('/favorites', \App\Livewire\Favorites::class)->name('favorites');
     });
