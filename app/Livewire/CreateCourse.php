@@ -16,12 +16,14 @@ class CreateCourse extends Component
     public $thumbnail;
     public $category_id;
     public $categories;
+    public $is_published = false;
 
     protected $rules = [
         'title' => 'required|string|max:255',
         'description' => 'required|string',
         'thumbnail' => 'required|image|max:2048',
-        'category_id' => 'required|exists:categories,id'
+        'category_id' => 'required|exists:categories,id',
+        'is_published' => 'boolean'
     ];
 
     public function mount()
@@ -31,10 +33,22 @@ class CreateCourse extends Component
 
     public function save()
     {
-        $this->validate();
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $this->dispatch('swal:error', [
+                'title' => 'Input Tidak Valid!',
+                'text' => 'Terdapat form yang belum diisi dengan benar. Silakan periksa kembali.'
+            ]);
+            throw $e;
+        }
 
         if (!$this->thumbnail) {
             $this->addError('thumbnail', 'Thumbnail harus diupload');
+            $this->dispatch('swal:error', [
+                'title' => 'Gambar Hilang!',
+                'text' => 'Mohon unggah gambar kursus terlebih dahulu.'
+            ]);
             return;
         }
 
@@ -45,13 +59,13 @@ class CreateCourse extends Component
             'description' => $this->description,
             'thumbnail' => 'storage/' . $path,
             'category_id' => $this->category_id,
+            'is_published' => false, // Override always to draft on creation
         ]);
 
         session()->flash('success', 'Kursus berhasil ditambahkan!');
         $this->dispatch('courseCreated');
 
-        $this->reset();
-        return redirect()->route('managecourses');
+        // Note: No immediate redirect here. The frontend SweetAlert handler will redirect.
     }
 
     public function render()

@@ -42,6 +42,7 @@ class CoursePlayer extends Component
             ->where('lesson_user.is_completed', true)
             ->where('lessons.course_id', $courseId)
             ->pluck('lessons.id')
+            ->map(fn($id) => (int) $id)
             ->toArray();
 
         $this->calculateProgress();
@@ -58,6 +59,10 @@ class CoursePlayer extends Component
             $this->lesson = $this->lessons->first();
             $this->lessonId = $this->lesson?->id;
         }
+
+        if ($this->lessonId && $this->enrollment) {
+            $this->enrollment->update(['last_lesson_id' => $this->lessonId]);
+        }
     }
 
     public function selectLesson($lessonId)
@@ -66,9 +71,11 @@ class CoursePlayer extends Component
             return redirect()->route('subscriptionplan');
         }
 
-        $this->lesson = Lessons::where('course_id', $this->courseId)->findOrFail($lessonId);
-        $this->lessonId = $lessonId;
-        $this->showCompletionPage = false;
+        // Use redirect for clean full-page navigation (avoids DOM diffing issues with rich HTML content)
+        return $this->redirect(
+            route('courseplayer', ['courseId' => $this->courseId, 'lessonId' => $lessonId]),
+            navigate: false
+        );
     }
 
     public function markComplete()
@@ -77,23 +84,32 @@ class CoursePlayer extends Component
 
         $user = Auth::user();
 
+        // Save completion to DB
         $user->lessonProgress()->syncWithoutDetaching([
             $this->lesson->id => ['is_completed' => true]
         ]);
 
-        if (!in_array($this->lesson->id, $this->completedLessonIds)) {
-            $this->completedLessonIds[] = $this->lesson->id;
+        // Update local state
+        $lessonIdInt = (int) $this->lesson->id;
+        if (!in_array($lessonIdInt, $this->completedLessonIds)) {
+            $this->completedLessonIds[] = $lessonIdInt;
         }
 
         $this->calculateProgress();
 
-        // Auto-complete enrollment if all lessons done
+        // If all lessons completed → redirect to completion page
         if ($this->progress >= 100) {
             $this->enrollment->update([
                 'status' => 'completed',
             ]);
-            return redirect()->route('courseplayer', ['courseId' => $this->courseId, 'lessonId' => 'completed']);
+            return $this->redirect(
+                route('courseplayer', ['courseId' => $this->courseId, 'lessonId' => 'completed']),
+                navigate: false
+            );
         }
+
+        // Stay on current page — just re-render with updated state (button changes to "Lesson Selesai")
+        // No redirect needed; Livewire will re-render the component.
     }
 
     private function calculateProgress()
@@ -109,6 +125,6 @@ class CoursePlayer extends Component
 
     public function render()
     {
-        return view('livewire.course-player')->layout('layouts.app');
+        return view('livewire.course-player')->layout('layouts.course-player');
     }
 }
