@@ -13,16 +13,18 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Categories::updateOrCreate([
-            'name' => 'Programming',
-        ]);
+        $categories = [
+            ['name' => 'Technology & Programming', 'description' => 'Pelajari keterampilan teknologi terpopuler, mulai dari pengembangan web hingga ilmu data.'],
+            ['name' => 'Design & Creativity', 'description' => 'Tingkatkan kreativitas Anda dengan kursus desain grafis, UI/UX, dan seni digital.'],
+            ['name' => 'Business & Management', 'description' => 'Kembangkan karir Anda dengan ilmu kepemimpinan, pemasaran digital, dan strategi bisnis.'],
+            ['name' => 'Personal Development', 'description' => 'Tingkatkan kualitas diri dengan kursus bahasa, produktivitas, dan public speaking.']
+        ];
 
-        Categories::updateOrCreate([
-            'name' => 'Web Development',
-        ]);
-
-        Categories::updateOrCreate([
-            'name' => 'Data Science',
-        ]);
+        foreach ($categories as $cat) {
+            Categories::updateOrCreate(
+                ['name' => $cat['name']],
+                ['name' => $cat['name']]
+            );
+        }
     }
 }
