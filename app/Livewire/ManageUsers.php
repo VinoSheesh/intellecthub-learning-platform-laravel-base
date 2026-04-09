@@ -23,14 +23,7 @@ class ManageUsers extends Component
         $this->resetPage();
     }
 
-    public function toggleStatus($userId)
-    {
-        $user = User::find($userId);
-        if ($user) {
-            $user->is_active = !$user->is_active;
-            $user->save();
-        }
-    }
+
 
     public function addSubscription($userId, $days = 30)
     {
@@ -69,9 +62,9 @@ class ManageUsers extends Component
 
         if ($this->statusFilter) {
             if ($this->statusFilter == 'active') {
-                $query->where('subscription_until', '>=', now()->toDateString());
+                $query->where('subscription_until', '>=', now()->toDateTimeString());
             } elseif ($this->statusFilter == 'expired') {
-                $query->where('subscription_until', '<', now()->toDateString())
+                $query->where('subscription_until', '<', now()->toDateTimeString())
                       ->whereNotNull('subscription_until');
             } elseif ($this->statusFilter == 'basic') {
                 $query->whereNull('subscription_until');

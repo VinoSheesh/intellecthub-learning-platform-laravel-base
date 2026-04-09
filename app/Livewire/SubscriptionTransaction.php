@@ -52,7 +52,12 @@ class SubscriptionTransaction extends Component
                 'ends_at' => $end,
             ]);
 
-            \Log::info('Subscription created:', $subscription->toArray());
+            // Sinkronisasi ke kolom subscription_until di tabel users agar status di Manage User akurat
+            $user->update([
+                'subscription_until' => $end
+            ]);
+
+            \Log::info('Subscription created and User synced:', $subscription->toArray());
 
             session()->flash('success', 'Berhasil berlangganan! Selamat menikmati layanan kami.');
             session()->forget(['snap_token', 'plan', 'price']);

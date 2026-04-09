@@ -96,7 +96,7 @@
                     <tr>
                         <th scope="col" class="px-6 py-4">Info User</th>
                         <th scope="col" class="px-6 py-4">Role</th>
-                        <th scope="col" class="px-6 py-4 text-center">Akses Keluar</th>
+
                         <th scope="col" class="px-6 py-4">Langganan</th>
                     </tr>
                 </thead>
@@ -129,15 +129,7 @@
                                 @endif
                             </td>
 
-                            <!-- Status Login (is_active) -->
-                            <td class="px-6 py-4 text-center">
-                                <button wire:click="toggleStatus({{ $user->id }})" wire:loading.attr="disabled" class="relative group outline-none overflow-hidden rounded-full cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                    <div class="w-12 h-6 flex items-center {{ $user->is_active ? 'bg-blue-600' : 'bg-gray-300' }} rounded-full p-1 transition-colors duration-300 ease-in-out">
-                                        <div class="bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ease-in-out {{ $user->is_active ? 'translate-x-6' : 'translate-x-0' }}"></div>
-                                    </div>
-                                </button>
-                                <div class="text-[10px] text-gray-400 mt-1">{{ $user->is_active ? 'Aktif' : 'Nonaktif' }}</div>
-                            </td>
+
 
                             <!-- Langganan -->
                             <td class="px-6 py-4">
