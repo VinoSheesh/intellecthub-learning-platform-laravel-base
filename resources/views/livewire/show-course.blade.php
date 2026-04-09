@@ -8,12 +8,12 @@
             <!-- Decorative Accent -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-[80px] pointer-events-none -mr-20 -mt-20"></div>
 
-            <div class="grid md:grid-cols-12 gap-8 items-start relative z-10"> <!-- Switched to md:grid-cols-12 for better control -->
+            <div class="flex flex-col gap-6 sm:gap-8 relative z-10">
 
                 <!-- Course Image -->
-                <div class="md:col-span-5 lg:col-span-4 w-full"> 
+                <div class="w-full"> 
                     <div class="relative group w-full">
-                        <div class="w-full aspect-[4/3] md:aspect-[3/4] overflow-hidden rounded-2xl bg-slate-100 shadow-sm border border-slate-100/50">
+                        <div class="w-full aspect-video overflow-hidden rounded-2xl bg-slate-100 shadow-sm border border-slate-100/50">
                             <img src="/{{ $course->thumbnail }}" alt="{{ $course->title }}"
                                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
                         </div>
@@ -21,7 +21,7 @@
                 </div>
 
                 <!-- Course Details -->
-                <div class="md:col-span-7 lg:col-span-8 space-y-6 sm:space-y-8">
+                <div class="w-full space-y-6 sm:space-y-8">
 
                     <!-- Course Title & Description -->
                     <div class="space-y-3 sm:space-y-4">
