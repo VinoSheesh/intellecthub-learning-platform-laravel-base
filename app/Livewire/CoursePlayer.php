@@ -63,6 +63,11 @@ class CoursePlayer extends Component
         if ($this->lessonId && $this->enrollment) {
             $this->enrollment->update(['last_lesson_id' => $this->lessonId]);
         }
+
+        // Format konten agar URL gambar yang relatif menjadi absolut pada tag img
+        if ($this->lesson && $this->lesson->content) {
+            $this->lesson->content = preg_replace('/src="(?:..\/)*storage\//i', 'src="/storage/', $this->lesson->content);
+        }
     }
 
     public function selectLesson($lessonId)
