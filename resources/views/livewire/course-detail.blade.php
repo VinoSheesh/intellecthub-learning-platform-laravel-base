@@ -37,6 +37,9 @@
                     branding: false,
                     min_height: 320,
                     max_height: 500,
+                    relative_urls: false,
+                    remove_script_host: false,
+                    convert_urls: true,
                     plugins: 'code table lists image media link',
                     toolbar: 'bold italic underline | blocks | alignleft aligncenter alignright | bullist numlist | link image media | code | table | removeformat',
 

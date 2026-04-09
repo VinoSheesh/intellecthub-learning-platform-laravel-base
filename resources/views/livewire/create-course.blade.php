@@ -153,6 +153,9 @@
 
             tinymce.init({
                 selector: 'textarea#description',
+                relative_urls: false,
+                remove_script_host: false,
+                convert_urls: true,
                 plugins: 'code table lists',
                 toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | indent outdent | bullist numlist | code | table',
                 setup: function(ed) {
